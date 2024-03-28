@@ -1,0 +1,822 @@
+'use strict';
+var fs = require('fs');
+var path = require('path');
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
+var bcrypt = require('bcrypt');
+
+const mysql = require('mysql2');
+
+const con = mysql.createConnection({
+  host: "istwebclass.org",
+  user: "jjohn172_admin",
+  password: "H00244755H00244755",
+  database: "jjohn172_tctgGolf"
+});
+
+con.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected!!");
+});
+
+app.set('port', (process.env.PORT || 3000));
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname + "/public/login.html"));
+});
+
+
+
+
+app.post('/updatesingleinv', function (req, res) {
+  var iname = req.body.upinventoryname;
+  var iprice = req.body.upinventoryprice;
+  var iqty = req.body.upinventoryquantity;
+  var iid = req.body.upinventoryid;
+  var sqlins = "UPDATE inventory SET inventoryName = ?, inventoryPrice = ?, inventoryQuantity = ?, WHERE inventoryID = ?";
+  var inserts = [iname, iprice, iqty, iid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+    res.end();
+  });
+});
+
+app.get('/getsingleinv/', function (req, res) {
+  var iid = req.query.upinvid;
+
+  var sqlsel = 'select * from inventory where inventoryID = ?'
+  var inserts = [iid];
+  var sql = mysql.format(sqlsel, inserts);
+  console.log("Item retrieved.");
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+
+app.get('/getinv/', function (req, res) {
+  var iname = req.query.inventoryname;
+  var iprice = req.query.inventoryprice;
+  var iqty = req.query.inventoryquantity;
+
+
+
+  var sqlsel = 'Select * FROM inventory where inventoryName Like ? and inventoryPrice Like ? and inventoryQuantity Like ?'
+
+  var inserts = [`%` + iname + `%`, `%` + iprice + `%`, `%` + iqty + `%`];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/inventory', function (req, res) {
+  var iname = req.body.inventoryname;
+  var iprice = req.body.inventoryprice;
+  var iqty = req.body.inventoryquantity;
+
+
+
+  var sqlins = "INSERT INTO inventory (inventoryName, inventoryPrice, inventoryQuantity) VALUES (?,?,?)";
+
+  var inserts = [iname, iprice, iqty];
+
+  var sql = mysql.format(sqlins, inserts);
+
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+    res.redirect('insertinventory.html');
+    res.end();
+  });
+}
+);
+
+app.post('/loginemp/', function (req, res) {
+  var eemail = req.body.employeeemail;
+  var epw = req.body.employeepw;
+
+  var sqlsel = 'select * from employee where employeeEmail = ?';
+
+  var inserts = [eemail];
+
+  var sql = mysql.format(sqlsel, inserts);
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    //Checks to see if there is data in the result
+    if (data.length > 0) {
+      console.log("User name correct: ");
+      console.log(data[0].employeePassword);
+
+      bcrypt.compare(epw, data[0].employeePassword, function (err, passwordCorrect) {
+        if (err) {
+          throw err;
+        } else if (!passwordCorrect) {
+          console.log("Password Incorrect");
+        } else {
+          console.log("Password Correct");
+          res.send({ redirect: '/backend/searchemployee.html' });
+        }
+      });
+    } else {
+      console.log("Incorrect user name or password!!");
+    }
+  });
+});
+app.post('/updatesingleplyr', function (req, res) {
+  var plname = req.body.upplayerlastname;
+  var pfname = req.body.upplayerfirstname;
+  var prewards = req.body.upplayerrewardspoints;
+  var pemail = req.body.upplayeremail;
+  var pstat = req.body.upplayerstatus;
+  var pid = req.body.upplayerid;
+  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ?, WHERE playerid = ?";
+  var inserts = [plname, pfname, pstat, prewards, pemail, pid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+    res.end();
+  });
+});
+
+app.get('/getsingleplyr/', function (req, res) {
+  var pid = req.query.upplyrid;
+
+  var sqlsel = 'select * from players where playerid = ?'
+  var inserts = [pid];
+  var sql = mysql.format(sqlsel, inserts);
+  console.log("Player retrieved.");
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+
+app.get('/getplyr/', function (req, res) {
+  var plname = req.query.playerlastname;
+  var pfname = req.query.playerfirstname;
+  var prewards = req.query.playerrewardspoints;
+  var pemail = req.query.playeremail;
+  var pstat = req.query.playerstatus;
+
+  console.log("Status: " + pstat);
+
+  if (pstat == 'Active' || pstat == 'Inactive') {
+    var statusaddon = ' and playerStatus = ?';
+    var statusaddonvar = pstat;
+  } else {
+    var statusaddon = ' and playerStatus Like ?';
+    var statusaddonvar = '%%';
+  }
+
+
+
+  var sqlsel = 'Select * FROM players ' +
+    ' where playerLastName Like ? and playerFirstName Like ? '
+    + ' and playerRewardsPoints Like ? and playerEmail Like ?' + statusaddon;
+
+  var inserts = [`%` + plname + `%`, `%` + pfname + `%`, `%` + prewards + `%`, `%` + pemail + `%`, statusaddonvar];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/loginplyr/', function (req, res) {
+  var pmail = req.body.playeremail;
+  var ppw = req.body.playerpw;
+
+  var sqlsel = 'select * from players where playerEmail = ?';
+
+  var inserts = [pmail];
+
+  var sql = mysql.format(sqlsel, inserts);
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    //Checks to see if there is data in the result
+    if (data.length > 0) {
+      console.log("User name correct: ");
+      console.log(data[0].playerPassword);
+
+      bcrypt.compare(ppw, data[0].playerPassword, function (err, passwordCorrect) {
+        if (err) {
+          throw err;
+        } else if (!passwordCorrect) {
+          console.log("Password Incorrect");
+        } else {
+          console.log("Password Correct");
+          res.send({ redirect: '/insertplayer.html' });
+        }
+      });
+    } else {
+      console.log("Incorrect user name or password!!");
+    }
+  });
+});
+
+app.get('/getemps/', function (req, res) {
+
+
+  var sqlsel = 'select * from employee';
+  var sql = mysql.format(sqlsel);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.get('/getplayers/', function (req, res) {
+  var sqlsel = 'select * from players';
+  var sql = mysql.format(sqlsel);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.get('/getinvs/', function (req, res) {
+  var sqlsel = 'select * from inventory';
+  var sql = mysql.format(sqlsel);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+app.get('/getrez/', function (req, res) {
+  var sqlsel = 'select * from reservations';
+  var sql = mysql.format(sqlsel);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+app.get('/getemptypes/', function (req, res) {
+
+  var sqlsel = 'SELECT * FROM employeeTypes';
+  var sql = mysql.format(sqlsel);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.get('/getsingleemp/', function (req, res) {
+
+  var ekey = req.query.upempkey;
+
+  var sqlsel = 'select * from employee where employeeID = ?';
+  var inserts = [ekey];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/updatesingleemp', function (req, res,) {
+
+  var eid = req.body.upemployeeid;
+  var elname = req.body.upemployeelastname;
+  var efname = req.body.upemployeefirstname;
+  var eemail = req.body.upemployeeemail;
+  var estatus = req.body.upemployeestatus;
+  var etype = req.body.upemployeetype;
+  var ekey = req.body.upemployeekey;
+
+  var sqlins = "UPDATE employee SET employeeID = ?, employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, " +
+    " employeeStatus = ?, employeeTypeID =? " +
+    " WHERE employeeID = ? ";
+  var inserts = [eid, elname, efname, eemail, estatus, etype, ekey];
+
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+
+    res.end();
+  });
+});
+
+app.get('/getemp/', function (req, res) {
+  var eid = req.query.employeeid;
+  var elname = req.query.employeelastname;
+  var efname = req.query.employeefirstname;
+  var eemail = req.query.employeeemail;
+  var estatus = req.query.employeestatus;
+  var etype = req.query.employeetype;
+
+  console.log(estatus);
+
+  if (estatus == 'Active' || estatus == 'Inactive') {
+    var statusaddon = ' and employee.employeeStatus = ?';
+    var statusaddonvar = estatus;
+  } else {
+    var statusaddon = ' and employee.employeeStatus Like ?';
+    var statusaddonvar = '%%';
+  }
+
+  if (etype > 0) {
+    var typeaddon = ' and employee.employeeTypeID = ?';
+    var typeaddonvar = etype;
+  } else {
+    var typeaddon = ' and employee.employeeTypeID Like ?';
+    var typeaddonvar = '%%';
+  }
+
+  var sqlsel = 'SELECT employee.*, employeeTypes.employeeTypeName from employee ' +
+    'inner join employeeTypes on employeeTypes.employeeTypeID = employee.employeeTypeID ' +
+    'where employee.employeeID LIKE ? and employee.employeeLastName LIKE ? and employee.employeeFirstName LIKE ?' +
+    'and employee.employeeEmail LIKE ? '
+    + statusaddon + typeaddon;
+
+  var inserts = ['%' + eid + '%', '%' + elname + '%', '%' + efname + '%', '%' + eemail + '%', statusaddonvar, typeaddonvar];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/player', function (req, res) {
+  var plname = req.body.playerlastname;
+  var pfname = req.body.playerfirstname;
+  var pstatus = req.body.playerstatus;
+  var prewards = req.body.playerrewardspoints;
+  var pmail = req.body.playeremail;
+  var ppw = req.body.playerpw;
+  console.log("PW: " + ppw);
+
+  var saltRounds = 10;
+  var theHashedPW = '';
+
+  bcrypt.hash(ppw, saltRounds, function (err, hashedPassword) {
+
+    if (err) {
+      console.log("Bad on encrypt");
+      return;
+    } else {
+
+      theHashedPW = hashedPassword;
+      console.log("Password Enc: " + theHashedPW);
+
+      var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
+        + " playerRewardsPoints, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ?)";
+
+      var inserts = [plname, pfname, pstatus, prewards, pmail, theHashedPW];
+
+      var sql = mysql.format(sqlins, inserts);
+
+      con.execute(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted");
+        res.redirect('insertplayer.html');
+        res.end();
+      });
+    }
+  });
+});
+
+app.post('/employee', function (req, res,) {
+
+  var eid = req.body.employeeid;
+  var elname = req.body.employeelastname;
+  var efname = req.body.employeefirstname;
+  var eemail = req.body.employeeemail;
+  var epw = req.body.employeepw;
+  var estatus = req.body.employeestatus;
+  var etype = req.body.employeetype
+
+  console.log("PW: " + epw);
+
+  var saltRounds = 10;
+  var theHashedPW = '';
+
+  bcrypt.hash(epw, saltRounds, function (err, hashedPassword) {
+
+    if (err) {
+      console.log("Bad on encrypt");
+      return;
+    } else {
+
+      theHashedPW = hashedPassword;
+      console.log("Password Enc: " + theHashedPW);
+
+      var sqlins = "INSERT INTO employee (employeeID, employeeLastName, employeeFirstName, employeeEmail, " +
+        " employeeStatus, employeeTypeID, employeePassword) " +
+        " VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+
+      var inserts = [eid, elname, efname, eemail, estatus, etype, theHashedPW];
+
+      var sql = mysql.format(sqlins, inserts);
+
+      con.execute(sql, function (err, result) {
+        if (err) throw err;
+        console.log("1 record inserted");
+        res.redirect('insertemployee.html');
+        res.end();
+      });
+    }
+  });
+});
+
+
+
+app.post('/updatesingleres', function (req, res) {
+  var rdatetime = req.body.upreservationdatetime;
+  var rstatus = req.body.upreservationstatus;
+  var rplay = req.body.upreservationplayer;
+  var rid = req.body.upreservationid;
+  var sqlins = "UPDATE reservations SET reservationDateTime = ?, reservationStatus = ?, playerID = ? WHERE reservationID = ?";
+  var inserts = [rdatetime, rstatus, rplay, rid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+    res.end();
+  });
+});
+
+app.get('/getsingleres/', function (req, res) {
+  var rid = req.query.upresid;
+
+  var sqlsel = 'select * from reservations where reservationID = ?'
+  var inserts = [rid];
+  var sql = mysql.format(sqlsel, inserts);
+  console.log("Reservation retrieved.");
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.get('/getres/', function (req, res) {
+  var rdatetime = req.query.reservationdatetime;
+  var rstatus = req.query.reservationstatus;
+  var rplay = req.query.reservationplayer;
+
+  console.log("Tier: " + rplay);
+
+
+
+  if (rplay > 0) {
+    var playaddon = ' and reservations.playerID = ?';
+    var playaddonvar = rplay;
+  } else {
+    var playaddon = ' and reservations.playerID Like ?';
+    var playaddonvar = '%%';
+  }
+
+  var sqlsel = ' SELECT reservations.*, players.playerFirstName, players.playerLastName' +
+    ' FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationDateTime LIKE ? AND reservationStatus LIKE ? ' + playaddon;
+
+  var inserts = [`%` + rdatetime + `%`, `%` + rstatus + `%`, playaddonvar];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/reservation', function (req, res) {
+  var rdatetime = req.body.reservationdatetime;
+  var rstatus = req.body.reservationstatus;
+  var rplay = req.body.reservationplayer;
+
+  var sqlins = "INSERT INTO reservations (reservationDateTime, reservationStatus, playerID) VALUES (?,?,?)";
+  var inserts = [rdatetime, rstatus, rplay];
+  var sql = mysql.format(sqlins, inserts);
+
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log(sql);
+    console.log("1 record inserted");
+    res.redirect('insertreservation.html');
+    res.end();
+  });
+});
+
+
+app.post('/updatesingleord', function (req, res) {
+  var odate = req.body.uporderdate;
+  var ototal = req.body.upordertotal;
+  var odid = req.body.uporderdetailid;
+  var odrid = req.body.upreservationid;
+  var odiid = req.body.upinventoryid;
+  var odqty = req.body.uporderdetailquantity;
+  var oeid = req.body.upemployeeid;
+  var oid = req.body.uporderid;
+  var sqlins = "UPDATE orders SET orderDate = ?, orderTotal = ?, orderDetailID = ?, reservationID = ?, inventoryID = ?, orderDetailQuantity = ?, employeeID = ? WHERE orderID = ?";
+  var inserts = [odate, ototal, odid, odrid, odiid, odqty, oeid, oid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+    res.end();
+  });
+});
+
+app.get('/getsingleord/', function (req, res) {
+  var oid = req.query.upordid;
+
+  var sqlsel = 'select * from orders where orderID = ?'
+  var inserts = [oid];
+  var sql = mysql.format(sqlsel, inserts);
+  console.log("Order retrieved.");
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.get('/getord/', function (req, res) {
+  var odate = req.query.orderdate;
+  var ototal = req.query.ordertotal;
+  var odid = req.query.orderdetailid;
+  var odrid = req.query.reservationid;
+  var odiid = req.query.inventoryid;
+  var odqty = req.query.orderdetailquantity;
+  var oeid = req.query.employeeid;
+
+  var sql = `SELECT o.orderID, o.orderDate, o.orderTotal, e.employeeLastName, e.employeeFirstName,
+       od.orderDetailID, od.orderDetailQuantity, od.orderDetailPrice,
+       i.inventoryName, r.reservationID
+FROM orders o
+INNER JOIN employee e ON e.employeeID = o.employeeID
+LEFT JOIN orderDetail od ON od.orderID = o.orderID
+LEFT JOIN inventory i ON i.inventoryID = od.inventoryID
+LEFT JOIN reservations r ON r.reservationID = od.reservationID
+WHERE (COALESCE(?, '') = '' OR o.orderDate LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(o.orderTotal AS CHAR) LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(od.orderDetailID AS CHAR) LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(r.reservationID AS CHAR) LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(i.inventoryID AS CHAR) LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(od.orderDetailQuantity AS CHAR) LIKE CONCAT('%', ?, '%')) AND
+      (COALESCE(?, '') = '' OR CAST(e.employeeID AS CHAR) LIKE CONCAT('%', ?, '%'));
+`;
+
+  var inserts = [
+    odate, odate,
+    ototal, ototal,
+    odid, odid,
+    odrid, odrid,
+    odiid, odiid,
+    odqty, odqty,
+    oeid, oeid
+  ];
+
+  var sql = mysql.format(sql, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
+
+app.post('/order', function (req, res) {
+  var odate = req.body.orderdate;
+  var ototal = req.body.ordertotal;
+  var odid = req.body.orderdetailid;
+  var odrid = req.body.reservationid;
+  var odiid = req.body.inventoryid;
+  var odprice = req.body.orderdetailprice;
+  var odqty = req.body.orderdetailquantity;
+  var oeid = req.body.employeeid;
+  console.log(odate + "-" + ototal + "-" + odid);
+  var sqlInsOrder = "INSERT INTO orders (employeeID, orderTotal, orderDate) VALUES (?, ?, now())";
+  var insertOrder = [oeid, 0];
+  var sqlOrder = mysql.format(sqlInsOrder, insertOrder);
+
+  con.query(sqlOrder, function (err, result) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    console.log("1 order record inserted");
+    var orderID = result.insertId;
+    if (odiid || odrid) {
+      var sqlInsOrderDetail = "INSERT INTO orderDetail (orderID, inventoryID, reservationID, orderDetailQuantity, orderDetailPrice) VALUES (?, ?, ?, ?, ?)";
+      var insertOrderDetail = [orderID, odiid, odrid, odqty, odprice];
+      var sqlOrderDetail = mysql.format(sqlInsOrderDetail, insertOrderDetail);
+
+      con.query(sqlOrderDetail, function (err, result) {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        }
+        console.log("1 orderDetail record inserted");
+        res.redirect('insertorder.html');
+      });
+    } else {
+      res.redirect('insertorder.html');
+    }
+  });
+});
+
+
+
+// app.post('/Cart/', function (req, res) {
+
+//   var cartemp = req.body.CartEmp;
+//   var cartcust = req.body.CartCust;
+
+//   var sqlsel = 'select MAX(dbcartdailyid) as daymax from cartinfo '
+//     + ' WHERE DATE(dbcartdate) = CURDATE()';
+
+//   var sql = mysql.format(sqlsel);
+
+//   var dailynumber = 1;
+
+//   con.query(sql, function (err, data) {
+//     console.log(data[0].daymax);
+
+//     if (!data[0].daymax) {
+//       dailynumber = 1;
+//     } else {
+//       dailynumber = data[0].daymax + 1;
+//     }
+
+//     var sqlinscart = "INSERT INTO cartinfo (dbcartemp, dbcartcust, dbcartdailyid, "
+//       + "  dbcartpickup, dbcartmade, dbcartdate) VALUES (?, ?, ?, ?, ?, now())";
+//     var insertscart = [cartemp, cartcust, dailynumber, 0, 0];
+
+//     var sqlcart = mysql.format(sqlinscart, insertscart);
+
+//     con.execute(sqlcart, function (err, result) {
+//       if (err) throw err;
+//       console.log("1 record inserted");
+//       res.redirect('insertcart.html');
+//       res.end();
+//     });
+//   });
+// });
+
+// app.get('/getcart/', function (req, res) {
+
+//   var empid = req.query.employeeid;
+
+//   if (empid == 0) {
+//     var sqlsel = 'Select cartinfo.*, employee.employeeLastName,  employee.employeeFirstName, players.playerLastName from cartinfo' +
+//       ' inner join employee on employee.employeeID = cartinfo.dbcartemp' +
+//       ' inner join players on players.playerID = cartinfo.dbcartcust' +
+//       ' ORDER by employee.employeeLastName';
+//     var sql = mysql.format(sqlsel);
+//   }
+//   else {
+//     var sqlsel = 'Select cartinfo.*, employee.employeeLastName,  employee.employeeFirstName, players.playerLastName from cartinfo' +
+//       ' inner join employee on employee.employeeID = cartinfo.dbcartemp' +
+//       ' inner join players on players.playerID = cartinfo.dbcartcust' +
+//       ' where dbcartemp = ? ';
+//     var inserts = [empid];
+//     var sql = mysql.format(sqlsel, inserts);
+//   }
+
+//   console.log(sql);
+
+//   con.query(sql, function (err, data) {
+//     if (err) {
+//       console.error(err);
+//       process.exit(1);
+//     }
+//     res.send(JSON.stringify(data));
+//   });
+// });
+
+// app.get('/getcartbydate/', function (req, res) {
+
+//   var startingdate = req.query.datestart;
+//   var endingdate = req.query.dateend;
+//   var empid = req.query.employeeid;
+//   if (empid == 0) {
+//     var sqlsel = 'Select cartinfo.*, employee.employeeLastName,  employee.employeeFirstName, players.playerLastName from cartinfo' +
+//       ' inner join employee on employee.employeeID = cartinfo.dbcartemp' +
+//       ' inner join players on players.playerID = cartinfo.dbcartcust' +
+//       ' where dbcartdate > ? AND dbcartdate < ?' +
+//       ' ORDER BY dbcartdate';
+//     var inserts = [startingdate, endingdate];
+//     var sql = mysql.format(sqlsel, inserts);
+//   }
+//   else {
+//     var sqlsel = 'Select cartinfo.*, employee.employeeLastName,  employee.employeeFirstName, players.playerLastName from cartinfo' +
+//       ' inner join employee on employee.employeeID = cartinfo.dbcartemp' +
+//       ' inner join players on players.playerID = cartinfo.dbcartcust' +
+//       ' where dbcartdate > ? AND dbcartdate < ? AND dbcartemp = ? ' +
+//       ' ORDER BY dbcartdate';
+
+//     var inserts = [startingdate, endingdate, empid];
+//     var sql = mysql.format(sqlsel, inserts);
+//   }
+
+
+//   console.log(sql);
+
+//   con.query(sql, function (err, data) {
+//     if (err) {
+//       console.error(err);
+//       process.exit(1);
+//     }
+//     res.send(JSON.stringify(data));
+//   });
+// });
+
+
+app.listen(app.get('port'), function () {
+  console.log('Server started: http://localhost:' + app.get('port') + '/');
+});
