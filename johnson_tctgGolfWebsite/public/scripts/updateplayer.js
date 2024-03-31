@@ -132,7 +132,7 @@ var Playerform2 = React.createClass({
 
     return (
       <div>
-        <div id="searchForm">
+        <div id="theForm">
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>

@@ -135,7 +135,7 @@ var Reservationform2 = React.createClass({
 
     return (
       <div>
-        <div id="insertForm">
+        <div id="theForm">
           <form className="reservationForm" onSubmit={this.handleSubmit}>
             <table>
               <tbody>

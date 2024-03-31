@@ -99,7 +99,7 @@ var Playerform2 = React.createClass({
   render: function () {
 
     return (
-      <div id="insertForm">
+      <div id="theForm">
         <form onSubmit={this.handleSubmit}>
           <table>
             <tbody>
