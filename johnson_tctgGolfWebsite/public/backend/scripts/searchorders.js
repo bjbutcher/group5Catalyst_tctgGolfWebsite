@@ -35,7 +35,6 @@ var OrderBox = React.createClass({
     return (
       <div>
         <div id="theform">
-          <h1>Search Orders</h1>
           <Orderform2 onOrderSubmit={this.loadOrdersFromServer} />
           <br />
           <table>
@@ -161,7 +160,7 @@ var Orderform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <form onSubmit={this.handleSubmit}>
 
             <table>
@@ -222,8 +221,9 @@ var Orderform2 = React.createClass({
                 </tr>
               </tbody>
             </table>
-            <input type="submit" value="Search Orders" />
-
+            <div className="button-container">
+              <input type="submit" value="Search Orders" />
+            </div>
           </form>
         </div>
       </div >

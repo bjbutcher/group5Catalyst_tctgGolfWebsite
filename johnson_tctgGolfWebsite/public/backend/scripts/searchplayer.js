@@ -40,7 +40,6 @@ var PlayerBox = React.createClass({
     return (
       <div>
         <div id="theresults">
-          <h1>Search Players</h1>
           <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
           <br />
           <table>
@@ -106,7 +105,7 @@ var Playerform2 = React.createClass({
 
     return (
       <div>
-        <div id="searchForm">
+        <div id="inputForm">
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>

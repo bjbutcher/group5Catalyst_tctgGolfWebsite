@@ -1,16 +1,25 @@
 var ReservationBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return {
+      data: [],
+      reservationDate: "",
+      reservationTime: "",
+      reservationStatus: "",
+      reservationPlayer: "",
+      reservationPlayerCount: ""
+    };
   },
-  loadReservationsFromServer: function () {
+  loadReservationsFromServer: function (formState) {
+    var reservationDateTime = formState.reservationDate && formState.reservationTime ? formState.reservationDate + 'T' + formState.reservationTime : '';
+
     $.ajax({
       url: '/getres',
       data: {
-        'reservationdatetime': reservationdate.value + 'T' + reservationtime.value,
-        'reservationstatus': reservationstatus.value,
-        'reservationplayer': resplayer.value
+        'reservationdatetime': reservationDateTime,
+        'reservationstatus': formState.reservationStatus,
+        'reservationplayer': formState.reservationPlayer,
+        'reservationplayercount': formState.reservationPlayerCount
       },
-
       dataType: 'json',
       cache: false,
       success: function (data) {
@@ -22,24 +31,27 @@ var ReservationBox = React.createClass({
     });
   },
   componentDidMount: function () {
-    this.loadReservationsFromServer();
-    // setInterval(this.loadReservationsFromServer, this.props.pollInterval);
+    this.loadReservationsFromServer(this.state);
+  },
+
+  handleFormChange: function (newState) {
+    this.setState(newState);
   },
 
   render: function () {
     return (
       <div>
         <div id="theform">
-          <h1>Reservations</h1>
-          <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} />
+          <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} onFormChange={this.handleFormChange} />
           <br />
           <table>
             <thead>
               <tr>
                 <th>Key</th>
                 <th>Date and Time</th>
+                <th>Number of Players</th>
+                <th>Player Reserved</th>
                 <th>Status</th>
-                <th>Player Scheduling Reservation</th>
               </tr>
             </thead>
             <ReservationList data={this.state.data} />
@@ -50,7 +62,6 @@ var ReservationBox = React.createClass({
     );
   }
 });
-
 var Reservationform2 = React.createClass({
   getInitialState: function () {
     return {
@@ -58,7 +69,9 @@ var Reservationform2 = React.createClass({
       reservationtime: "",
       reservationdatetime: "",
       reservationstatus: "",
-      data: []
+      reservationplayercount: "",
+      data: [],
+      reservedDateTimes: []
     };
   },
   handleOptionChange: function (e) {
@@ -75,7 +88,7 @@ var Reservationform2 = React.createClass({
     if (modifier === 'PM') {
       hours = parseInt(hours, 10) + 12;
     }
-    return `${hours}:${minutes}:00`; // Assuming seconds as 00
+    return `${hours}:${minutes}:00`;
   },
   loadResPlayer: function () {
     $.ajax({
@@ -89,6 +102,17 @@ var Reservationform2 = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    $.ajax({
+      url: '/getReservedDateTime',
+      dataType: 'json',
+      cache: false,
+      success: function (data) {
+        this.setState({ reservedDateTime: data });
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   componentDidMount: function () {
     this.loadResPlayer();
@@ -97,6 +121,10 @@ var Reservationform2 = React.createClass({
     var partialState = {};
     partialState[event.target.id] = event.target.value;
     this.setState(partialState);
+
+    if (event.target.id === "reservationdate") {
+      this.setState({ reservationtime: '' });
+    }
   },
 
   handleDateTimeChange: function () {
@@ -106,6 +134,9 @@ var Reservationform2 = React.createClass({
 
   renderTimeOptions: function () {
     var timeOptions = [];
+    var reservedTimes = this.state.reservedDateTime ?
+      this.state.reservedDateTime.map(rt => rt.reservationDateTime) : [];
+
     var hours, minutes, ampm;
 
     for (var i = 480; i <= 960; i += 8) {
@@ -117,23 +148,33 @@ var Reservationform2 = React.createClass({
       minutes = minutes < 10 ? '0' + minutes : minutes;
 
       var timeValue = `${hours}:${minutes} ${ampm}`;
-      timeOptions.push(<option key={timeValue} value={timeValue}>{timeValue}</option>);
+      var optionDateTime = this.createDateTime(this.state.reservationdate, timeValue);
+
+      if (!reservedTimes.includes(optionDateTime)) {
+        timeOptions.push(<option key={timeValue} value={timeValue}>{timeValue}</option>);
+      }
     }
 
     return timeOptions;
   },
 
+
+
   handleSubmit: function (e) {
     e.preventDefault();
-
-    var reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
-    var reservationstatus = document.getElementById('reservationstatus').value;
-    var reservationplayer = document.getElementById('resplayer').value;
+    var reservationdatetime = "";
+    if (this.state.reservationdate && this.state.reservationtime) {
+      reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
+    }
+    var reservationstatus = this.state.reservationstatus;
+    var reservationplayer = this.state.reservationplayer;
+    var reservationplayercount = this.state.reservationplayercount;
 
     this.props.onReservationSubmit({
       reservationdatetime: reservationdatetime,
       reservationstatus: reservationstatus,
-      reservationplayer: reservationplayer
+      reservationplayer: reservationplayer,
+      reservationplayercount: reservationplayercount,
     });
   },
   createDateTime: function (date, time12h) {
@@ -159,27 +200,52 @@ var Reservationform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
-          <form onSubmit={this.handleSubmit}>
-
+        <div id="inputForm">
+          <form className="reservationForm" onSubmit={this.handleSubmit}>
             <table>
               <tbody>
                 <tr>
-                  <th>Reservation Time</th>
+                  <th>Reservation Date</th>
                   <td>
-                    <input type="time" name="reservationtime" id="reservationtime" value={this.state.reservationtime} onChange={this.handleChange} />
+                    <input
+                      type="date"
+                      uniqueName="reservationdate"
+                      id="reservationdate"
+                      value={this.state.reservationdate}
+                      onChange={this.handleChange} />
                   </td>
                 </tr>
                 <tr>
-                  <th>Reservation Date</th>
+                  <th>Reservation Time</th>
                   <td>
-                    <input type="date" name="reservationdate" id="reservationdate" value={this.state.reservationdate} onChange={this.handleChange} />
+                    <select
+                      id="reservationtime"
+                      value={this.state.reservationtime}
+                      onChange={this.handleChange}
+                      required>
+                      <option value="">Select Time</option>
+                      {this.renderTimeOptions()}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Number of Players for Reservation</th>
+                  <td>
+                    <input
+                      type="number"
+                      title="Select number of players who want to play during this reservation"
+                      id="reservationplayercount"
+                      value={this.state.reservationplayercount}
+                      onChange={this.handleChange}
+                      required>
+                    </input>
                   </td>
                 </tr>
                 <tr>
                   <th>Reservation Status</th>
-                  <td><select emptyMessage="Status is required" name="reservationstatus" id="reservationstatus" defaultValue={this.state.selectValue} onChange={this.setValue.bind(this, 'reservationstatus')} required>
-                    <option value="" selected disabled>Please Select a Status</option>
+                  <td><select
+                    value={this.state.reservationstatus} onChange={this.handleChange.bind(this, 'reservationstatus')} required>
+                    <option value="">Please Select a Status</option>
                     <option value="Scheduled">Scheduled</option>
                     <option value="Rescheduled">Rescheduled</option>
                     <option value="Cancelled">Cancelled</option>
@@ -196,11 +262,12 @@ var Reservationform2 = React.createClass({
                 </tr>
               </tbody>
             </table>
-            <input type="submit" value="Search Reservation" />
-
+            <div className="button-container">
+              <input type="submit" value="Insert Reservation" />
+            </div>
           </form>
         </div>
-      </div >
+      </div>
     );
   }
 });
@@ -214,6 +281,7 @@ var ReservationList = React.createClass({
           resdatetime={reservation.reservationDateTime}
           resstatus={reservation.reservationStatus}
           resplayer={reservation.playerFirstName + " " + reservation.playerLastName}
+          rescount={reservation.reservationPlayerCount}
         >
         </Reservation>
       );
@@ -243,11 +311,13 @@ var Reservation = React.createClass({
         <td>
           {this.props.resdatetime}
         </td>
-        <td>
-          {this.props.resstatus}
-        </td>
+        <td>{this.props.rescount}</td>
+
         <td>
           {this.props.resplayer}
+        </td>
+        <td>
+          {this.props.resstatus}
         </td>
       </tr>
     );

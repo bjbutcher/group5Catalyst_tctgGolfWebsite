@@ -2,7 +2,7 @@ var PlayerBox = React.createClass({
   handlePlayerSubmit: function (player) {
 
     $.ajax({
-      url: '/player',
+      url: '/userCreatePlayer',
       dataType: 'json',
       type: 'POST',
       data: player,
@@ -32,8 +32,8 @@ var Playerform2 = React.createClass({
       playerstatus: "",
       playerrewardspoints: "",
       playeremail: "",
-      playerrpw: "",
-      playerrpw2: ""
+      playerpw: "",
+      playerpw2: ""
     };
   },
 
@@ -46,8 +46,8 @@ var Playerform2 = React.createClass({
     var playerstatus = this.state.selectedOption;
     var playerrewardspoints = this.state.playerrewardspoints;
     var playeremail = this.state.playeremail.trim();
-    var playerrpw = this.state.playerrpw.trim();
-    var playerrpw2 = this.state.playerrpw2.trim();
+    var playerpw = this.state.playerpw.trim();
+    var playerpw2 = this.state.playerpw2.trim();
 
     if (!this.validateEmail(playeremail)) {
       console.log("Bad Email!!!" + this.validateEmail(playeremail));
@@ -58,7 +58,7 @@ var Playerform2 = React.createClass({
       return;
     }
 
-    if (playerrpw != playerrpw2) {
+    if (playerpw != playerpw2) {
       console.log("Passwords do not match!!");
       alert("Passwords do not match!!");
       return;
@@ -75,7 +75,7 @@ var Playerform2 = React.createClass({
       playerstatus: playerstatus,
       playerrewardspoints: playerrewardspoints,
       playeremail: playeremail,
-      playerrpw: playerrpw
+      playerpw: playerpw
     });
 
   },
@@ -155,12 +155,12 @@ var Playerform2 = React.createClass({
                 <td>
                   <TextInput
                     inputType="password"
-                    value={this.state.playerrpw}
-                    uniqueName="playerrpw"
+                    value={this.state.playerpw}
+                    uniqueName="playerpw"
                     textArea={false}
                     required={true}
                     validate={this.commonValidate}
-                    onChange={this.setValue.bind(this, 'playerrpw')}
+                    onChange={this.setValue.bind(this, 'playerpw')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
                 </td>
@@ -170,12 +170,12 @@ var Playerform2 = React.createClass({
                 <td>
                   <TextInput
                     inputType="password"
-                    value={this.state.playerrpw2}
-                    uniqueName="playerrpw2"
+                    value={this.state.playerpw2}
+                    uniqueName="playerpw2"
                     textArea={false}
                     required={true}
                     validate={this.commonValidate}
-                    onChange={this.setValue.bind(this, 'playerrpw2')}
+                    onChange={this.setValue.bind(this, 'playerpw2')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
                 </td>

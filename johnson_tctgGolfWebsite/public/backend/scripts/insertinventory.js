@@ -17,7 +17,6 @@ var InventoryBox = React.createClass({
   render: function () {
     return (
       <div className="InventoryBox">
-        <h1>New Inventory Item</h1>
         <Inventoryform2 onInventorySubmit={this.handleInventorySubmit} />
       </div>
     );
@@ -77,7 +76,7 @@ var Inventoryform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <form className="inventoryForm" onSubmit={this.handleSubmit}>
 
             <table>
@@ -129,8 +128,9 @@ var Inventoryform2 = React.createClass({
                 </tr>
               </tbody>
             </table>
-            <input type="submit" value="Insert Inventory" />
-
+            <div className="button-container">
+              <input type="submit" value="Insert Inventory" />
+            </div>
           </form>
         </div>
       </div>

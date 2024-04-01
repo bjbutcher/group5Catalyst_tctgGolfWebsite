@@ -1,3 +1,11 @@
+*
+{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+}
+
 .header
 {
   background-image: url('../images/sunset-in-the-golf-course-9ouh_sz.png');
@@ -100,7 +108,7 @@ nav
   color: rgba(96, 96, 96, 1);
   font-size: 2vw;
   padding-right: 2vw;
-  font-family: Avenir Next;
+  font-family: Avenir Next, sans-serif;
 
 }
 
@@ -259,103 +267,6 @@ footer a:hover
   font-family: Avenir Next,
 }
 
-#theform
-{
-  font-family: Avenir Next, sans-serif;
-  background-color: #f5f5f5;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 8px;
-}
-
-#theform table
-{
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-#theform th
-{
-  text-align: left;
-  padding-left: 10px;
-  color: rgba(96, 96, 96, 1);
-}
-
-#theform td
-{
-  padding: 10px;
-}
-
-#theform input
-{
-  width: 100%;
-  padding: 8px;
-  margin: 5px 0;
-  border-radius: 4px;
-  border: 1px solid rgba(96, 96, 96, 0.3);
-  box-sizing: border-box;
-}
-
-#theform input[type="submit"]
-{
-  width: 100%;
-  background-color: rgba(96, 96, 96, 1);
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#theresults
-{
-  font-family: Avenir Next, sans-serif;
-  margin: 20px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#theresults h1
-{
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#theresults table
-{
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-}
-
-#theresults th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
-}
-
-#theresults td
-{
-  text-align: center;
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-}
-
-#theresults tr:nth-child(even)
-{
-  background-color: #f9f9f9;
-}
-
-#theform input[type="submit"]:hover
-{
-  background-color: darkgray;
-}
-
 #content h1
 {
   font-family: Balgon Serif;
@@ -365,86 +276,238 @@ footer a:hover
   margin-bottom: 20px;
 }
 
-#theresults,
-#theForm,
-#updateForm
+#theresults tr:nth-child(even)
 {
-  background-color: white;
+  background-color: #f9f9f9;
+}
+
+
+
+#inputForm
+{
+  font-family: Avenir Next, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+#theresults
+{
+  font-family: Avenir Next, sans-serif;
+  background-color: #f5f5f5;
   padding: 20px;
   margin: 20px auto;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#theresults table,
-#theForm table,
-#updateForm table
-{
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-}
-
-#theresults th,
-#theForm th,
-#updateForm th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
-}
-
-#theresults td,
-#theForm td,
-#updateForm td
-{
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-
-
-#theresults,
-#theForm,
 #updateForm
 {
-  background-color: white;
+  font-family: Avenir Next, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin: 20px auto;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#theresults table,
-#theForm table,
-#updateForm table
+#productDisplay
 {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
+  font-family: Avenir Next, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#theresults th,
-#theForm th,
+#loginForm
+{
+  font-family: Avenir Next, sans-serif;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+#playerInfo
+{
+  font-family: Avenir Next, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#productDisplay h1
+{
+  font-family: Balgon Serif;
+  color: rgba(96, 96, 96, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#playerInfo h1
+{
+  color: rgba(96, 96, 96, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#inputForm h1
+{
+  color: rgba(96, 96, 96, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#theresults h1
+{
+  color: rgba(96, 96, 96, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#updateForm h1
+{
+  color: rgba(96, 96, 96, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#inputForm table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#theresults table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#updateForm table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+
+
+#productDisplay table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#loginForm table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+}
+
+
+#playerInfo table
+{
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+#inputForm th
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 10px 15px;
+}
+
+#theresults th
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 10px 15px;
+}
+
 #updateForm th
 {
   background-color: rgba(196, 79, 77, 1);
   color: white;
+  padding: 10px 15px;
 }
 
-#theresults td,
-#theForm td,
+#productDisplay th
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 10px 15px;
+}
+
+#loginForm th
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 10px 15px;
+}
+
+#playerInfo th
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 10px 15px;
+}
+
+#inputForm td,
 #updateForm td
+{
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 0.8em;
+}
+
+#theresults td
 {
   padding: 10px 15px;
   border-bottom: 1px solid #ddd;
   text-align: center;
 }
 
-#theresults tr:nth-child(even)
+#productDisplay td
 {
-  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
 }
 
-#theForm input,
+#loginForm td
+{
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+
+}
+
+#playerInfo td
+{
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+#inputForm input,
+select,
+radio,
+date,
+number,
+#productDisplay input,
 select,
 radio,
 #updateForm input,
@@ -455,37 +518,60 @@ radio
   border: 1px solid rgba(96, 96, 96, 0.3);
   box-sizing: border-box;
   font-size: 1em;
+  width: 40vw;
 }
 
-#theForm input[type="text"],
-#theForm input[type="number"],
-#theForm input[type="email"],
-#theForm input[type="submit"],
-#updateForm input[type="text"],
-#updateForm input[type="number"],
-#updateForm input[type="email"],
-#updateForm input[type="submit"]
+#loginForm input
 {
   border-radius: 4px;
   border: 1px solid rgba(96, 96, 96, 0.3);
   box-sizing: border-box;
-
+  font-size: 1em;
+  width: 40vw;
 }
 
-#theForm input[type="submit"],
-#updateForm input[type="submit"]
+#playerInfo input,
+select,
+radio
 {
-  width: 100%;
-  background-color: rgba(96, 96, 96, 1);
+  border-radius: 4px;
+  border: 1px solid rgba(96, 96, 96, 0.3);
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+#productID
+{
+  font-size: smaller;
+  font-style: italic;
+}
+
+#productName
+{
+  margin-bottom: 5px;
+}
+
+.button-container
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-container input
+{
+  background-color: rgba(196, 79, 77, 1);
   color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-#theForm input[type="submit"]:hover,
-#updateForm input[type="submit"]:hover
+.button-container input:hover
 {
-  background-color: darkgray;
+  background-color: rgba(196, 79, 77, .8);
 }
 
 @media (max-width: 768px)

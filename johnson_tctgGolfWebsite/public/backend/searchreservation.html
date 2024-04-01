@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Reservations</title>
     <link rel="stylesheet" href="css/backEnd.css" />
     <script
@@ -18,53 +19,73 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/classnames/2.1.5/index.min.js"></script>
   </head>
   <body>
-    <nav>
-      <img src="../images/tctgLogo.png" alt="TCTG Golf Course Logo"
-        id="header-logo">
-      <div class="dropdown">
-        <button class="dropbtn">Player</button>
-        <div class="dropdown-content">
-          <a href="insertplayer.html">New Player</a>
-          <a href="searchplayer.html">Search Players</a>
-          <a href="updateplayer.html">Update Player</a>
+    <header class="header">
+      <div class="header-logo"></div>
+      <div class="phone-number">843-347-0538</div>
+      <div class="top-right-image"></div>
+      <nav>
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)">Player</a>
+          <div class="dropdown-content">
+            <a href="insertplayer.html">New Player</a>
+            <a href="searchplayer.html">Search Players</a>
+            <a href="updateplayer.html">Update Player</a>
+          </div>
         </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropbtn">Employee</button>
-        <div class="dropdown-content">
-          <a href="insertemployee.html">Insert Employee</a>
-          <a href="searchemployee.html">Search Employee</a>
-          <a href="updateemployee.html">Update Employee</a>
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)">Users</a>
+          <div class="dropdown-content">
+            <a href="insertemployee.html">New User</a>
+            <a href="searchemployee.html">Search Users</a>
+            <a href="updateemployee.html">Update User</a>
+          </div>
         </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropbtn">Orders</button>
-        <div class="dropdown-content">
-          <a href="insertorder.html">New Order</a>
-          <a href="searchorders.html">Search Orders</a>
-          <a href="updateorder.html">Update Order</a>
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)">Orders</a>
+          <div class="dropdown-content">
+            <a href="insertorder.html">New Order</a>
+            <a href="searchorders.html">Search Orders</a>
+            <a href="updateorder.html">Update Order</a>
+          </div>
         </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropbtn">Inventory</button>
-        <div class="dropdown-content">
-          <a href="insertinventory.html">Insert Inventory</a>
-          <a href="searchinventory.html">Search Inventory</a>
-          <a href="updateinventory.html">Update Inventory</a>
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)">Inventory</a>
+          <div class="dropdown-content">
+            <a href="insertinventory.html">New Inventory</a>
+            <a href="searchinventory.html">Search Inventory</a>
+            <a href="updateinventory.html">Update Inventory</a>
+          </div>
         </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropbtn">Reservations</button>
-        <div class="dropdown-content">
-          <a href="insertreservation.html">Insert Reservation</a>
-          <a href="searchreservation.html">Search Reservations</a>
-          <a href="updatereservation.html">Update Reservation</a>
+        <div class="nav-dropdown">
+          <a href="javascript:void(0)">Reservations</a>
+          <div class="dropdown-content">
+            <a href="insertreservation.html">New Reservation</a>
+            <a href="searchreservation.html">Search Reservations</a>
+            <a href="updatereservation.html">Update Reservation</a>
+          </div>
         </div>
-      </div>
-      <a href="login.html">Login</a>
-    </nav>
+        <a href="index.html">Login</a>
+      </nav>
+    </header>
     <div id="content"></div>
-    <script type="text/babel" src="scripts/searchreservation.js">
-    </script>
+    <script type="text/babel" src="scripts/searchreservation.js"></script>
+    <footer>
+      <div class="footer-left">
+        <img src="../images/instagram-white-icon_vc.png"
+          alt="Instagram Icon">
+        <img src="../images/facebook-logo-png-white-facebo_ql.png"
+          alt="Facebook Icon">
+      </div>
+      <div class="footer-logo">
+        <img src="../images/BRLogoColor_k.png" alt="Logo">
+      </div>
+      <div class="footer-right">
+        <p><span class="footer-contact-title">Contact</span><br><br>
+          Burning Ridge Golf Club<br>
+          500 Burning Ridge Rd.<br>
+          Conway, SC 29526<br>
+          (843) 347-0538<br></p>
+      </div>
+    </footer>
   </body>
 </html>

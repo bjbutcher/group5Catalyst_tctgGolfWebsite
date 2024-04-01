@@ -42,7 +42,6 @@ var EmployeeBox = React.createClass({
   render: function () {
     return (
       <div>
-        <h1>Search Employees</h1>
         <Employeeform2 onEmployeeSubmit={this.loadEmployeesFromServer} />
         <br />
         <div id="theresults">
@@ -127,7 +126,7 @@ var Employeeform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>
@@ -184,8 +183,9 @@ var Employeeform2 = React.createClass({
                 </tr>
               </tbody>
             </table>
-            <input type="submit" value="Search Employee" />
-
+            <div className="button-container">
+              <input type="submit" value="Search Users" />
+            </div>
           </form>
         </div>
       </div>

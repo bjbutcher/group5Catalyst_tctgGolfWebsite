@@ -2,7 +2,7 @@ var PlayerBox = React.createClass({
   handlePlayerSubmit: function (player) {
 
     $.ajax({
-      url: '/player',
+      url: '/playerCreateAccount',
       dataType: 'json',
       type: 'POST',
       data: player,
@@ -17,7 +17,7 @@ var PlayerBox = React.createClass({
   render: function () {
     return (
       <div className="PlayerBox">
-        <h1>New Player</h1>
+        <h1>Create New Account</h1>
         <Playerform2 onPlayerSubmit={this.handlePlayerSubmit} />
       </div>
     );
@@ -29,11 +29,11 @@ var Playerform2 = React.createClass({
     return {
       playerlastname: "",
       playerfirstname: "",
-      playerstatus: "",
-      playerrewardspoints: "",
+      // playerstatus: "",
+      // playerrewardspoints: "",
       playeremail: "",
-      playerrpw: "",
-      playerrpw2: ""
+      playerpw: "",
+      playerpw2: ""
     };
   },
 
@@ -43,28 +43,28 @@ var Playerform2 = React.createClass({
 
     var playerlastname = this.state.playerlastname.trim();
     var playerfirstname = this.state.playerfirstname.trim();
-    var playerstatus = this.state.selectedOption;
-    var playerrewardspoints = this.state.playerrewardspoints;
+    // var playerstatus = this.state.selectedOption;
+    // var playerrewardspoints = this.state.playerrewardspoints;
     var playeremail = this.state.playeremail.trim();
-    var playerrpw = this.state.playerrpw.trim();
-    var playerrpw2 = this.state.playerrpw2.trim();
+    var playerpw = this.state.playerpw.trim();
+    var playerpw2 = this.state.playerpw2.trim();
 
     if (!this.validateEmail(playeremail)) {
       console.log("Bad Email!!!" + this.validateEmail(playeremail));
       return;
     }
-    if (isNaN(playerrewardspoints)) {
-      console.log("Not a number: " + playerrewardspoints);
-      return;
-    }
+    // if (isNaN(playerrewardspoints)) {
+    //   console.log("Not a number: " + playerrewardspoints);
+    //   return;
+    // }
 
-    if (playerrpw != playerrpw2) {
+    if (playerpw != playerpw2) {
       console.log("Passwords do not match!!");
       alert("Passwords do not match!!");
       return;
     }
 
-    if (!playerlastname || !playeremail) {
+    if (!playerlastname || !playerfirstname || !playeremail) {
       console.log("Field Missing");
       return;
     }
@@ -72,14 +72,16 @@ var Playerform2 = React.createClass({
     this.props.onPlayerSubmit({
       playerlastname: playerlastname,
       playerfirstname: playerfirstname,
-      playerstatus: playerstatus,
-      playerrewardspoints: playerrewardspoints,
+      // playerstatus: playerstatus,
+      // playerrewardspoints: playerrewardspoints,
       playeremail: playeremail,
-      playerrpw: playerrpw
+      playerpw: playerpw
     });
 
   },
-
+  matchPassword: function (playerpw2) {
+    return this.state.playerpw1 === playerpw2;
+  },
   validateEmail: function (value) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(value);
@@ -99,25 +101,10 @@ var Playerform2 = React.createClass({
   render: function () {
 
     return (
-      <div id="theForm">
+      <div id="inputForm">
         <form onSubmit={this.handleSubmit}>
           <table>
             <tbody>
-              <tr>
-                <th>Last Name</th>
-                <td>
-                  <TextInput
-                    inputType="text"
-                    value={this.state.playerlastname}
-                    uniqueName="playerlastname"
-                    textArea={false}
-                    required={true}
-                    validate={this.commonValidate}
-                    onChange={this.setValue.bind(this, 'playerlastname')}
-                    errorMessage="Last Name is invalid"
-                    emptyMessage="Last Name is required" />
-                </td>
-              </tr>
               <tr>
                 <th>First Name</th>
                 <td>
@@ -134,10 +121,23 @@ var Playerform2 = React.createClass({
                 </td>
               </tr>
               <tr>
+                <th>Last Name</th>
+                <td>
+                  <TextInput
+                    inputType="text"
+                    value={this.state.playerlastname}
+                    uniqueName="playerlastname"
+                    textArea={false}
+                    required={true}
+                    validate={this.commonValidate}
+                    onChange={this.setValue.bind(this, 'playerlastname')}
+                    errorMessage="Last Name is invalid"
+                    emptyMessage="Last Name is required" />
+                </td>
+              </tr>
+              <tr>
                 <th>Email</th>
                 <td>
-
-
                   <TextInput
                     inputType="email"
                     value={this.state.playeremail}
@@ -155,12 +155,12 @@ var Playerform2 = React.createClass({
                 <td>
                   <TextInput
                     inputType="password"
-                    value={this.state.playerrpw}
-                    uniqueName="playerrpw"
+                    value={this.state.playerpw}
+                    uniqueName="playerpw"
                     textArea={false}
                     required={true}
                     validate={this.commonValidate}
-                    onChange={this.setValue.bind(this, 'playerrpw')}
+                    onChange={this.setValue.bind(this, 'playerpw')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
                 </td>
@@ -170,17 +170,17 @@ var Playerform2 = React.createClass({
                 <td>
                   <TextInput
                     inputType="password"
-                    value={this.state.playerrpw2}
-                    uniqueName="playerrpw2"
+                    value={this.state.playerpw2}
+                    uniqueName="playerpw2"
                     textArea={false}
                     required={true}
-                    validate={this.commonValidate}
-                    onChange={this.setValue.bind(this, 'playerrpw2')}
+                    validate={() => this.matchPassword(this.state.playerpw2)}
+                    onChange={this.setValue.bind(this, 'playerpw2')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>Rewards Points</th>
                 <td>
                   <TextInput
@@ -194,8 +194,8 @@ var Playerform2 = React.createClass({
                     errorMessage="Invalid point value"
                     emptyMessage="" />
                 </td>
-              </tr>
-              <tr>
+              </tr> */}
+              {/* <tr>
                 <th>
                   Player Status
                 </th>
@@ -219,11 +219,11 @@ var Playerform2 = React.createClass({
                     className="form-check-input"
                   />Inactive
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
           <div className="button-container">
-            <input type="submit" value="New Player" />
+            <input type="submit" value="Create Account" />
           </div>
         </form>
       </div>

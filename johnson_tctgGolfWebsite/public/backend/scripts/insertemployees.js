@@ -20,11 +20,8 @@ var EmployeeBox = React.createClass({
   render: function () {
     return (
       <div className="EmployeeBox">
-        <h1>Input New Employee</h1>
-        <div>
-          <div id="theform">
-            <Employeeform2 onEmployeeSubmit={this.handleEmployeeSubmit} />
-          </div>
+        <div id="theform">
+          <Employeeform2 onEmployeeSubmit={this.handleEmployeeSubmit} />
         </div>
       </div>
     );
@@ -125,7 +122,7 @@ var Employeeform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>
@@ -171,7 +168,7 @@ var Employeeform2 = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <th>Employee E-Mail</th>
+                  <th>E-Mail</th>
                   <td>
                     <TextInput
                       inputType="text"
@@ -186,7 +183,7 @@ var Employeeform2 = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <th>Employee Password</th>
+                  <th>Password</th>
                   <td>
                     <TextInput
                       inputType="password"
@@ -201,7 +198,7 @@ var Employeeform2 = React.createClass({
                   </td>
                 </tr>
                 <tr>
-                  <th>Employee Password Confirm</th>
+                  <th>Password Confirm</th>
                   <td>
                     <TextInput
                       inputType="password"
@@ -251,8 +248,9 @@ var Employeeform2 = React.createClass({
 
               </tbody>
             </table>
-            <input type="submit" value="Insert Employee" />
-
+            <div className="button-container">
+              <input type="submit" value="Insert User" />
+            </div>
           </form>
         </div>
       </div>

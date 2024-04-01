@@ -90,7 +90,28 @@ app.get('/getinv/', function (req, res) {
     res.send(JSON.stringify(data));
   });
 });
+app.get('/getInvDisplay/', function (req, res) {
+  var iname = req.query.inventoryname;
+  var iprice = req.query.inventoryprice;
 
+
+
+  var sqlsel = 'Select * FROM inventory where inventoryName Like ? and inventoryPrice Like ?'
+
+  var inserts = [`%` + iname + `%`, `%` + iprice + `%`];
+
+  var sql = mysql.format(sqlsel, inserts);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
 app.post('/inventory', function (req, res) {
   var iname = req.body.inventoryname;
   var iprice = req.body.inventoryprice;
@@ -219,6 +240,28 @@ app.get('/getplyr/', function (req, res) {
   });
 });
 
+app.get('/getplyrinfo/', function (req, res) {
+  // var plname = req.query.playerlastname;
+  // var pfname = req.query.playerfirstname;
+  // var pemail = req.query.playeremail;
+
+
+  var sqlsel = 'Select * FROM players ';
+
+  // var inserts = [`%` + plname + `%`, `%` + pfname + `%`, `%` + pemail + `%`];
+
+  var sql = mysql.format(sqlsel);
+
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
 app.post('/loginplyr/', function (req, res) {
   var pmail = req.body.playeremail;
   var ppw = req.body.playerpw;
@@ -413,11 +456,49 @@ app.get('/getemp/', function (req, res) {
   });
 });
 
-app.post('/player', function (req, res) {
+app.post('/userCreatePlayer', function (req, res) {
   var plname = req.body.playerlastname;
   var pfname = req.body.playerfirstname;
   var pstatus = req.body.playerstatus;
   var prewards = req.body.playerrewardspoints;
+  var pmail = req.body.playeremail;
+  // var ppw = req.body.playerpw;
+  // console.log("PW: " + ppw);
+
+  // var saltRounds = 10;
+  // var theHashedPW = '';
+
+  // bcrypt.hash(ppw, saltRounds, function (err, hashedPassword) {
+
+  //   if (err) {
+  //     console.log("Bad on encrypt");
+  //     return;
+  //   } else {
+
+  //     theHashedPW = hashedPassword;
+  //     console.log("Password Enc: " + theHashedPW);
+
+  var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
+    + " playerRewardsPoints, playerEmail) VALUES (?, ?, ?, ?, ?)";
+
+  var inserts = [plname, pfname, pstatus, prewards, pmail];
+
+  var sql = mysql.format(sqlins, inserts);
+
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+    res.redirect('insertplayer.html');
+    res.end();
+  });
+}
+);
+
+app.post('/playerCreateAccount', function (req, res) {
+  var plname = req.body.playerlastname;
+  var pfname = req.body.playerfirstname;
+  var pstatus = "Active";
+  var prewards = 0;
   var pmail = req.body.playeremail;
   var ppw = req.body.playerpw;
   console.log("PW: " + ppw);
@@ -436,7 +517,7 @@ app.post('/player', function (req, res) {
       console.log("Password Enc: " + theHashedPW);
 
       var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
-        + " playerRewardsPoints, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ?)";
+        + " playerRewardsPoints, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ? )";
 
       var inserts = [plname, pfname, pstatus, prewards, pmail, theHashedPW];
 
@@ -445,13 +526,12 @@ app.post('/player', function (req, res) {
       con.execute(sql, function (err, result) {
         if (err) throw err;
         console.log("1 record inserted");
-        res.redirect('insertplayer.html');
+        res.redirect('Home_PC.html');
         res.end();
       });
     }
   });
 });
-
 app.post('/employee', function (req, res,) {
 
   var eid = req.body.employeeid;
@@ -502,8 +582,9 @@ app.post('/updatesingleres', function (req, res) {
   var rstatus = req.body.upreservationstatus;
   var rplay = req.body.upreservationplayer;
   var rid = req.body.upreservationid;
-  var sqlins = "UPDATE reservations SET reservationDateTime = ?, reservationStatus = ?, playerID = ? WHERE reservationID = ?";
-  var inserts = [rdatetime, rstatus, rplay, rid];
+  var rplaycount = req.body.upreservationplayercount;
+  var sqlins = "UPDATE reservations SET reservationDateTime = ?, reservationStatus = ?, playerID = ?, reservationPlayerCount = ?, WHERE reservationID = ?";
+  var inserts = [rdatetime, rstatus, rplay, rplaycount, rid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
   con.execute(sql, function (err, result) {
@@ -534,6 +615,7 @@ app.get('/getres/', function (req, res) {
   var rdatetime = req.query.reservationdatetime;
   var rstatus = req.query.reservationstatus;
   var rplay = req.query.reservationplayer;
+  var rplaycount = req.query.reservationplayercount;
 
   console.log("Tier: " + rplay);
 
@@ -548,9 +630,9 @@ app.get('/getres/', function (req, res) {
   }
 
   var sqlsel = ' SELECT reservations.*, players.playerFirstName, players.playerLastName' +
-    ' FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationDateTime LIKE ? AND reservationStatus LIKE ? ' + playaddon;
+    ' FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationDateTime LIKE ? AND reservationStatus LIKE ? and reservationPlayerCount LIKE ?' + playaddon;
 
-  var inserts = [`%` + rdatetime + `%`, `%` + rstatus + `%`, playaddonvar];
+  var inserts = [`%` + rdatetime + `%`, `%` + rstatus + `%`, `%` + rplaycount + `%`, playaddonvar];
 
   var sql = mysql.format(sqlsel, inserts);
 
@@ -569,21 +651,34 @@ app.post('/reservation', function (req, res) {
   var rdatetime = req.body.reservationdatetime;
   var rstatus = req.body.reservationstatus;
   var rplay = req.body.reservationplayer;
+  var rplaycount = req.body.reservationplayercount;
 
-  var sqlins = "INSERT INTO reservations (reservationDateTime, reservationStatus, playerID) VALUES (?,?,?)";
-  var inserts = [rdatetime, rstatus, rplay];
+  var sqlins = "INSERT INTO reservations (reservationDateTime, reservationStatus, playerID, reservationPlayerCount) VALUES (?,?,?,?)";
+  var inserts = [rdatetime, rstatus, rplay, rplaycount];
   var sql = mysql.format(sqlins, inserts);
 
   con.execute(sql, function (err, result) {
     if (err) throw err;
     console.log(sql);
     console.log("1 record inserted");
-    res.redirect('insertreservation.html');
+    res.redirect('Home_PC.html');
     res.end();
   });
 });
 
+app.get('/getReservedDateTime', (req, res) => {
+  var sqlsel = "SELECT reservationDateTime FROM reservations WHERE reservationStatus != 'Cancelled'";
+  var sql = mysql.format(sqlsel)
+  console.log(sql);
 
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
 app.post('/updatesingleord', function (req, res) {
   var odate = req.body.uporderdate;
   var ototal = req.body.upordertotal;

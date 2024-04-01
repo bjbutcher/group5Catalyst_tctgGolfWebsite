@@ -47,7 +47,6 @@ var InventoryBox = React.createClass({
   render: function () {
     return (
       <div>
-        <h1>Update Inventory Item</h1>
         <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
         <br />
         <div id="theresults">
@@ -140,13 +139,17 @@ var Inventoryform2 = React.createClass({
                 </tr>
               </tbody>
             </table>
-            <input type="submit" value="Search Inventory" />
+            <div className="button-container">
+              <input type="submit" value="Search Inventory" />
+            </div>
           </form>
         </div>
         <div>
           <br />
           <form onSubmit={this.getInitialState}>
-            <input type="submit" value="Clear Form" />
+            <div className="button-container">
+              <input type="submit" value="Clear Form" />
+            </div>
           </form>
         </div>
       </div>
@@ -217,8 +220,10 @@ var InventoryUpdateform = React.createClass({
                 </tr>
               </tbody>
             </table><br />
-            <input type="hidden" name="upinvid" id="upinvid" onChange={this.handleUpChange} />
-            <input type="submit" value="Update Inventory" />
+            <div className="button-container">
+              <input type="hidden" name="upinvid" id="upinvid" onChange={this.handleUpChange} />
+              <input type="submit" value="Update Inventory" />
+            </div>
           </form>
         </div>
       </div>
@@ -313,7 +318,9 @@ var Inventory = React.createClass({
         </td>
         <td>
           <form onSubmit={this.updateRecord}>
-            <input type="submit" value="Update Record" />
+            <div className="updateButton">
+              <input type="submit" value="Update Record" />
+            </div>
           </form>
         </td>
       </tr>

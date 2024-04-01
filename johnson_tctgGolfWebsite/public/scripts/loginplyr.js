@@ -26,7 +26,6 @@ var LoginBox = React.createClass({
   render: function () {
     return (
       <div>
-        <h1>Login</h1>
         <LoginForm onLoginSubmit={this.handleLogin} />
         <br />
 
@@ -39,7 +38,7 @@ var LoginForm = React.createClass({
   getInitialState: function () {
     return {
       playeremail: "",
-      playerrpw: "",
+      playerpw: "",
 
     };
   },
@@ -52,11 +51,11 @@ var LoginForm = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
 
-    var playerrpw = this.state.playerrpw.trim();
+    var playerpw = this.state.playerpw.trim();
     var playeremail = this.state.playeremail.trim();
 
     this.props.onLoginSubmit({
-      playerrpw: playerrpw,
+      playerpw: playerpw,
       playeremail: playeremail
     });
 
@@ -76,15 +75,15 @@ var LoginForm = React.createClass({
             <table>
               <tbody>
                 <tr>
-                  <th>Player Email</th>
+                  <th>Email</th>
                   <td>
                     <input type="email" name="playeremail" id="playeremail" value={this.state.playeremail} onChange={this.handleChange} />
                   </td>
                 </tr>
                 <tr>
-                  <th>Player Password</th>
+                  <th>Password</th>
                   <td>
-                    <input type="password" name="playerrpw" id="playerrpw" value={this.state.playerrpw} onChange={this.handleChange} />
+                    <input type="password" name="playerpw" id="playerpw" value={this.state.playerpw} onChange={this.handleChange} />
                   </td>
                 </tr>
 
@@ -97,13 +96,6 @@ var LoginForm = React.createClass({
         </div>
         <div>
           <br />
-          <div className="button-container">
-            <form onSubmit={this.getInitialState}>
-
-              <input type="submit" value="Clear Form" />
-
-            </form>
-          </div>
         </div>
       </div >
     );
