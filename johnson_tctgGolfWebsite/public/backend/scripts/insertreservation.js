@@ -128,7 +128,7 @@ var Reservationform2 = React.createClass({
 
     var reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
     var reservationstatus = this.state.reservationstatus;
-    var reservationplayer = this.state.reservationplayer;
+    var reservationplayer = resplayer.value;
     var reservationplayercount = this.state.reservationplayercount;
 
     this.props.onReservationSubmit({
@@ -197,15 +197,16 @@ var Reservationform2 = React.createClass({
                       title="Select number of players who want to play during this reservation"
                       id="reservationplayercount"
                       value={this.state.reservationplayercount}
-                      onChange={this.handleChange}
+                      onChange={this.setValue.bind(this, 'reservationplayercount')}
                       required>
                     </input>
                   </td>
                 </tr>
                 <tr>
                   <th>Reservation Status</th>
-                  <td><select emptyMessage="Status is required" name="reservationstatus" id="reservationstatus" defaultValue={this.state.selectValue} onChange={this.setValue.bind(this, 'reservationstatus')} required>
-                    <option value="" selected disabled>Please Select a Status</option>
+                  <td><select name="reservationstatus" id="reservationstatus"
+                    value={this.state.reservationstatus} onChange={this.setValue.bind(this, 'reservationstatus')} required>
+                    <option value="">Please Select a Status</option>
                     <option value="Scheduled">Scheduled</option>
                     <option value="Rescheduled">Rescheduled</option>
                     <option value="Cancelled">Cancelled</option>

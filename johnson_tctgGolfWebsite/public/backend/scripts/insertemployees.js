@@ -31,7 +31,7 @@ var EmployeeBox = React.createClass({
 var Employeeform2 = React.createClass({
   getInitialState: function () {
     return {
-      employeeid: "",
+      // employeeid: "",
       employeelastname: "",
       employeefirstname: "",
       employeeemail: "",
@@ -67,7 +67,7 @@ var Employeeform2 = React.createClass({
     //we don't want the form to submit, so we prevent the default behavior
     e.preventDefault();
 
-    var employeeid = this.state.employeeid.trim();
+    // var employeeid = this.state.employeeid.trim();
     var employeeemail = this.state.employeeemail.trim();
     var employeelastname = this.state.employeelastname.trim();
     var employeefirstname = this.state.employeefirstname.trim();
@@ -85,13 +85,13 @@ var Employeeform2 = React.createClass({
       return;
     }
 
-    if (!employeepw || !employeeid || !employeeemail) {
+    if (!employeepw || !employeeemail) {
       console.log("Missed somthing")
       return;
     }
 
     this.props.onEmployeeSubmit({
-      employeeid: employeeid,
+      // employeeid: employeeid,
       employeelastname: employeelastname,
       employeefirstname: employeefirstname,
       employeeemail: employeeemail,
@@ -126,7 +126,7 @@ var Employeeform2 = React.createClass({
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>
-                <tr>
+                {/* <tr>
                   <th>Employee ID</th>
                   <td>
                     <TextInput
@@ -140,7 +140,7 @@ var Employeeform2 = React.createClass({
                       errorMessage="Employee ID is invalid"
                       emptyMessage="Employee ID is required" />
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th>Last Name</th>
                   <td>
@@ -245,7 +245,6 @@ var Employeeform2 = React.createClass({
                     <SelectList data={this.state.data} />
                   </td>
                 </tr>
-
               </tbody>
             </table>
             <div className="button-container">

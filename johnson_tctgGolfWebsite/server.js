@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + "/public/login.html"));
+  res.sendFile(path.join(__dirname + "/public/designPages/Home_PC.html"));
 });
 
 
@@ -286,7 +286,7 @@ app.post('/loginplyr/', function (req, res) {
           console.log("Password Incorrect");
         } else {
           console.log("Password Correct");
-          res.send({ redirect: '/insertplayer.html' });
+          res.send({ redirect: '/designPages/Home_PC.html' });
         }
       });
     } else {

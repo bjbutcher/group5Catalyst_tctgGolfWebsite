@@ -17,7 +17,6 @@ var PlayerBox = React.createClass({
   render: function () {
     return (
       <div className="PlayerBox">
-        <h1>New Player</h1>
         <Playerform2 onPlayerSubmit={this.handlePlayerSubmit} />
       </div>
     );
@@ -99,7 +98,7 @@ var Playerform2 = React.createClass({
   render: function () {
 
     return (
-      <div id="insertForm">
+      <div id="inputForm">
         <form onSubmit={this.handleSubmit}>
           <table>
             <tbody>

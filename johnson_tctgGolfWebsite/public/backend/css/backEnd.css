@@ -1,109 +1,17 @@
-.header
+nav
 {
-  background-image: url('../../images/sunset-in-the-golf-course-9ouh.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  height: 50vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.header::after
-{
-  content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 32.4%, rgba(128, 128, 128, 0) 100%);
-  z-index: 1;
-}
-
-.header-logo,
-.top-right-image,
-.phone-number
-{
-  position: relative;
-  z-index: 2;
-}
-
-.header-logo
-{
-  background-image: url('../../images/BRLogoColor.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  position: absolute;
-  top: 25%;
-  left: 38%;
-  width: 30vw;
-  height: 30vh;
-}
-
-.top-right-image
-{
-  position: absolute;
-  right: 1vw;
-  top: 1vh;
-  height: 5vh;
-  width: 5vh;
-  background-image: url('../../images/Untitled.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.phone-number
-{
-  position: absolute;
-  right: 5vw;
-  top: 2vh;
-  color: rgba(96, 96, 96, 1);
-  font-size: 2vw;
-  padding-right: 2vw;
-  font-family: Avenir Next, sans-serif;
-
-}
-
-h1
-{
-  font-family: Balgon Serif;
-  font-size: 3vw;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: rgba(96, 96, 96, 1);
-  z-index: 2;
-}
-
-h2
-{
-  font-family: Balgon Serif;
-  font-size: 2vw;
-  color: rgba(96, 96, 96, 1);
-  z-index: 2;
-}
-
-h3
-{
-  font-family: Balgon Serif;
-  font-size: 1vw;
-  color: rgba(96, 96, 96, 1);
-  z-index: 2;
-}
-
-nav
-{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 10px 0;
+
 }
+
 
 nav a
 {
@@ -116,14 +24,71 @@ nav a
   text-decoration: none;
   font-family: Balgon Serif;
   white-space: nowrap;
-  margin-left: .5%;
+  margin-left: 1%;
   position: relative;
-  z-index: 4;
+
 }
 
-nav a:hover
+.nav-dropdown .dropdown-content
 {
-  background-color: darkgray;
+  position: absolute;
+  top: 100%;
+  display: none;
+  background-color: rgba(96, 96, 96, 1);
+  /* min-width: 160px; */
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+
+}
+
+
+
+
+
+.nav-dropdown
+{
+  position: relative;
+  display: block;
+  margin-left: 1%;
+  background-color: rgba(96, 96, 96, 1);
+}
+
+
+
+.dropdown-content a
+{
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 1em;
+  background-color: rgba(96, 96, 96, 1);
+  position: relative;
+  font-family: Avenir Next, sans-serif;
+}
+
+.dropdown-content a:hover
+{
+  background-color: #f1f1f1;
+  color: black;
+}
+
+.nav-dropdown:hover .dropdown-content
+{
+  display: block;
+}
+
+
+.header-logo
+{
+  background-image: url('../../images/BRLogoColor.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  width: 10vw;
+  height: 10vh;
+  margin-right: 20px;
+  z-index: 5;
 }
 
 footer
@@ -187,9 +152,33 @@ footer a:hover
 
 #content
 {
+  padding-top: 5%;
   font-size: 2em;
   font-family: Avenir Next, sans-serif;
-  z-index: 3;
+}
+
+h1
+{
+  font-family: Balgon Serif;
+  font-size: 3vw;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgba(96, 96, 96, 1);
+}
+
+h2
+{
+  font-family: Balgon Serif;
+  font-size: 2vw;
+  color: rgba(96, 96, 96, 1);
+}
+
+h3
+{
+  font-family: Balgon Serif;
+  font-size: 1vw;
+  color: rgba(96, 96, 96, 1);
 }
 
 form
@@ -201,71 +190,6 @@ form
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-}
-
-.nav-dropdown
-{
-  position: relative;
-  display: inline-block;
-  margin-left: .5%;
-  z-index: 4;
-  background-color: rgba(96, 96, 96, 1);
-}
-
-.nav-dropdown a
-{
-  position: relative;
-  font-size: 1.5em;
-  padding: 0.5em 1em;
-  border-radius: 3px;
-  transition: background-color 0.3s;
-  background-color: rgba(96, 96, 96, 1);
-  color: white;
-  text-decoration: none;
-  font-family: Balgon Serif;
-  white-space: nowrap;
-  z-index: 4;
-}
-
-.nav-dropdown a:hover
-{
-  background-color: darkgray;
-}
-
-.dropdown-content
-{
-  display: none;
-  position: fixed;
-  background-color: rgba(96, 96, 96, 1);
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 4;
-  font-family: Avenir Next, sans-serif;
-}
-
-.dropdown-content a
-{
-  color: white;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  font-size: 1em;
-  background-color: rgba(96, 96, 96, 1);
-  z-index: 4;
-  position: relative;
-  font-family: Avenir Next, sans-serif;
-
-}
-
-.dropdown-content a:hover
-{
-  background-color: #f1f1f1;
-  color: black;
-}
-
-.nav-dropdown:hover .dropdown-content
-{
-  display: block;
 }
 
 table
@@ -386,6 +310,11 @@ input[type="radio"]
   transition: background-color 0.3s ease;
 }
 
+.nav-dropdown a
+{
+  margin-left: -1em;
+}
+
 @media (max-width: 768px)
 {
   .header-logo
@@ -393,10 +322,6 @@ input[type="radio"]
     width: 50%;
   }
 
-  .phone-number
-  {
-    font-size: 5vw;
-  }
 
   nav a
   {

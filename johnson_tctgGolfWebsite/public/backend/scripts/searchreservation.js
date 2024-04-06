@@ -16,9 +16,9 @@ var ReservationBox = React.createClass({
       url: '/getres',
       data: {
         'reservationdatetime': reservationDateTime,
-        'reservationstatus': formState.reservationStatus,
-        'reservationplayer': formState.reservationPlayer,
-        'reservationplayercount': formState.reservationPlayerCount
+        'reservationstatus': formState.reservationstatus,
+        'reservationplayer': resplayer.value,
+        'reservationplayercount': formState.reservationplayercount
       },
       dataType: 'json',
       cache: false,
@@ -118,15 +118,10 @@ var Reservationform2 = React.createClass({
     this.loadResPlayer();
   },
   handleChange: function (event) {
-    var partialState = {};
-    partialState[event.target.id] = event.target.value;
-    this.setState(partialState);
-
-    if (event.target.id === "reservationdate") {
-      this.setState({ reservationtime: '' });
-    }
+    this.setState({
+      [event.target.id]: event.target.value
+    });
   },
-
   handleDateTimeChange: function () {
     var reservationdatetime = this.state.reservationdate + 'T' + this.state.reservationtime;
     this.setState({ reservationdatetime: reservationdatetime });
@@ -167,7 +162,7 @@ var Reservationform2 = React.createClass({
       reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
     }
     var reservationstatus = this.state.reservationstatus;
-    var reservationplayer = this.state.reservationplayer;
+    var reservationplayer = resplayer.value;
     var reservationplayercount = this.state.reservationplayercount;
 
     this.props.onReservationSubmit({
@@ -191,10 +186,9 @@ var Reservationform2 = React.createClass({
   commonValidate: function () {
     return true;
   },
-  setValue: function (field, event) {
-    var object = {};
-    object[field] = event.target.value;
-    this.setState(object);
+  setValue(field, event) {
+    const value = event.target.value !== "" ? event.target.value : null;
+    this.setState({ [field]: value });
   },
   render: function () {
 
@@ -222,7 +216,7 @@ var Reservationform2 = React.createClass({
                       id="reservationtime"
                       value={this.state.reservationtime}
                       onChange={this.handleChange}
-                      required>
+                    >
                       <option value="">Select Time</option>
                       {this.renderTimeOptions()}
                     </select>
@@ -236,15 +230,15 @@ var Reservationform2 = React.createClass({
                       title="Select number of players who want to play during this reservation"
                       id="reservationplayercount"
                       value={this.state.reservationplayercount}
-                      onChange={this.handleChange}
-                      required>
+                      onChange={this.setValue.bind(this, 'reservationplayercount')}
+                    >
                     </input>
                   </td>
                 </tr>
                 <tr>
                   <th>Reservation Status</th>
-                  <td><select
-                    value={this.state.reservationstatus} onChange={this.handleChange.bind(this, 'reservationstatus')} required>
+                  <td><select name="reservationstatus" id="reservationstatus"
+                    value={this.state.reservationstatus} onChange={this.handleChange}>
                     <option value="">Please Select a Status</option>
                     <option value="Scheduled">Scheduled</option>
                     <option value="Rescheduled">Rescheduled</option>
@@ -263,7 +257,7 @@ var Reservationform2 = React.createClass({
               </tbody>
             </table>
             <div className="button-container">
-              <input type="submit" value="Insert Reservation" />
+              <input type="submit" value="Search Reservations" />
             </div>
           </form>
         </div>
@@ -338,6 +332,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="resplayer" id="resplayer">
+        <option key="" value="">Please Select Player</option>
         {optionNodes}
       </select>
     );

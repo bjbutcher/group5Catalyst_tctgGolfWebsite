@@ -210,7 +210,7 @@ var Reservationform2 = React.createClass({
                   <th>Reservation Status</th>
                   <td>
                     <select
-                      value={this.state.reservationstatus} onChange={this.handleChange.bind(this, 'reservationstatus')} required>
+                      value={this.state.reservationstatus} onChange={this.setValue.bind(this, 'reservationstatus')} required>
                       <option value="">Please Select a Status</option>
                       <option value="Scheduled">Scheduled</option>
                       <option value="Rescheduled">Rescheduled</option>

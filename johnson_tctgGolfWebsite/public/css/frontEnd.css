@@ -574,6 +574,52 @@ radio
   background-color: rgba(196, 79, 77, .8);
 }
 
+#directions
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#directions h3
+{
+  font-family: Avenir, sans-serif;
+  font-size: 1vw;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: rgba(96, 96, 96, 1);
+}
+
+#directions img
+{
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#About_Us
+{
+  width: 50%;
+  font-family: Avenir, sans-serif;
+  color: rgba(96, 96, 96, 1);
+  text-align: left;
+  margin: 5vw auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#About_Us h1
+{
+  font-family: Avenir, sans-serif;
+  font-size: 2vw;
+  text-align: left;
+  margin-bottom: 5vw;
+
+}
+
 @media (max-width: 768px)
 {
   .header-logo
