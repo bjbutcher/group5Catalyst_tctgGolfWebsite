@@ -3,7 +3,13 @@ var PlayerBox = React.createClass({
     return { data: [] };
   },
   loadPlayersFromServer: function () {
-
+    var playermembertypevalue = 2;
+    if (basic.checked) {
+      playermembertypevalue = 0;
+    }
+    if (premium.checked) {
+      playermembertypevalue = 1;
+    }
     var playerstatusvalue = 'Active';
     if (plyrstatusactive.checked) {
       playerstatusvalue = 'Active';
@@ -16,6 +22,7 @@ var PlayerBox = React.createClass({
       data: {
         'playerlastname': playerlastname.value,
         'playerfirstname': playerfirstname.value,
+        'playermembertype': playermembertypevalue,
         'playerrewardspoints': playerrewardspoints.value,
         'playeremail': playeremail.value,
         'playerstatus': playerstatusvalue,
@@ -64,9 +71,10 @@ var PlayerBox = React.createClass({
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th>Key</th>
                   <th>Last Name</th>
                   <th>First Name</th>
+                  <th>Reward Member Type</th>
                   <th>Rewards Points</th>
                   <th>Email</th>
                   <th>Player Status</th>
@@ -91,31 +99,38 @@ var Playerform2 = React.createClass({
       playerid: "",
       playerlastname: "",
       playerfirstname: "",
+      playermembertype: "",
       playerrewardspoints: "",
       playeremail: "",
       playerstatus: "",
       data: []
     };
   },
-  handleOptionChange: function (e) {
+  handleTypeChange: function (e) {
     this.setState({
-      selectedOption: e.target.value
+      selectedType: e.target.value
     });
   },
-
+  handleStatusChange: function (e) {
+    this.setState({
+      selectedStatus: e.target.value
+    });
+  },
 
   handleSubmit: function (e) {
     e.preventDefault();
 
     var playerlastname = this.state.playerlastname.trim();
     var playerfirstname = this.state.playerfirstname.trim();
+    var playermembertype = this.state.selectedType;
     var playerrewardspoints = this.state.playerrewardspoints.trim();
     var playeremail = this.state.playeremail;
-    var playerstatus = this.state.selectedOption;
+    var playerstatus = this.state.selectedStatus;
 
     this.props.onPlayerSubmit({
       playerlastname: playerlastname,
       playerfirstname: playerfirstname,
+      playermembertype: playermembertype,
       playerrewardspoints: playerrewardspoints,
       playeremail: playeremail,
       playerstatus: playerstatus
@@ -148,6 +163,31 @@ var Playerform2 = React.createClass({
                   </td>
                 </tr>
                 <tr>
+                  <th>
+                    Rewards Member Type
+                  </th>
+                  <td>
+                    <input
+                      type="radio"
+                      name="playermembertype"
+                      id="basic"
+                      value="0"
+                      checked={this.state.selectedType === "0"}
+                      onChange={this.handleTypeChange}
+                      className="form-check-input"
+                    />Basic
+                    <input
+                      type="radio"
+                      name="playermembertype"
+                      id="premium"
+                      value="1"
+                      checked={this.state.selectedType === "1"}
+                      onChange={this.handleTypeChange}
+                      className="form-check-input"
+                    />Premium
+                  </td>
+                </tr>
+                <tr>
                   <th>Rewards Points</th>
                   <td>
                     <input type="number" name="playerrewardspoints" id="playerrewardspoints" value={this.state.playerrewardspoints} onChange={this.handleChange} />
@@ -167,8 +207,8 @@ var Playerform2 = React.createClass({
                       name="plyrstatus"
                       id="plyrstatusactive"
                       value="Active"
-                      checked={this.state.selectedOption === "Active"}
-                      onChange={this.handleOptionChange}
+                      checked={this.state.selectedStatus === "Active"}
+                      onChange={this.handleStatusChange}
                       className="form-check-input"
                     />Active
                     <input
@@ -176,8 +216,8 @@ var Playerform2 = React.createClass({
                       name="plyrstatus"
                       id="plyrstatusinactive"
                       value="Inactive"
-                      checked={this.state.selectedOption === "Inactive"}
-                      onChange={this.handleOptionChange}
+                      checked={this.state.selectedStatus === "Inactive"}
+                      onChange={this.handleStatusChange}
                       className="form-check-input"
                     /> Inactive
                   </td>
@@ -209,33 +249,41 @@ var PlayerUpdateform = React.createClass({
       upplayerid: "",
       upplayerlastname: "",
       upplayerfirstname: "",
+      upplayermembertype: "",
       upplayerrewardspoints: "",
       upplayeremail: "",
       upplayerstatus: "",
-      upselectedOption: "",
+      upselectedType: "",
+      upselectedStatus: "",
       updata: []
     };
   },
-  handleUpOptionChange: function (e) {
+  handleUpTypeChange: function (e) {
     this.setState({
-      upselectedOption: e.target.value
+      upselectedType: e.target.value
     });
   },
-
+  handleUpStatusChange: function (e) {
+    this.setState({
+      upselectedStatus: e.target.value
+    });
+  },
   handleUpSubmit: function (e) {
     e.preventDefault();
 
     var upplayerid = upplyrid.value;
     var upplayerlastname = upplyrlname.value;
     var upplayerfirstname = upplyrfname.value;
+    var upplayermembertype = this.state.upselectedType;
     var upplayerrewardspoints = upplyrrewards.value;
     var upplayeremail = upplyremail.value;
-    var upplayerstatus = this.state.upselectedOption;
+    var upplayerstatus = this.state.upselectedStatus;
 
     this.props.onUpdateSubmit({
       upplayerid: upplayerid,
       upplayerlastname: upplayerlastname,
       upplayerfirstname: upplayerfirstname,
+      upplayermembertype: upplayermembertype,
       upplayerrewardspoints: upplayerrewardspoints,
       upplayeremail: upplayeremail,
       upplayerstatus: upplayerstatus
@@ -268,6 +316,31 @@ var PlayerUpdateform = React.createClass({
                   </td>
                 </tr>
                 <tr>
+                  <th>
+                    Rewards Member Type
+                  </th>
+                  <td>
+                    <input
+                      type="radio"
+                      name="upplayermembertype"
+                      id="upbasic"
+                      value="0"
+                      checked={this.state.upselectedType === "0"}
+                      onChange={this.handleUpTypeChange}
+                      className="form-check-input"
+                    />Basic
+                    <input
+                      type="radio"
+                      name="upplayermembertype"
+                      id="uppremium"
+                      value="1"
+                      checked={this.state.upselectedType === "1"}
+                      onChange={this.handleUpTypeChange}
+                      className="form-check-input"
+                    />Premium
+                  </td>
+                </tr>
+                <tr>
                   <th>Rewards Points</th>
                   <td>
                     <input type="number" name="upplyrrewards" id="upplyrrewards" value={this.state.upplyrrewards} onChange={this.handleUpChange} />
@@ -289,8 +362,8 @@ var PlayerUpdateform = React.createClass({
                       name="upplyrstatus"
                       id="upplyrstatusactive"
                       value="Active"
-                      checked={this.state.upselectedOption === "Active"}
-                      onChange={this.handleUpOptionChange}
+                      checked={this.state.upselectedStatus === "Active"}
+                      onChange={this.handleUpStatusChange}
                       className="form-check-input"
                     />Active
                     <input
@@ -298,8 +371,8 @@ var PlayerUpdateform = React.createClass({
                       name="upplyrstatus"
                       id="upplyrstatusinactive"
                       value="Inactive"
-                      checked={this.state.upselectedOption === "Inactive"}
-                      onChange={this.handleUpOptionChange}
+                      checked={this.state.upselectedStatus === "Inactive"}
+                      onChange={this.handleUpStatusChange}
                       className="form-check-input"
                     />Inactive
                   </td>
@@ -329,6 +402,7 @@ var PlayerList = React.createClass({
           plyrrewards={player.playerRewardsPoints}
           plyremail={player.playerEmail}
           plyrstatus={player.playerStatus}
+          playermembertype={player.playerMemberRewardsType}
         >
         </Player>
       );
@@ -374,7 +448,11 @@ var Player = React.createClass({
           upplyrfname.value = player.playerFirstName;
           upplyrrewards.value = player.playerRewardsPoints;
           upplyremail.value = player.playerEmail;
-
+          if (player.playerMemberRewardsType == 0) {
+            upbasic.checked = true;
+          } else {
+            uppremium.checked = true;
+          }
           if (player.playerStatus == 'Active') {
             upplyrstatusactive.checked = true;
           } else {
@@ -391,7 +469,11 @@ var Player = React.createClass({
   },
 
   render: function () {
-
+    if (this.props.playermembertype == 0) {
+      var thetype = "Basic";
+    } else {
+      var thetype = "Premium";
+    }
     if (this.props.plyrstatus == "Active") {
       var thestatus = "Active";
     } else {
@@ -410,6 +492,7 @@ var Player = React.createClass({
         <td>
           {this.props.plyrfname}
         </td>
+        <td>{thetype}</td>
         <td>
           {this.props.plyrrewards}
         </td>

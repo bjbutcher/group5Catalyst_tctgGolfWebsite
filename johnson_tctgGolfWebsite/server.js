@@ -173,7 +173,7 @@ app.post('/updatesingleplyr', function (req, res) {
   var pemail = req.body.upplayeremail;
   var pstat = req.body.upplayerstatus;
   var pid = req.body.upplayerid;
-  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ?, WHERE playerid = ?";
+  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ?, WHERE playerID = ?";
   var inserts = [plname, pfname, pstat, prewards, pemail, pid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
@@ -187,7 +187,7 @@ app.post('/updatesingleplyr', function (req, res) {
 app.get('/getsingleplyr/', function (req, res) {
   var pid = req.query.upplyrid;
 
-  var sqlsel = 'select * from players where playerid = ?'
+  var sqlsel = 'select * from players where playerID = ?'
   var inserts = [pid];
   var sql = mysql.format(sqlsel, inserts);
   console.log("Player retrieved.");
@@ -205,12 +205,19 @@ app.get('/getsingleplyr/', function (req, res) {
 app.get('/getplyr/', function (req, res) {
   var plname = req.query.playerlastname;
   var pfname = req.query.playerfirstname;
+  var prtype = req.query.playermembertype;
   var prewards = req.query.playerrewardspoints;
   var pemail = req.query.playeremail;
   var pstat = req.query.playerstatus;
 
   console.log("Status: " + pstat);
-
+  if (prtype == 0 || prtype == 1) {
+    var typeaddon = ' and playerMemberRewardsType = ?';
+    var typeaddonvar = prtype;
+  } else {
+    var typeaddon = ' and playerMemberRewardsType Like ?';
+    var typeaddonvar = '%%';
+  }
   if (pstat == 'Active' || pstat == 'Inactive') {
     var statusaddon = ' and playerStatus = ?';
     var statusaddonvar = pstat;
@@ -223,9 +230,9 @@ app.get('/getplyr/', function (req, res) {
 
   var sqlsel = 'Select * FROM players ' +
     ' where playerLastName Like ? and playerFirstName Like ? '
-    + ' and playerRewardsPoints Like ? and playerEmail Like ?' + statusaddon;
+    + ' and playerRewardsPoints Like ? and playerEmail Like ?' + statusaddon + typeaddon;
 
-  var inserts = [`%` + plname + `%`, `%` + pfname + `%`, `%` + prewards + `%`, `%` + pemail + `%`, statusaddonvar];
+  var inserts = [`%` + plname + `%`, `%` + pfname + `%`, `%` + prewards + `%`, `%` + pemail + `%`, statusaddonvar, typeaddonvar];
 
   var sql = mysql.format(sqlsel, inserts);
 
@@ -460,6 +467,7 @@ app.post('/userCreatePlayer', function (req, res) {
   var plname = req.body.playerlastname;
   var pfname = req.body.playerfirstname;
   var pstatus = req.body.playerstatus;
+  var prtype = req.body.playermembertype;
   var prewards = req.body.playerrewardspoints;
   var pmail = req.body.playeremail;
   // var ppw = req.body.playerpw;
@@ -479,9 +487,9 @@ app.post('/userCreatePlayer', function (req, res) {
   //     console.log("Password Enc: " + theHashedPW);
 
   var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
-    + " playerRewardsPoints, playerEmail) VALUES (?, ?, ?, ?, ?)";
+    + " playerMemberRewardsType, playerRewardsPoints, playerEmail) VALUES (?, ?, ?, ?, ?, ?)";
 
-  var inserts = [plname, pfname, pstatus, prewards, pmail];
+  var inserts = [plname, pfname, pstatus, prtype, prewards, pmail];
 
   var sql = mysql.format(sqlins, inserts);
 

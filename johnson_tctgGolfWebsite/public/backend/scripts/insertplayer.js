@@ -31,22 +31,33 @@ var Playerform2 = React.createClass({
       playerstatus: "",
       playerrewardspoints: "",
       playeremail: "",
-      playerpw: "",
-      playerpw2: ""
+      playermembertype: ""
+      // playerpw: "",
+      // playerpw2: ""
     };
   },
-
+  handleTypeChange: function (e) {
+    this.setState({
+      selectedType: e.target.value
+    });
+  },
+  handleStatusChange: function (e) {
+    this.setState({
+      selectedStatus: e.target.value
+    });
+  },
   handleSubmit: function (e) {
 
     e.preventDefault();
 
     var playerlastname = this.state.playerlastname.trim();
     var playerfirstname = this.state.playerfirstname.trim();
-    var playerstatus = this.state.selectedOption;
+    var playerstatus = this.state.selectedStatus;
     var playerrewardspoints = this.state.playerrewardspoints;
     var playeremail = this.state.playeremail.trim();
-    var playerpw = this.state.playerpw.trim();
-    var playerpw2 = this.state.playerpw2.trim();
+    var playermembertype = this.state.selectedType;
+    // var playerpw = this.state.playerpw.trim();
+    // var playerpw2 = this.state.playerpw2.trim();
 
     if (!this.validateEmail(playeremail)) {
       console.log("Bad Email!!!" + this.validateEmail(playeremail));
@@ -57,11 +68,11 @@ var Playerform2 = React.createClass({
       return;
     }
 
-    if (playerpw != playerpw2) {
-      console.log("Passwords do not match!!");
-      alert("Passwords do not match!!");
-      return;
-    }
+    // if (playerpw != playerpw2) {
+    //   console.log("Passwords do not match!!");
+    //   alert("Passwords do not match!!");
+    //   return;
+    // }
 
     if (!playerlastname || !playeremail) {
       console.log("Field Missing");
@@ -73,8 +84,9 @@ var Playerform2 = React.createClass({
       playerfirstname: playerfirstname,
       playerstatus: playerstatus,
       playerrewardspoints: playerrewardspoints,
+      playermembertype: playermembertype,
       playeremail: playeremail,
-      playerpw: playerpw
+      // playerpw: playerpw
     });
 
   },
@@ -149,7 +161,7 @@ var Playerform2 = React.createClass({
                     emptyMessage="Email Address is Required" />
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>Password</th>
                 <td>
                   <TextInput
@@ -163,8 +175,8 @@ var Playerform2 = React.createClass({
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
                 </td>
-              </tr>
-              <tr>
+              </tr> */}
+              {/* <tr>
                 <th>Password Confirm</th>
                 <td>
                   <TextInput
@@ -177,6 +189,31 @@ var Playerform2 = React.createClass({
                     onChange={this.setValue.bind(this, 'playerpw2')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />
+                </td>
+              </tr> */}
+              <tr>
+                <th>
+                  Reward Member Type
+                </th>
+                <td>
+                  <input
+                    type="radio"
+                    name="playermembertype"
+                    id="basic"
+                    value="0"
+                    checked={this.state.selectedType === "0"}
+                    onChange={this.handleTypeChange}
+                    className="form-check-input"
+                  />Basic Member
+                  <input
+                    type="radio"
+                    name="playermembertype"
+                    id="premium"
+                    value="1"
+                    checked={this.state.selectedType === "1"}
+                    onChange={this.handleTypeChange}
+                    className="form-check-input"
+                  />Premium Member
                 </td>
               </tr>
               <tr>
@@ -204,8 +241,8 @@ var Playerform2 = React.createClass({
                     name="plyrstatus"
                     id="plyrstatusactive"
                     value="Active"
-                    checked={this.state.upselectedOption === "Active"}
-                    onChange={this.handleOptionChange}
+                    checked={this.state.selectedStatus === "Active"}
+                    onChange={this.handleStatusChange}
                     className="form-check-input"
                   />Active
                   <input
@@ -213,8 +250,8 @@ var Playerform2 = React.createClass({
                     name="plyrstatus"
                     id="plyrstatusinactive"
                     value="Inactive"
-                    checked={this.state.selectedOption === "Inactive"}
-                    onChange={this.handleOptionChange}
+                    checked={this.state.selectedStatus === "Inactive"}
+                    onChange={this.handleStatusChange}
                     className="form-check-input"
                   />Inactive
                 </td>
