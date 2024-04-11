@@ -4,9 +4,9 @@ var ReservationBox = React.createClass({
       data: [],
       reservationDate: "",
       reservationTime: "",
-      reservationStatus: "",
+      reservationstatus: "",
       reservationPlayer: "",
-      reservationPlayerCount: ""
+      reservationplayercount: ""
     };
   },
   loadReservationsFromServer: function (formState) {
@@ -33,17 +33,26 @@ var ReservationBox = React.createClass({
   componentDidMount: function () {
     this.loadReservationsFromServer(this.state);
   },
-
+  updateFormState: function (date, time, status, playerCount, playerId) {
+    this.refs.reservationUpdateForm.setState({
+      upresdate: date,
+      uprestime: time,
+      upresstatus: status,
+      uppresplaycount: playerCount,
+      upresplayer: playerId
+    });
+  },
   handleFormChange: function (newState) {
     this.setState(newState);
   },
-
   render: function () {
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} onFormChange={this.handleFormChange} />
-          <br />
+        </div>
+        <br />
+        <div id="resultList">
           <table>
             <thead>
               <tr>
@@ -79,17 +88,6 @@ var Reservationform2 = React.createClass({
       selectedOption: e.target.value
     });
   },
-  convertTo24Hour: function (time12h) {
-    const [time, modifier] = time12h.split(' ');
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
-    }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    return `${hours}:${minutes}:00`;
-  },
   loadResPlayer: function () {
     $.ajax({
       url: '/getplayers',
@@ -118,10 +116,15 @@ var Reservationform2 = React.createClass({
     this.loadResPlayer();
   },
   handleChange: function (event) {
+
     this.setState({
+
       [event.target.id]: event.target.value
     });
+
+
   },
+
   handleDateTimeChange: function () {
     var reservationdatetime = this.state.reservationdate + 'T' + this.state.reservationtime;
     this.setState({ reservationdatetime: reservationdatetime });
@@ -157,6 +160,7 @@ var Reservationform2 = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
+
     var reservationdatetime = "";
     if (this.state.reservationdate && this.state.reservationtime) {
       reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
@@ -171,6 +175,7 @@ var Reservationform2 = React.createClass({
       reservationplayer: reservationplayer,
       reservationplayercount: reservationplayercount,
     });
+
   },
   createDateTime: function (date, time12h) {
     const [time, modifier] = time12h.split(' ');
@@ -183,8 +188,10 @@ var Reservationform2 = React.createClass({
     }
     return date + 'T' + hours + ':' + minutes + ':00';
   },
-  commonValidate: function () {
-    return true;
+  handleChange: function (event) {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
   },
   setValue(field, event) {
     const value = event.target.value !== "" ? event.target.value : null;
@@ -261,17 +268,26 @@ var Reservationform2 = React.createClass({
             </div>
           </form>
         </div>
+        <div>
+          <br />
+          <div className="button-container">
+            <form onSubmit={this.getInitialState}>
+              <input type="submit" value="Clear Form" />
+            </form>
+          </div>
+        </div>
       </div>
     );
   }
 });
+
 var ReservationList = React.createClass({
   render: function () {
     var reservationNodes = this.props.data.map(function (reservation) {
       return (
         <Reservation
           key={reservation.reservationID}
-          reskey={reservation.reservationID}
+          resid={reservation.reservationID}
           resdatetime={reservation.reservationDateTime}
           resstatus={reservation.reservationStatus}
           resplayer={reservation.playerFirstName + " " + reservation.playerLastName}
@@ -282,6 +298,7 @@ var ReservationList = React.createClass({
 
     });
 
+    //print all the nodes in the list
     return (
       <tbody>
         {reservationNodes}
@@ -300,7 +317,7 @@ var Reservation = React.createClass({
 
       <tr>
         <td>
-          {this.props.reskey}
+          {this.props.resid}
         </td>
         <td>
           {this.props.resdatetime}

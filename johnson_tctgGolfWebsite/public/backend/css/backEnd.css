@@ -41,10 +41,6 @@ nav a
 
 }
 
-
-
-
-
 .nav-dropdown
 {
   position: relative;
@@ -52,8 +48,6 @@ nav a
   margin-left: 1%;
   background-color: rgba(96, 96, 96, 1);
 }
-
-
 
 .dropdown-content a
 {
@@ -78,7 +72,6 @@ nav a
   display: block;
 }
 
-
 .header-logo
 {
   background-image: url('../../images/BRLogoColor.png');
@@ -88,81 +81,42 @@ nav a
   width: 10vw;
   height: 10vh;
   margin-right: 20px;
-  z-index: 5;
 }
 
-footer
+.nav-dropdown a
 {
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  text-align: center;
-  padding: 1em;
-  font-family: Avenir Next, sans-serif;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1em;
+  margin-left: -1em;
 }
 
-.footer-left,
-.footer-right,
-.footer-logo
+html,
+body
 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: auto;
+  padding: 0;
 
-footer a
-{
-  color: white;
-  text-decoration: none;
-  padding: 0.5em;
-}
-
-.footer-left img
-{
-  margin: 0 5px;
-  height: 3vh;
-}
-
-.footer-logo img
-{
-  height: 15vh;
-
-}
-
-.footer-right p
-{
-  margin: 1vh;
-  padding: 1vh;
-  text-align: right;
-}
-
-.footer-contact-title
-{
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-footer a:hover
-{
-  text-decoration: underline;
 }
 
 #content
 {
-  padding-top: 5%;
-  font-size: 2em;
-  font-family: Avenir Next, sans-serif;
   width: auto;
   max-width: 100%;
+  font-family: Avenir Next, sans-serif;
+
+  margin: auto;
+  font-size: .8em;
+  border-radius: 5;
+  padding: 2%;
+  padding-top: 5%;
 }
+
+
 
 h1
 {
   font-family: Balgon Serif;
-  font-size: 3vw;
+  font-size: 1em;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -172,14 +126,14 @@ h1
 h2
 {
   font-family: Balgon Serif;
-  font-size: 2vw;
+  font-size: .8em;
   color: rgba(96, 96, 96, 1);
 }
 
 h3
 {
   font-family: Balgon Serif;
-  font-size: 1vw;
+  font-size: .5em;
   color: rgba(96, 96, 96, 1);
 }
 
@@ -187,13 +141,24 @@ form
 {
   font-family: Avenir Next, sans-serif;
   background-color: #f5f5f5;
-  /* padding: 20px; */
-  margin: 20px auto;
+  margin: auto;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: auto;
-  max-width: 100%;
+  max-width: 90%;
+  padding-top: 2%;
 
+}
+
+table
+{
+  width: 90%;
+  max-width: 90%;
+  border-collapse: collapse;
+  margin: auto;
+  padding-top: 1%;
+  border-radius: 8px;
+  background-color: #f5f5f5;
 }
 
 input,
@@ -204,69 +169,30 @@ radio
   border: 1px solid rgba(96, 96, 96, 0.3);
   box-sizing: border-box;
   font-size: 1em;
-  width: 40vw;
-}
-
-table
-{
-  border-collapse: collapse;
+  width: 30%;
+  height: 3vh;
   margin: auto;
-  /* margin-bottom: 20px; */
-  width: auto;
-  max-width: 100%;
 }
 
 th
 {
-  padding: 10px 15px;
   white-space: nowrap;
   font-size: 1em;
 }
 
 td
 {
-  /* padding: 10px; */
   border-bottom: 1px solid #ddd;
   text-align: center;
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 
-
-#productID
-{
-  font-size: smaller;
-  font-style: italic;
-}
-
-#productName
-{
-  margin-bottom: 5px;
-}
-
-.button-container
-{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.button-container input
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
 
 .button-container input:hover
 {
   background-color: rgba(196, 79, 77, .8);
 }
-
 
 #inputForm th
 {
@@ -274,123 +200,113 @@ td
   white-space: nowrap;
 }
 
+#updateForm
+{
+  margin: auto;
+}
+
+#updateForm th
+{
+  margin: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+#updateForm td
+{
+  margin: auto;
+  text-align: left;
+  align-items: flex-start;
+  vertical-align: middle;
+  border-bottom: none;
+}
+
 #inputForm td
 {
   text-align: left;
   align-items: flex-start;
   vertical-align: middle;
+  border-bottom: none;
 }
 
 input[type="radio"]
 {
-  margin-right: 5px;
-  width: 8vw;
+  width: 7%;
+  margin-right: 1%;
+  align-items: flex-start;
+  vertical-align: middle;
 }
 
-#theresults
+#theleft
 {
-  /* display: flex;
-  justify-content: space-between; */
-  width: auto;
-  max-width: 100%;
+  font-size: 1em;
+  background-color: #f5f5f5;
+  max-width: 80%;
+  margin: auto;
+  border-radius: 8px;
+
 }
 
-#theleft,
-#theright
+.button-container
 {
-  /* flex: 1; */
-  width: auto;
-  max-width: 100%;
-}
-
-.updateButton
-{
-  /* display: flex; */
+  display: flex;
   justify-content: center;
   align-items: center;
+  width: 30%;
+  margin: auto;
+  min-width: 8vw;
 }
 
-.updateButton input
+.button-container input
 {
-  width: 10vw;
   background-color: rgba(196, 79, 77, 1);
   color: white;
-  padding: 10px;
+  padding: 1%;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  min-width: 8vw;
 }
 
-.nav-dropdown a
+.updateButton
 {
-  margin-left: -1em;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  max-width: 50%;
+  font-size: 1.1em;
+  min-width: 8vw;
+  max-width: 10vw;
 }
 
-#content
+.updateButton form
 {
-  width: auto;
-  max-width: 100%;
+  box-shadow: none;
 }
 
-@media (max-width: 1280px)
+.updateButton input
 {
+  width: 100%;
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0;
 
-  input
-  {
-    width: 30vw;
-    font-size: 0.5em;
-  }
-
-  th,
-  td
-  {
-    font-size: 0.5em;
-    padding: 5px 10px;
-  }
-
-  .updateButton input
-  {
-    font-size: 0.8em;
-  }
 }
 
-@media (max-width: 768px)
+#resultList td
 {
-  .header-logo
-  {
-    width: 50%;
-  }
+  padding: 1%;
+  font-size: 1em;
+}
 
-
-  nav a
-  {
-    font-size: 5vw;
-  }
-
-  footer
-  {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-left,
-  .footer-right,
-  .footer-logo
-  {
-    margin: 10px 0;
-  }
-
-  .nav-dropdown a,
-  .dropdown-content a
-  {
-    font-size: 5vw;
-  }
-
-  .nav-dropdown,
-  .dropdown-content
-  {
-    width: 100%;
-  }
-
+input[type="date"]
+{
+  font-size: 1.5em;
 }

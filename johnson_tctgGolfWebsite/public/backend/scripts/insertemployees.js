@@ -271,6 +271,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="emptype" id="emptype">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );

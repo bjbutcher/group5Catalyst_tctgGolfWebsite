@@ -246,6 +246,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="resplayer" id="resplayer">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );

@@ -64,6 +64,7 @@ var InventoryBox = React.createClass({
               <InventoryList data={this.state.data} />
             </table>
           </div>
+          <br />
           <div id="theright">
             <InventoryUpdateform onUpdateSubmit={this.updateSingleInvFromServer} />
           </div>
@@ -144,12 +145,9 @@ var Inventoryform2 = React.createClass({
             </div>
           </form>
         </div>
-        <div>
-          <br />
+        <div className="button-container">
           <form onSubmit={this.getInitialState}>
-            <div className="button-container">
-              <input type="submit" value="Clear Form" />
-            </div>
+            <input type="submit" value="Clear Form" />
           </form>
         </div>
       </div>
@@ -195,9 +193,8 @@ var InventoryUpdateform = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
-
             <table>
               <tbody>
                 <tr>
@@ -317,11 +314,11 @@ var Inventory = React.createClass({
           {this.props.invprice}
         </td>
         <td>
-          <form onSubmit={this.updateRecord}>
-            <div className="updateButton">
+          <div className="updateButton">
+            <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
-            </div>
-          </form>
+            </form>
+          </div>
         </td>
       </tr>
     );

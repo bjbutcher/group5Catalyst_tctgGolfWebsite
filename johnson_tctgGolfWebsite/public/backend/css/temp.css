@@ -1,0 +1,189 @@
+footer
+{
+  background-color: rgba(196, 79, 77, 1);
+  color: white;
+  text-align: center;
+  padding: 1em;
+  font-family: Avenir Next, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1em;
+}
+
+.footer-left,
+.footer-right,
+.footer-logo
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer a
+{
+  color: white;
+  text-decoration: none;
+  padding: 0.5em;
+}
+
+.footer-left img
+{
+  margin: 0 5px;
+  height: 3vh;
+}
+
+.footer-logo img
+{
+  height: 15vh;
+
+}
+
+.footer-right p
+{
+  margin: 1vh;
+  padding: 1vh;
+  text-align: right;
+}
+
+.footer-contact-title
+{
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+footer a:hover
+{
+  text-decoration: underline;
+}
+
+#content
+{
+
+  font-size: 2em;
+
+  width: auto;
+  max-width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#productID
+{
+  font-size: smaller;
+  font-style: italic;
+}
+
+#productName
+{
+  margin-bottom: 5px;
+}
+
+
+
+
+
+
+
+
+
+.table-responsive
+{
+  overflow-x: auto;
+}
+
+
+
+
+
+@media (max-width: 1280px)
+{
+
+  input
+  {
+    width: 30vw;
+    font-size: 0.5em;
+  }
+
+  th,
+  td
+  {
+    font-size: 0.5em;
+    padding: 5px 10px;
+  }
+
+  .updateButton input
+  {
+    font-size: 0.8em;
+  }
+}
+
+
+
+@media (max-width: 768px)
+{
+  .header-logo
+  {
+    width: 50%;
+  }
+
+
+  nav a
+  {
+    font-size: 5vw;
+  }
+
+  footer
+  {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-left,
+  .footer-right,
+  .footer-logo
+  {
+    margin: 10px 0;
+  }
+
+  .nav-dropdown a,
+  .dropdown-content a
+  {
+    font-size: 5vw;
+  }
+
+  .nav-dropdown,
+  .dropdown-content
+  {
+    width: 100%;
+  }
+
+}
+
+
+
+@media screen and (max-width: 768px)
+{
+  table
+  {
+    font-size: 0.8em;
+    /* Smaller font size */
+  }
+
+  table,
+  th,
+  td
+  {
+    padding: 5px;
+    /* Smaller padding */
+  }
+}

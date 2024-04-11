@@ -47,9 +47,11 @@ var PlayerBox = React.createClass({
   render: function () {
     return (
       <div>
-        <div id="theresults">
+        <div id="inputForm">
           <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
-          <br />
+        </div>
+        <br />
+        <div id="resultList">
           <table>
             <thead>
               <tr>

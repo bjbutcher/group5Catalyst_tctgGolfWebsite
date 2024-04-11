@@ -78,6 +78,7 @@ var EmployeeBox = React.createClass({
               <EmployeeList data={this.state.data} />
             </table>
           </div>
+          <br />
           <div id="theright">
             <EmployeeUpdateform onUpdateSubmit={this.updateSingleEmpFromServer} />
           </div>
@@ -212,12 +213,9 @@ var Employeeform2 = React.createClass({
             </div>
           </form>
         </div>
-        <div>
-          <br />
+        <div className="button-container">
           <form onSubmit={this.getInitialState}>
-            <div className="button-container">
-              <input type="submit" value="Clear Form" />
-            </div>
+            <input type="submit" value="Clear Form" />
           </form>
         </div>
       </div>
@@ -291,17 +289,17 @@ var EmployeeUpdateform = React.createClass({
 
     return (
       <div>
-        <div id="inputForm">
+        <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
 
             <table>
               <tbody>
-                <tr>
+                {/* <tr>
                   <th>Employee ID</th>
                   <td>
                     <input type="text" name="upempid" id="upempid" value={this.state.upempid} onChange={this.handleUpChange} />
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th>Last Name</th>
                   <td>
@@ -357,7 +355,7 @@ var EmployeeUpdateform = React.createClass({
             </table><br />
             <div className="button-container">
               <input type="hidden" name="upempkey" id="upempkey" onChange={this.handleUpChange} />
-              <input type="submit" value="Update Employee" />
+              <input type="submit" value="Update User" />
             </div>
           </form>
         </div>
@@ -469,11 +467,11 @@ var Employee = React.createClass({
           {this.props.emptype}
         </td>
         <td>
-          <form onSubmit={this.updateRecord}>
-            <div className="updateButton">
+          <div className="updateButton">
+            <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
-            </div>
-          </form>
+            </form>
+          </div>
         </td>
       </tr>
     );

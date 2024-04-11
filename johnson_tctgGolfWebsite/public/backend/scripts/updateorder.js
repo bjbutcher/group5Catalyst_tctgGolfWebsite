@@ -76,6 +76,7 @@ var OrderBox = React.createClass({
               <OrderList data={this.state.data} />
             </table>
           </div>
+          <br />
           <div id="theright">
             <OrderUpdateform onUpdateSubmit={this.updateSingleOrdFromServer} />
           </div>
@@ -185,72 +186,66 @@ var Orderform2 = React.createClass({
   render: function () {
 
     return (
-      <div>
-        <div id="inputForm">
-          <form onSubmit={this.handleSubmit}>
+      <div id="inputForm">
+        <form onSubmit={this.handleSubmit}>
+          <table>
+            <tbody>
 
-            <table>
-              <tbody>
-
-                <tr>
-                  <th>Order ID</th>
-                  <td>
-                    <input name="orderid" id="orderid" value={this.state.orderid} onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Date</th>
-                  <td>
-                    <input type="date" name="orderdate" id="orderdate" value={this.state.orderdate} onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Order Total</th>
-                  <td>
-                    <input type="number" name="ordertotal" id="ordertotal" value={this.state.ordertotal} onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Order Detail ID</th>
-                  <td>
-                    <input name="orderdetailid" id="orderdetailid" value={this.state.orderdetailid} onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Reservation</th>
-                  <td>
-                    <ResSelectList data={this.state.resdata} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Product</th>
-                  <td>
-                    <InvSelectList data={this.state.invdata} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Product Quantity</th>
-                  <td>
-                    <input type="number" name="orderdetailquantity" id="orderdetailquantity" value={this.state.orderdetailquantity} onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Order Employee</th>
-                  <td><SelectList data={this.state.data} /></td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="button-container">
-              <input type="submit" value="Search Orders" />
-            </div>
-          </form>
-        </div>
-        <div>
-          <br />
+              <tr>
+                <th>Order ID</th>
+                <td>
+                  <input name="orderid" id="orderid" value={this.state.orderid} onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Date</th>
+                <td>
+                  <input type="date" name="orderdate" id="orderdate" value={this.state.orderdate} onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Order Total</th>
+                <td>
+                  <input type="number" name="ordertotal" id="ordertotal" value={this.state.ordertotal} onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Order Detail ID</th>
+                <td>
+                  <input name="orderdetailid" id="orderdetailid" value={this.state.orderdetailid} onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Reservation</th>
+                <td>
+                  <ResSelectList data={this.state.resdata} />
+                </td>
+              </tr>
+              <tr>
+                <th>Product</th>
+                <td>
+                  <InvSelectList data={this.state.invdata} />
+                </td>
+              </tr>
+              <tr>
+                <th>Product Quantity</th>
+                <td>
+                  <input type="number" name="orderdetailquantity" id="orderdetailquantity" value={this.state.orderdetailquantity} onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Order Employee</th>
+                <td><SelectList data={this.state.data} /></td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="button-container">
+            <input type="submit" value="Search Orders" />
+          </div>
+        </form>
+        <div className="button-container">
           <form onSubmit={this.getInitialState}>
-            <div className="button-container">
-              <input type="submit" value="Clear Form" />
-            </div>
+            <input type="submit" value="Clear Form" />
           </form>
         </div>
       </div>
@@ -285,7 +280,7 @@ var OrderUpdateform = React.createClass({
       dataType: 'json',
       cache: false,
       success: function (data) {
-        this.setState({ data: data });
+        this.setState({ updata: data });
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -298,7 +293,7 @@ var OrderUpdateform = React.createClass({
       dataType: 'json',
       cache: false,
       success: function (data) {
-        this.setState({ invdata: data });
+        this.setState({ upinvdata: data });
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -311,7 +306,7 @@ var OrderUpdateform = React.createClass({
       dataType: 'json',
       cache: false,
       success: function (data) {
-        this.setState({ resdata: data });
+        this.setState({ upresdata: data });
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -357,7 +352,7 @@ var OrderUpdateform = React.createClass({
 
     return (
       <div>
-        <div id="inputForm">
+        <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
 
             <table>
@@ -470,7 +465,7 @@ var Order = React.createClass({
     $.ajax({
       url: '/getsingleord',
       data: {
-        'upordid': theupordid
+        'upordid': theupordid,
       },
       dataType: 'json',
       cache: false,
@@ -487,14 +482,12 @@ var Order = React.createClass({
           uporddetqty.value = order.orderDetailQuantity;
           uporddetprice.value = order.orderDetailPrice;
           uporderemp.value = order.employeeID;
-
         });
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-
   },
 
   render: function () {
@@ -532,13 +525,13 @@ var Order = React.createClass({
           {this.props.orderemp}
         </td>
         <td>
-          <form onSubmit={this.updateRecord}>
-            <div className="updateButton">
+          <div className="updateButton">
+            <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
-            </div>
-          </form>
+            </form>
+          </div>
         </td>
-      </tr>
+      </tr >
     );
   }
 });
@@ -557,6 +550,7 @@ var InvSelectUpdateList = React.createClass({
     });
     return (
       <select name="uporderinv" id="uporderinv">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );
@@ -591,7 +585,6 @@ var ResSelectList = React.createClass({
           key={orderRes.reservationID}
           value={orderRes.reservationID}
         >
-
           {orderRes.reservationID}
         </option>
       );
@@ -639,6 +632,7 @@ var ResSelectUpdateList = React.createClass({
     });
     return (
       <select name="uporderres" id="uporderres">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );
@@ -658,12 +652,12 @@ var SelectUpdateList = React.createClass({
     });
     return (
       <select name="uporderemp" id="uporderemp">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );
   }
 });
-
 ReactDOM.render(
   <OrderBox />,
   document.getElementById('content')

@@ -29,9 +29,11 @@ var InventoryBox = React.createClass({
   render: function () {
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
-          <br />
+        </div>
+        <br />
+        <div id="resultList">
           <table>
             <thead>
               <tr>
@@ -43,7 +45,6 @@ var InventoryBox = React.createClass({
             </thead>
             <InventoryList data={this.state.data} />
           </table>
-
         </div>
       </div>
     );

@@ -158,6 +158,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="empnum" id="empnum">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );
@@ -178,6 +179,7 @@ var SelectCust = React.createClass({
     });
     return (
       <select name="custnum" id="custnum">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );

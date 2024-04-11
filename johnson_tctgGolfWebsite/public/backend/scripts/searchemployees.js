@@ -42,9 +42,11 @@ var EmployeeBox = React.createClass({
   render: function () {
     return (
       <div>
-        <Employeeform2 onEmployeeSubmit={this.loadEmployeesFromServer} />
+        <div id="inputForm">
+          <Employeeform2 onEmployeeSubmit={this.loadEmployeesFromServer} />
+        </div>
         <br />
-        <div id="theresults">
+        <div id="resultList">
           <table>
             <thead>
               <tr>

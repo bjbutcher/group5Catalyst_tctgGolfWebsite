@@ -34,9 +34,11 @@ var OrderBox = React.createClass({
   render: function () {
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <Orderform2 onOrderSubmit={this.loadOrdersFromServer} />
-          <br />
+        </div>
+        <br />
+        <div id="resultList">
           <table>
             <thead>
               <tr>

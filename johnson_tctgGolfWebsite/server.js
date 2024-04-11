@@ -12,7 +12,8 @@ const con = mysql.createConnection({
   host: "istwebclass.org",
   user: "jjohn172_admin",
   password: "H00244755H00244755",
-  database: "jjohn172_tctgGolf"
+  database: "jjohn172_tctgGolf",
+  timezone: 'Z'
 });
 
 con.connect(function (err) {
@@ -38,7 +39,7 @@ app.post('/updatesingleinv', function (req, res) {
   var iprice = req.body.upinventoryprice;
   var iqty = req.body.upinventoryquantity;
   var iid = req.body.upinventoryid;
-  var sqlins = "UPDATE inventory SET inventoryName = ?, inventoryPrice = ?, inventoryQuantity = ?, WHERE inventoryID = ?";
+  var sqlins = "UPDATE inventory SET inventoryName = ?, inventoryPrice = ?, inventoryQuantity = ? WHERE inventoryID = ?";
   var inserts = [iname, iprice, iqty, iid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
@@ -173,7 +174,7 @@ app.post('/updatesingleplyr', function (req, res) {
   var pemail = req.body.upplayeremail;
   var pstat = req.body.upplayerstatus;
   var pid = req.body.upplayerid;
-  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ?, WHERE playerID = ?";
+  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ? WHERE playerID = ?";
   var inserts = [plname, pfname, pstat, prewards, pemail, pid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
@@ -614,7 +615,9 @@ app.get('/getsingleres/', function (req, res) {
       console.error(err);
       process.exit(1);
     }
-
+    if (data && data[0] && data[0].reservationDateTime) {
+      console.log("Raw Reservation DateTime: ", data[0].reservationDateTime.toISOString());
+    }
     res.send(JSON.stringify(data));
   });
 });
@@ -693,33 +696,44 @@ app.post('/updatesingleord', function (req, res) {
   var odid = req.body.uporderdetailid;
   var odrid = req.body.upreservationid;
   var odiid = req.body.upinventoryid;
+  var odprice = req.body.uporderdetailprice;
   var odqty = req.body.uporderdetailquantity;
   var oeid = req.body.upemployeeid;
   var oid = req.body.uporderid;
-  var sqlins = "UPDATE orders SET orderDate = ?, orderTotal = ?, orderDetailID = ?, reservationID = ?, inventoryID = ?, orderDetailQuantity = ?, employeeID = ? WHERE orderID = ?";
-  var inserts = [odate, ototal, odid, odrid, odiid, odqty, oeid, oid];
-  var sql = mysql.format(sqlins, inserts);
-  console.log(sql);
-  con.execute(sql, function (err, result) {
+  var sqlInsOrder = "UPDATE orders SET employeeID = ?, orderTotal = ?, orderDate = ? WHERE orderID = ?";
+  var insOrder = [oeid, ototal, odate, oid];
+  var sqlOrder = mysql.format(sqlInsOrder, insOrder);
+  var sqlInsDetail = "UPDATE orderDetail SET inventoryID = ?, reservationID = ?, orderDetailQuantity = ?, orderDetailPrice = ? WHERE orderDetailID = ?";
+  var insDetail = [odiid, odrid, odqty, odprice, odid];
+  var sqlDetail = mysql.format(sqlInsDetail, insDetail);
+
+  console.log(sqlOrder, sqlDetail);
+  con.execute(sqlOrder, function (err) {
     if (err) throw err;
-    console.log("1 record updated");
+    console.log("Order updated");
+    process.exit(1);
+  });
+  con.execute(sqlDetail, function (err) {
+    if (err) throw err;
+    console.log("Order Detail updated");
     res.end();
   });
 });
 
 app.get('/getsingleord/', function (req, res) {
   var oid = req.query.upordid;
+  var odid = req.query.upordid;
 
-  var sqlsel = 'select * from orders where orderID = ?'
-  var inserts = [oid];
+  var sqlsel = 'select * from orders, orderDetail where orders.orderID = ? AND orderDetail.orderID = ?'
+  var inserts = [oid, odid];
   var sql = mysql.format(sqlsel, inserts);
-  console.log("Order retrieved.");
+  console.log("Single order retrieved.");
   con.query(sql, function (err, data) {
     if (err) {
       console.error(err);
       process.exit(1);
     }
-
+    console.log(data)
     res.send(JSON.stringify(data));
   });
 });
@@ -794,22 +808,18 @@ app.post('/order', function (req, res) {
     }
     console.log("1 order record inserted");
     var orderID = result.insertId;
-    if (odiid || odrid) {
-      var sqlInsOrderDetail = "INSERT INTO orderDetail (orderID, inventoryID, reservationID, orderDetailQuantity, orderDetailPrice) VALUES (?, ?, ?, ?, ?)";
-      var insertOrderDetail = [orderID, odiid, odrid, odqty, odprice];
-      var sqlOrderDetail = mysql.format(sqlInsOrderDetail, insertOrderDetail);
+    var sqlInsOrderDetail = "INSERT INTO orderDetail (orderID, inventoryID, reservationID, orderDetailQuantity, orderDetailPrice) VALUES (?, ?, ?, ?, ?)";
+    var insertOrderDetail = [orderID, odiid, odrid, odqty, odprice];
+    var sqlOrderDetail = mysql.format(sqlInsOrderDetail, insertOrderDetail);
 
-      con.query(sqlOrderDetail, function (err, result) {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        }
-        console.log("1 orderDetail record inserted");
-        res.redirect('insertorder.html');
-      });
-    } else {
+    con.query(sqlOrderDetail, function (err, result) {
+      if (err) {
+        console.error(err);
+        process.exit(1);
+      }
+      console.log("1 orderDetail record inserted");
       res.redirect('insertorder.html');
-    }
+    });
   });
 });
 

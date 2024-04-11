@@ -84,6 +84,7 @@ var PlayerBox = React.createClass({
               <PlayerList data={this.state.data} />
             </table>
           </div>
+          <br />
           <div id="theright">
             <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
           </div>
@@ -298,7 +299,7 @@ var PlayerUpdateform = React.createClass({
 
     return (
       <div>
-        <div id="inputForm">
+        <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
 
             <table>
@@ -503,11 +504,11 @@ var Player = React.createClass({
           {thestatus}
         </td>
         <td>
-          <form onSubmit={this.updateRecord}>
-            <div className="updateButton">
+          <div className="updateButton">
+            <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
-            </div>
-          </form>
+            </form>
+          </div>
         </td>
       </tr>
     );

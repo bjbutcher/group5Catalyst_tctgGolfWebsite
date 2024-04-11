@@ -71,7 +71,6 @@ var ReservationBox = React.createClass({
         <br />
         <div id="theresults">
           <div id="theleft">
-            <br />
             <table>
               <thead>
                 <tr>
@@ -85,6 +84,7 @@ var ReservationBox = React.createClass({
               <ReservationList data={this.state.data} updateFormState={this.updateFormState} />
             </table>
           </div>
+          <br />
           <div id="theright">
             <ReservationUpdateform ref="reservationUpdateForm" onUpdateSubmit={this.updateSingleResFromServer} />
           </div>
@@ -291,12 +291,9 @@ var Reservationform2 = React.createClass({
             </div>
           </form>
         </div>
-        <div>
-          <br />
+        <div className="button-container">
           <form onSubmit={this.getInitialState}>
-            <div className="button-container">
-              <input type="submit" value="Clear Form" />
-            </div>
+            <input type="submit" value="Clear Form" />
           </form>
         </div>
       </div>
@@ -397,9 +394,8 @@ var ReservationUpdateform = React.createClass({
 
     return (
       <div>
-        <div id="inputForm">
+        <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
-
             <table>
               <tbody>
                 <tr>
@@ -577,11 +573,11 @@ var Reservation = React.createClass({
           {this.props.resstatus}
         </td>
         <td>
-          <form onSubmit={this.updateRecord}>
-            <div className="updateButton">
+          <div className="updateButton">
+            <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
-            </div>
-          </form>
+            </form>
+          </div>
         </td>
       </tr>
     );
@@ -602,6 +598,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="resplayer" id="resplayer">
+        <option value="0"></option>
         {optionNodes}
       </select>
     );
