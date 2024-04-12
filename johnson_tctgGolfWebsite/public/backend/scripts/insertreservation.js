@@ -1,4 +1,22 @@
 var ReservationBox = React.createClass({
+  getInitialState: function () {
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleReservationSubmit: function (reservation) {
 
     $.ajax({
@@ -14,12 +32,22 @@ var ReservationBox = React.createClass({
       }.bind(this)
     });
   },
+  componentDidMount: function () {
+    this.loadAllowLogin();
+  },
   render: function () {
-    return (
-      <div className="ReservationBox">
-        <Reservationform2 onReservationSubmit={this.handleReservationSubmit} />
-      </div>
-    );
+    if (this.state.viewthepage < 2) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div className="ReservationBox">
+          <Reservationform2 onReservationSubmit={this.handleReservationSubmit} />
+        </div>
+      );
+    }
   }
 });
 

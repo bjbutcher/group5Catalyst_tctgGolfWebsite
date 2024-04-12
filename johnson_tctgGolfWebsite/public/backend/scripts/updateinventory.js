@@ -1,6 +1,21 @@
 var InventoryBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadInventoryFromServer: function () {
     $.ajax({
@@ -40,37 +55,47 @@ var InventoryBox = React.createClass({
     window.location.reload(true);
   },
   componentDidMount: function () {
-    this.loadInventoryFromServer();
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 1) {
+      this.loadInventoryFromServer();
+    }
     // setInterval(this.loadInventoryFromServer, this.props.pollInterval);
   },
 
   render: function () {
-    return (
-      <div>
-        <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
-        <br />
-        <div id="theresults">
-          <div id="theleft">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Quantity On Hand</th>
-                  <th>Price Per Item</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <InventoryList data={this.state.data} />
-            </table>
-          </div>
+    if (this.state.viewthepage < 4) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
           <br />
-          <div id="theright">
-            <InventoryUpdateform onUpdateSubmit={this.updateSingleInvFromServer} />
+          <div id="theresults">
+            <div id="theleft">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Quantity On Hand</th>
+                    <th>Price Per Item</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <InventoryList data={this.state.data} />
+              </table>
+            </div>
+            <br />
+            <div id="theright">
+              <InventoryUpdateform onUpdateSubmit={this.updateSingleInvFromServer} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

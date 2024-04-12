@@ -1,6 +1,21 @@
 var OrderBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadOrdersFromServer: function () {
     $.ajax({
@@ -27,38 +42,48 @@ var OrderBox = React.createClass({
     });
   },
   componentDidMount: function () {
-    this.loadOrdersFromServer();
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 1) {
+      this.loadOrdersFromServer();
+    }
     // setInterval(this.loadOrdersFromServer, this.props.pollInterval);
   },
 
   render: function () {
-    return (
-      <div>
-        <div id="inputForm">
-          <Orderform2 onOrderSubmit={this.loadOrdersFromServer} />
-        </div>
-        <br />
-        <div id="resultList">
-          <table>
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Date</th>
-                <th>Order Total</th>
-                <th>Reservation ID</th>
-                <th>Order Detail ID</th>
-                <th>Order Product</th>
-                <th>Product Quantity</th>
-                <th>Order Subtotal</th>
-                <th>Order Employee</th>
-              </tr>
-            </thead>
-            <OrderList data={this.state.data} />
-          </table>
+    if (this.state.viewthepage < 2) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <div id="inputForm">
+            <Orderform2 onOrderSubmit={this.loadOrdersFromServer} />
+          </div>
+          <br />
+          <div id="resultList">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Date</th>
+                  <th>Order Total</th>
+                  <th>Reservation ID</th>
+                  <th>Order Detail ID</th>
+                  <th>Order Product</th>
+                  <th>Product Quantity</th>
+                  <th>Order Subtotal</th>
+                  <th>Order Employee</th>
+                </tr>
+              </thead>
+              <OrderList data={this.state.data} />
+            </table>
 
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

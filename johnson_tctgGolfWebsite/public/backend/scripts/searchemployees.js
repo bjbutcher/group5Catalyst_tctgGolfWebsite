@@ -50,12 +50,15 @@ var EmployeeBox = React.createClass({
 
   },
   componentDidMount: function () {
-    this.loadEmployeesFromServer();
-    // setInterval(this.loadEmployeesFromServer, this.props.pollInterval);
+    this.loadAllowLogin();
+    if (this.state.viewthepage == 5) {
+      this.loadEmployeesFromServer();
+    }
+
   },
 
   render: function () {
-    if (this.state.viewthepage < 5) {
+    if (this.state.viewthepage != 5) {
       return (
         <div>You are not authorized to view this page.</div>
       );

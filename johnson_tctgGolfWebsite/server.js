@@ -6,11 +6,11 @@ var bodyParser = require('body-parser');
 var app = express();
 var bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const cookieparser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql2');
+const jwtKey = 'my_secret_key'
+const jwtExpirySeconds = 3000
 
-const jwtKey = 'my_secret_key';
-const jwtExpirySeconds = 3000;
 const con = mysql.createConnection({
   host: "istwebclass.org",
   user: "jjohn172_admin",
@@ -28,10 +28,11 @@ app.set('port', (process.env.PORT || 3000));
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname + "/public/designPages/Home_PC.html"));
+  res.sendFile(path.join(__dirname + "/public/Home.html"));
 });
 
 
@@ -155,7 +156,7 @@ app.post('/loginplyr/', function (req, res) {
           });
 
           res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
-          res.send({ redirect: '/designPages/Home_PC.html' });
+          res.send({ redirect: '//Home.html' });
         }
       });
     } else {
@@ -602,7 +603,7 @@ app.post('/playerCreateAccount', function (req, res) {
       con.execute(sql, function (err, result) {
         if (err) throw err;
         console.log("1 record inserted");
-        res.redirect('Home_PC.html');
+        res.redirect('Home.html');
         res.end();
       });
     }
@@ -739,7 +740,7 @@ app.post('/reservation', function (req, res) {
     if (err) throw err;
     console.log(sql);
     console.log("1 record inserted");
-    res.redirect('Home_PC.html');
+    res.redirect('Home.html');
     res.end();
   });
 });

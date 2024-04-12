@@ -1,4 +1,24 @@
 var EmployeeBox = React.createClass({
+  getInitialState: function () {
+    return {
+      data: [],
+      viewthepage: 0
+    };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (data) {
+        this.setState({ viewthepage: data });
+        empuser = this.state.viewthepage;
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleEmployeeSubmit: function (employee) {
 
     $.ajax({
@@ -17,14 +37,24 @@ var EmployeeBox = React.createClass({
 
   },
 
+  componentDidMount: function () {
+    this.loadAllowLogin();
+  },
   render: function () {
-    return (
-      <div className="EmployeeBox">
-        <div id="theform">
-          <Employeeform2 onEmployeeSubmit={this.handleEmployeeSubmit} />
+    if (this.state.viewthepage < 5) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div className="EmployeeBox">
+          <div id="theform">
+            <Employeeform2 onEmployeeSubmit={this.handleEmployeeSubmit} />
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

@@ -1,6 +1,21 @@
 var PlayerBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadPlayersFromServer: function () {
     var playermembertypevalue = 2;
@@ -57,40 +72,50 @@ var PlayerBox = React.createClass({
     window.location.reload(true);
   },
   componentDidMount: function () {
-    this.loadPlayersFromServer();
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 2) {
+      this.loadPlayersFromServer();
+    }
     // setInterval(this.loadPlayersFromServer, this.props.pollInterval);
   },
 
   render: function () {
-    return (
-      <div>
-        <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
-        <br />
-        <div id="theresults">
-          <div id="theleft">
-            <table>
-              <thead>
-                <tr>
-                  <th>Key</th>
-                  <th>Last Name</th>
-                  <th>First Name</th>
-                  <th>Reward Member Type</th>
-                  <th>Rewards Points</th>
-                  <th>Email</th>
-                  <th>Player Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <PlayerList data={this.state.data} />
-            </table>
-          </div>
+    if (this.state.viewthepage < 3) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
           <br />
-          <div id="theright">
-            <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
+          <div id="theresults">
+            <div id="theleft">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Key</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Reward Member Type</th>
+                    <th>Rewards Points</th>
+                    <th>Email</th>
+                    <th>Player Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <PlayerList data={this.state.data} />
+              </table>
+            </div>
+            <br />
+            <div id="theright">
+              <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

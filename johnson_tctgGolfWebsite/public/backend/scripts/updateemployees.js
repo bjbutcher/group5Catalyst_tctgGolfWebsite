@@ -1,6 +1,21 @@
 var EmployeeBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadEmployeesFromServer: function () {
 
@@ -53,38 +68,50 @@ var EmployeeBox = React.createClass({
   },
   componentDidMount: function () {
     this.loadEmployeesFromServer();
+    this.loadAllowLogin();
     // setInterval(this.loadEmployeesFromServer, this.props.pollInterval);
   },
 
   render: function () {
-    return (
-      <div>
-        <Employeeform2 onEmployeeSubmit={this.loadEmployeesFromServer} />
-        <br />
-        <div id="theresults">
-          <div id="theleft">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Last Name</th>
-                  <th>First Name</th>
-                  <th>Email</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <EmployeeList data={this.state.data} />
-            </table>
-          </div>
+    if (this.state.viewthepage < 5) {
+      //if it's less than 5 (manager) then I'd like to let the user update/see their own info only
+      //gotta figure out how to pass empuser id to the rest of the code without repeating it
+      //maybe make certain divs conditional instead of the whole page?
+      //look into later if time
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <Employeeform2 onEmployeeSubmit={this.loadEmployeesFromServer} />
           <br />
-          <div id="theright">
-            <EmployeeUpdateform onUpdateSubmit={this.updateSingleEmpFromServer} />
+          <div id="theresults">
+            <div id="theleft">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <EmployeeList data={this.state.data} />
+              </table>
+            </div>
+            <br />
+            <div id="theright">
+              <EmployeeUpdateform onUpdateSubmit={this.updateSingleEmpFromServer} />
+            </div>
           </div>
-        </div>
-      </div>
-    );
+        </div >
+      );
+    }
   }
 });
 

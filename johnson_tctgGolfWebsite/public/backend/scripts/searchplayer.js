@@ -1,6 +1,21 @@
 var PlayerBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadPlayersFromServer: function () {
     var playermembertypevalue = 2;
@@ -40,36 +55,46 @@ var PlayerBox = React.createClass({
     });
   },
   componentDidMount: function () {
-    this.loadPlayersFromServer();
-    // setInterval(this.loadPlayersFromServer, this.props.pollInterval);
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 2) {
+      this.loadPlayersFromServer();
+      // setInterval(this.loadPlayersFromServer, this.props.pollInterval);
+    }
   },
 
   render: function () {
-    return (
-      <div>
-        <div id="inputForm">
-          <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
-        </div>
-        <br />
-        <div id="resultList">
-          <table>
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Last Name</th>
-                <th>First Name</th>
-                <th>Reward Member Type</th>
-                <th>Rewards Points</th>
-                <th>Email</th>
-                <th>Player Status</th>
-              </tr>
-            </thead>
-            <PlayerList data={this.state.data} />
-          </table>
+    if (this.state.viewthepage < 3) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <div id="inputForm">
+            <Playerform2 onPlayerSubmit={this.loadPlayersFromServer} />
+          </div>
+          <br />
+          <div id="resultList">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Last Name</th>
+                  <th>First Name</th>
+                  <th>Reward Member Type</th>
+                  <th>Rewards Points</th>
+                  <th>Email</th>
+                  <th>Player Status</th>
+                </tr>
+              </thead>
+              <PlayerList data={this.state.data} />
+            </table>
 
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

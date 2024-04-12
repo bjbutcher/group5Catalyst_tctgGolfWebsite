@@ -1,4 +1,24 @@
 var InventoryBox = React.createClass({
+  getInitialState: function () {
+    return {
+      data: [],
+      viewthepage: 0
+    };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (data) {
+        this.setState({ viewthepage: data });
+        empuser = this.state.viewthepage;
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleInventorySubmit: function (inventory) {
 
     $.ajax({
@@ -14,12 +34,22 @@ var InventoryBox = React.createClass({
       }.bind(this)
     });
   },
+  componentDidMount: function () {
+    this.loadAllowLogin();
+  },
   render: function () {
-    return (
-      <div className="InventoryBox">
-        <Inventoryform2 onInventorySubmit={this.handleInventorySubmit} />
-      </div>
-    );
+    if (this.state.viewthepage < 2) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div className="InventoryBox">
+          <Inventoryform2 onInventorySubmit={this.handleInventorySubmit} />
+        </div>
+      );
+    }
   }
 });
 
@@ -34,6 +64,7 @@ var Inventoryform2 = React.createClass({
       inventoryquantity: "",
     };
   },
+
   handleOptionChange: function (e) {
     this.setState({
       selectedOption: e.target.value
@@ -73,7 +104,6 @@ var Inventoryform2 = React.createClass({
     this.setState(object);
   },
   render: function () {
-
     return (
       <div>
         <div id="inputForm">

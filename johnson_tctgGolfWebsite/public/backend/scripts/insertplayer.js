@@ -1,4 +1,22 @@
 var PlayerBox = React.createClass({
+  getInitialState: function () {
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handlePlayerSubmit: function (player) {
 
     $.ajax({
@@ -14,12 +32,22 @@ var PlayerBox = React.createClass({
       }.bind(this)
     });
   },
+  componentDidMount: function () {
+    this.loadAllowLogin();
+  },
   render: function () {
-    return (
-      <div className="PlayerBox">
-        <Playerform2 onPlayerSubmit={this.handlePlayerSubmit} />
-      </div>
-    );
+    if (this.state.viewthepage < 2) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div className="PlayerBox">
+          <Playerform2 onPlayerSubmit={this.handlePlayerSubmit} />
+        </div>
+      );
+    }
   }
 });
 

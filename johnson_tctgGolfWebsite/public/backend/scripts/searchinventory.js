@@ -1,6 +1,21 @@
 var InventoryBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return { data: [], viewthepage: 0 };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadInventoryFromServer: function () {
     $.ajax({
@@ -22,32 +37,42 @@ var InventoryBox = React.createClass({
     });
   },
   componentDidMount: function () {
-    this.loadInventoryFromServer();
-    // setInterval(this.loadInventoryFromServer, this.props.pollInterval);
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 0) {
+      this.loadInventoryFromServer();
+      // setInterval(this.loadInventoryFromServer, this.props.pollInterval);
+    }
   },
 
   render: function () {
-    return (
-      <div>
-        <div id="inputForm">
-          <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
+    if (this.state.viewthepage < 1) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <div id="inputForm">
+            <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
+          </div>
+          <br />
+          <div id="resultList">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Name</th>
+                  <th>Quantity On Hand</th>
+                  <th>Price Per Item</th>
+                </tr>
+              </thead>
+              <InventoryList data={this.state.data} />
+            </table>
+          </div>
         </div>
-        <br />
-        <div id="resultList">
-          <table>
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Name</th>
-                <th>Quantity On Hand</th>
-                <th>Price Per Item</th>
-              </tr>
-            </thead>
-            <InventoryList data={this.state.data} />
-          </table>
-        </div>
-      </div>
-    );
+      );
+    }
   }
 });
 

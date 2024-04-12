@@ -96,7 +96,7 @@ nav
   right: 0;
   display: flex;
   justify-content: center;
-  z-index: 2;
+  z-index: 5;
 }
 
 
@@ -124,6 +124,7 @@ nav a
   font-family: Balgon Serif;
   white-space: nowrap;
   margin-left: .5%;
+  z-index: 6;
 }
 
 nav a:hover

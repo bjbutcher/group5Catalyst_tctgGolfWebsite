@@ -6,8 +6,24 @@ var ReservationBox = React.createClass({
       reservationTime: "",
       reservationstatus: "",
       reservationPlayer: "",
-      reservationplayercount: ""
+      reservationplayercount: "",
+      viewthepage: 0
     };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/getloggedin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   loadReservationsFromServer: function (formState) {
     var reservationDateTime = formState.reservationDate && formState.reservationTime ? formState.reservationDate + 'T' + formState.reservationTime : '';
@@ -31,7 +47,10 @@ var ReservationBox = React.createClass({
     });
   },
   componentDidMount: function () {
-    this.loadReservationsFromServer(this.state);
+    this.loadAllowLogin();
+    if (this.state.viewthepage > 1) {
+      this.loadReservationsFromServer(this.state);
+    }
   },
   updateFormState: function (date, time, status, playerCount, playerId) {
     this.refs.reservationUpdateForm.setState({
@@ -46,29 +65,36 @@ var ReservationBox = React.createClass({
     this.setState(newState);
   },
   render: function () {
-    return (
-      <div>
-        <div id="inputForm">
-          <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} onFormChange={this.handleFormChange} />
-        </div>
-        <br />
-        <div id="resultList">
-          <table>
-            <thead>
-              <tr>
-                <th>Key</th>
-                <th>Date and Time</th>
-                <th>Number of Players</th>
-                <th>Player Reserved</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <ReservationList data={this.state.data} />
-          </table>
+    if (this.state.viewthepage < 2) {
+      return (
+        <div>You are not authorized to view this page.</div>
+      );
+    }
+    else {
+      return (
+        <div>
+          <div id="inputForm">
+            <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} onFormChange={this.handleFormChange} />
+          </div>
+          <br />
+          <div id="resultList">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Date and Time</th>
+                  <th>Number of Players</th>
+                  <th>Player Reserved</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <ReservationList data={this.state.data} />
+            </table>
 
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 var Reservationform2 = React.createClass({
