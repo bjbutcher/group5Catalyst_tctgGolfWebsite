@@ -66,9 +66,12 @@ var EmployeeBox = React.createClass({
     });
     window.location.reload(true);
   },
+
   componentDidMount: function () {
-    this.loadEmployeesFromServer();
     this.loadAllowLogin();
+    if (this.state.viewthepage > 4) {
+      this.loadEmployeesFromServer();
+    }
     // setInterval(this.loadEmployeesFromServer, this.props.pollInterval);
   },
 

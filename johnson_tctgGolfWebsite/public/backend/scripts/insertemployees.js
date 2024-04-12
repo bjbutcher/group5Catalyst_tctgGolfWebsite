@@ -10,9 +10,10 @@ var EmployeeBox = React.createClass({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
-      success: function (data) {
-        this.setState({ viewthepage: data });
-        empuser = this.state.viewthepage;
+      success: function (datalog) {
+        this.setState({ data: datalog });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
