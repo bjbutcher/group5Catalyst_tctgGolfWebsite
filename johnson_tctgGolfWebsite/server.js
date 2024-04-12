@@ -5,9 +5,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
+const cookieparser = require('cookie-parser');
 const mysql = require('mysql2');
 
+const jwtKey = 'my_secret_key';
+const jwtExpirySeconds = 3000;
 const con = mysql.createConnection({
   host: "istwebclass.org",
   user: "jjohn172_admin",
@@ -32,7 +35,134 @@ app.get('/', function (req, res) {
 });
 
 
+app.get('/getloggedout/', function (req, res) {
+  res.cookie('token', 2, { maxAge: 0 })
+  res.send({ redirect: '/backend/index.html' });
+});
 
+app.get('/getloggedin/', function (req, res) {
+
+  var viewpage = 0;
+  var datahold = [];
+  const validtoken = req.cookies.token
+  console.log('token new:', validtoken);
+  var payload;
+
+  if (!validtoken) {
+    viewpage = 0;
+    console.log("NVT");
+  } else {
+    try {
+      payload = jwt.verify(validtoken, jwtKey);
+      console.log('payload new:', payload.empkey);
+      viewpage = payload.empkey;
+
+      var sqlsel = 'select * from employee where employeeID = ?';
+      var inserts = [viewpage];
+
+      var sql = mysql.format(sqlsel, inserts);
+
+      con.query(sql, function (err, data) {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        }
+        console.log("Show 1" + data);
+
+        datahold = data;
+
+        res.send(JSON.stringify(data));
+      });
+
+    } catch (e) {
+      if (e instanceof jwt.JsonWebTokenError) {
+        viewpage = 0;
+        console.log("NVT2");
+      }
+      viewpage = 0;
+      console.log("NVT3");
+    }
+  }
+
+});
+app.post('/loginemp/', function (req, res) {
+  var eemail = req.body.employeeemail;
+  var epw = req.body.employeepw;
+
+  var sqlsel = 'select * from employee where employeeEmail = ?';
+
+  var inserts = [eemail];
+
+  var sql = mysql.format(sqlsel, inserts);
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    //Checks to see if there is data in the result
+    if (data.length > 0) {
+      console.log("User name correct: ");
+      var empkey = data[0].employeeID;
+      console.log(data[0].employeeID);
+
+      bcrypt.compare(epw, data[0].employeePassword, function (err, passwordCorrect) {
+        if (err) {
+          throw err;
+        } else if (!passwordCorrect) {
+          console.log("Password Incorrect");
+        } else {
+          console.log("Password Correct");
+          const token = jwt.sign({ empkey }, jwtKey, {
+            algorithm: 'HS256',
+            expiresIn: jwtExpirySeconds
+          });
+
+          res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
+          res.send({ redirect: '/backend/searchemployee.html' });
+        }
+      });
+    } else {
+      console.log("Incorrect user name or password!!");
+    }
+  });
+});
+app.post('/loginplyr/', function (req, res) {
+  var pmail = req.body.playeremail;
+  var ppw = req.body.playerpw;
+
+  var sqlsel = 'select * from players where playerEmail = ?';
+
+  var inserts = [pmail];
+
+  var sql = mysql.format(sqlsel, inserts);
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    //Checks to see if there is data in the result
+    if (data.length > 0) {
+      console.log("User name correct: ");
+      var playkey = data[0].playerID;
+      console.log(data[0].playerID);
+
+      bcrypt.compare(ppw, data[0].playerPassword, function (err, passwordCorrect) {
+        if (err) {
+          throw err;
+        } else if (!passwordCorrect) {
+          console.log("Password Incorrect");
+        } else {
+          console.log("Password Correct");
+          const token = jwt.sign({ playkey }, jwtKey, {
+            algorithm: 'HS256',
+            expiresIn: jwtExpirySeconds
+          });
+
+          res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
+          res.send({ redirect: '/designPages/Home_PC.html' });
+        }
+      });
+    } else {
+      console.log("Incorrect user name or password!!");
+    }
+  });
+});
 
 app.post('/updatesingleinv', function (req, res) {
   var iname = req.body.upinventoryname;
@@ -135,38 +265,7 @@ app.post('/inventory', function (req, res) {
 }
 );
 
-app.post('/loginemp/', function (req, res) {
-  var eemail = req.body.employeeemail;
-  var epw = req.body.employeepw;
 
-  var sqlsel = 'select * from employee where employeeEmail = ?';
-
-  var inserts = [eemail];
-
-  var sql = mysql.format(sqlsel, inserts);
-  console.log(sql);
-
-  con.query(sql, function (err, data) {
-    //Checks to see if there is data in the result
-    if (data.length > 0) {
-      console.log("User name correct: ");
-      console.log(data[0].employeePassword);
-
-      bcrypt.compare(epw, data[0].employeePassword, function (err, passwordCorrect) {
-        if (err) {
-          throw err;
-        } else if (!passwordCorrect) {
-          console.log("Password Incorrect");
-        } else {
-          console.log("Password Correct");
-          res.send({ redirect: '/backend/searchemployee.html' });
-        }
-      });
-    } else {
-      console.log("Incorrect user name or password!!");
-    }
-  });
-});
 app.post('/updatesingleplyr', function (req, res) {
   var plname = req.body.upplayerlastname;
   var pfname = req.body.upplayerfirstname;
@@ -268,38 +367,6 @@ app.get('/getplyrinfo/', function (req, res) {
       process.exit(1);
     }
     res.send(JSON.stringify(data));
-  });
-});
-app.post('/loginplyr/', function (req, res) {
-  var pmail = req.body.playeremail;
-  var ppw = req.body.playerpw;
-
-  var sqlsel = 'select * from players where playerEmail = ?';
-
-  var inserts = [pmail];
-
-  var sql = mysql.format(sqlsel, inserts);
-  console.log(sql);
-
-  con.query(sql, function (err, data) {
-    //Checks to see if there is data in the result
-    if (data.length > 0) {
-      console.log("User name correct: ");
-      console.log(data[0].playerPassword);
-
-      bcrypt.compare(ppw, data[0].playerPassword, function (err, passwordCorrect) {
-        if (err) {
-          throw err;
-        } else if (!passwordCorrect) {
-          console.log("Password Incorrect");
-        } else {
-          console.log("Password Correct");
-          res.send({ redirect: '/designPages/Home_PC.html' });
-        }
-      });
-    } else {
-      console.log("Incorrect user name or password!!");
-    }
   });
 });
 

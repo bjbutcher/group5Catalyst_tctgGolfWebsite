@@ -360,13 +360,13 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Order Date</th>
                   <td>
-                    <input name="upordate" id="upordate" value={this.state.upordate} onChange={this.handleUpChange} />
+                    <input name="upordate" id="upordate" value={this.state.upordate} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Order Total</th>
                   <td>
-                    <input type="number" name="upordtotal" id="upordtotal" value={this.state.upordtotal} onChange={this.handleUpChange} />
+                    <input type="number" name="upordtotal" id="upordtotal" value={this.state.upordtotal} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -378,7 +378,7 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Order Detail ID</th>
                   <td>
-                    <input name="uporddetid" id="uporddetid" value={this.state.uporddetid} onChange={this.handleUpChange} />
+                    <input name="uporddetid" id="uporddetid" value={this.state.uporddetid} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -390,13 +390,13 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Product Quantity</th>
                   <td>
-                    <input type="number" name="uporddetqty" id="uporddetqty" value={this.state.uporddetqty} onChange={this.handleUpChange} />
+                    <input type="number" name="uporddetqty" id="uporddetqty" value={this.state.uporddetqty} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Order Subtotal</th>
                   <td>
-                    <input type="number" name="uporddetprice" id="uporddetprice" value={this.state.uporddetprice} onChange={this.handleUpChange} />
+                    <input type="number" name="uporddetprice" id="uporddetprice" value={this.state.uporddetprice} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -408,7 +408,7 @@ var OrderUpdateform = React.createClass({
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upordid" id="upordid" onChange={this.handleUpChange} />
+              <input type="hidden" name="upordid" id="upordid" onChange={this.state.handleUpChange} />
               <input type="submit" value="Update Order" />
             </div>
           </form>

@@ -406,7 +406,7 @@ var ReservationUpdateform = React.createClass({
                       uniqueName="upresdate"
                       id="upresdate"
                       value={this.state.upresdate}
-                      onChange={this.handleUpChange} />
+                      onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -415,7 +415,7 @@ var ReservationUpdateform = React.createClass({
                     <select
                       id="uprestime"
                       value={this.state.uprestime}
-                      onChange={this.handleUpChange}
+                      onChange={this.state.handleUpChange}
                       required>
                       <option value="">Select Time</option>
                       {this.renderTimeOptions()}
@@ -429,7 +429,7 @@ var ReservationUpdateform = React.createClass({
                       title="Select number of players who want to play during this reservation"
                       id="uppresplaycount"
                       value={this.state.uppresplaycount}
-                      onChange={this.handleUpChange}
+                      onChange={this.state.handleUpChange}
                       required>
                     </input>
                   </td>
@@ -457,7 +457,7 @@ var ReservationUpdateform = React.createClass({
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upresid" id="upresid" onChange={this.handleUpChange} />
+              <input type="hidden" name="upresid" id="upresid" onChange={this.state.handleUpChange} />
               <input type="submit" value="Update Reservation" />
             </div>
           </form>

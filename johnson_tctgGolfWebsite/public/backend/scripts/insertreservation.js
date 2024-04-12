@@ -160,74 +160,72 @@ var Reservationform2 = React.createClass({
   render: function () {
 
     return (
-      <div>
-        <div id="inputForm">
-          <form className="reservationForm" onSubmit={this.handleSubmit}>
-            <table>
-              <tbody>
-                <tr>
-                  <th>Reservation Date</th>
-                  <td>
-                    <input
-                      type="date"
-                      uniqueName="reservationdate"
-                      id="reservationdate"
-                      value={this.state.reservationdate}
-                      onChange={this.handleChange} />
-                  </td>
-                </tr>
-                <tr>
-                  <th>Reservation Time</th>
-                  <td>
-                    <select
-                      id="reservationtime"
-                      value={this.state.reservationtime}
-                      onChange={this.handleChange}
-                      required>
-                      <option value="">Select Time</option>
-                      {this.renderTimeOptions()}
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Number of Players for Reservation</th>
-                  <td>
-                    <input
-                      type="number"
-                      title="Select number of players who want to play during this reservation"
-                      id="reservationplayercount"
-                      value={this.state.reservationplayercount}
-                      onChange={this.setValue.bind(this, 'reservationplayercount')}
-                      required>
-                    </input>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Reservation Status</th>
-                  <td><select name="reservationstatus" id="reservationstatus"
-                    value={this.state.reservationstatus} onChange={this.setValue.bind(this, 'reservationstatus')} required>
-                    <option value="">Please Select a Status</option>
-                    <option value="Scheduled">Scheduled</option>
-                    <option value="Rescheduled">Rescheduled</option>
-                    <option value="Cancelled">Cancelled</option>
-                    <option value="Checked In">Checked In</option>
-                    <option value="Completed">Completed</option>
+      <div id="inputForm">
+        <form onSubmit={this.handleSubmit}>
+          <table >
+            <tbody>
+              <tr>
+                <th>Reservation Date</th>
+                <td>
+                  <input
+                    type="date"
+                    uniqueName="reservationdate"
+                    id="reservationdate"
+                    value={this.state.reservationdate}
+                    onChange={this.handleChange} />
+                </td>
+              </tr>
+              <tr>
+                <th>Reservation Time</th>
+                <td>
+                  <select
+                    id="reservationtime"
+                    value={this.state.reservationtime}
+                    onChange={this.handleChange}
+                    required>
+                    <option value="">Select Time</option>
+                    {this.renderTimeOptions()}
                   </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Player Scheduling Reservation</th>
-                  <td>
-                    <SelectList data={this.state.data} />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="button-container">
-              <input type="submit" value="Insert Reservation" />
-            </div>
-          </form>
-        </div>
+                </td>
+              </tr>
+              <tr>
+                <th>Number of Players for Reservation</th>
+                <td>
+                  <input
+                    type="number"
+                    title="Select number of players who want to play during this reservation"
+                    id="reservationplayercount"
+                    value={this.state.reservationplayercount}
+                    onChange={this.setValue.bind(this, 'reservationplayercount')}
+                    required>
+                  </input>
+                </td>
+              </tr>
+              <tr>
+                <th>Reservation Status</th>
+                <td><select name="reservationstatus" id="reservationstatus"
+                  value={this.state.reservationstatus} onChange={this.setValue.bind(this, 'reservationstatus')} required>
+                  <option value="">Please Select a Status</option>
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="Rescheduled">Rescheduled</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Checked In">Checked In</option>
+                  <option value="Completed">Completed</option>
+                </select>
+                </td>
+              </tr>
+              <tr>
+                <th>Player Scheduling Reservation</th>
+                <td>
+                  <SelectList data={this.state.data} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="button-container">
+            <input width="fit-content" type="submit" value="Insert Reservation" />
+          </div>
+        </form>
       </div>
     );
   }

@@ -259,16 +259,6 @@ var PlayerUpdateform = React.createClass({
       updata: []
     };
   },
-  handleUpTypeChange: function (e) {
-    this.setState({
-      upselectedType: e.target.value
-    });
-  },
-  handleUpStatusChange: function (e) {
-    this.setState({
-      upselectedStatus: e.target.value
-    });
-  },
   handleUpSubmit: function (e) {
     e.preventDefault();
 
@@ -291,11 +281,29 @@ var PlayerUpdateform = React.createClass({
     });
   },
   handleUpChange: function (event) {
+    const { id, value } = event.target;
     this.setState({
-      [event.target.id]: event.target.value
+      [id]: value
     });
   },
+
+  handleUpTypeChange: function (e) {
+    console.log("Type Change:", e.target.value);
+    this.setState({
+      upselectedType: e.target.value
+    });
+  },
+
+  handleUpStatusChange: function (e) {
+    console.log("Status Change:", e.target.value);
+    this.setState({
+      upselectedStatus: e.target.value
+    });
+  },
+
   render: function () {
+    console.log("Render State:", this.state.upselectedType, this.state.upselectedStatus);
+
 
     return (
       <div>
@@ -307,13 +315,13 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.handleUpChange} />
+                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.handleUpChange} />
+                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -327,7 +335,7 @@ var PlayerUpdateform = React.createClass({
                       id="upbasic"
                       value="0"
                       checked={this.state.upselectedType === "0"}
-                      onChange={this.handleUpTypeChange}
+                      onChange={this.state.handleUpTypeChange}
                       className="form-check-input"
                     />Basic
                     <input
@@ -336,7 +344,7 @@ var PlayerUpdateform = React.createClass({
                       id="uppremium"
                       value="1"
                       checked={this.state.upselectedType === "1"}
-                      onChange={this.handleUpTypeChange}
+                      onChange={this.state.handleUpTypeChange}
                       className="form-check-input"
                     />Premium
                   </td>
@@ -344,13 +352,13 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>Rewards Points</th>
                   <td>
-                    <input type="number" name="upplyrrewards" id="upplyrrewards" value={this.state.upplyrrewards} onChange={this.handleUpChange} />
+                    <input type="number" name="upplyrrewards" id="upplyrrewards" value={this.state.upplyrrewards} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Email</th>
                   <td>
-                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.handleUpChange} />
+                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -364,7 +372,7 @@ var PlayerUpdateform = React.createClass({
                       id="upplyrstatusactive"
                       value="Active"
                       checked={this.state.upselectedStatus === "Active"}
-                      onChange={this.handleUpStatusChange}
+                      onChange={this.state.handleUpStatusChange}
                       className="form-check-input"
                     />Active
                     <input
@@ -373,7 +381,7 @@ var PlayerUpdateform = React.createClass({
                       id="upplyrstatusinactive"
                       value="Inactive"
                       checked={this.state.upselectedStatus === "Inactive"}
-                      onChange={this.handleUpStatusChange}
+                      onChange={this.state.handleUpStatusChange}
                       className="form-check-input"
                     />Inactive
                   </td>
@@ -381,7 +389,7 @@ var PlayerUpdateform = React.createClass({
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upplyrid" id="upplyrid" onChange={this.handleUpChange} />
+              <input type="hidden" name="upplyrid" id="upplyrid" onChange={this.state.handleUpChange} />
               <input type="submit" value="Update Player" />
             </div>
           </form>
@@ -468,6 +476,7 @@ var Player = React.createClass({
     });
 
   },
+
 
   render: function () {
     if (this.props.playermembertype == 0) {

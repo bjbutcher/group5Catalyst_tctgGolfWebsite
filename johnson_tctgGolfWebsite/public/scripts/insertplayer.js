@@ -174,7 +174,7 @@ var Playerform2 = React.createClass({
                     uniqueName="playerpw2"
                     textArea={false}
                     required={true}
-                    validate={() => this.matchPassword(this.state.playerpw2)}
+                    validate={this.commonValidate}
                     onChange={this.setValue.bind(this, 'playerpw2')}
                     errorMessage="Invalid Password"
                     emptyMessage="Password is Required" />

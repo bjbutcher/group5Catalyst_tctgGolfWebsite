@@ -210,25 +210,25 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.handleUpChange} />
+                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.handleUpChange} />
+                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Email</th>
                   <td>
-                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.handleUpChange} />
+                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upplyrid" id="upplyrid" onChange={this.handleUpChange} />
+              <input type="hidden" name="upplyrid" id="upplyrid" onChange={this.state.handleUpChange} />
               <input type="submit" value="Save Changes" />
             </div>
           </form>

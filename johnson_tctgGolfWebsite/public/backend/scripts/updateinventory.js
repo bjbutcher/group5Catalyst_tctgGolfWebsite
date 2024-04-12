@@ -200,25 +200,25 @@ var InventoryUpdateform = React.createClass({
                 <tr>
                   <th>Item Name</th>
                   <td>
-                    <input type="text" name="upinvname" id="upinvname" value={this.state.upinvname} onChange={this.handleUpChange} />
+                    <input type="text" name="upinvname" id="upinvname" value={this.state.upinvname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Quantity On Hand</th>
                   <td>
-                    <input name="upinvqty" id="upinvqty" value={this.state.upinvqty} onChange={this.handleUpChange} />
+                    <input name="upinvqty" id="upinvqty" value={this.state.upinvqty} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Price Per Item</th>
                   <td>
-                    <input name="upinvprice" id="upinvprice" value={this.state.upinvprice} onChange={this.handleUpChange} />
+                    <input name="upinvprice" id="upinvprice" value={this.state.upinvprice} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upinvid" id="upinvid" onChange={this.handleUpChange} />
+              <input type="hidden" name="upinvid" id="upinvid" onChange={this.state.handleUpChange} />
               <input type="submit" value="Update Inventory" />
             </div>
           </form>

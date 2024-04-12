@@ -297,25 +297,25 @@ var EmployeeUpdateform = React.createClass({
                 {/* <tr>
                   <th>Employee ID</th>
                   <td>
-                    <input type="text" name="upempid" id="upempid" value={this.state.upempid} onChange={this.handleUpChange} />
+                    <input type="text" name="upempid" id="upempid" value={this.state.upempid} onChange={this.state.handleUpChange} />
                   </td>
                 </tr> */}
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input name="upemplname" id="upemplname" value={this.state.upemplname} onChange={this.handleUpChange} />
+                    <input name="upemplname" id="upemplname" value={this.state.upemplname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input name="upempfname" id="upempfname" value={this.state.upempfname} onChange={this.handleUpChange} />
+                    <input name="upempfname" id="upempfname" value={this.state.upempfname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Employee Email</th>
                   <td>
-                    <input name="upempemail" id="upempemail" value={this.state.upempemail} onChange={this.handleUpChange} />
+                    <input name="upempemail" id="upempemail" value={this.state.upempemail} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -329,7 +329,7 @@ var EmployeeUpdateform = React.createClass({
                       id="upempstatusactive"
                       value="Active"
                       checked={this.state.upselectedOption === "Active"}
-                      onChange={this.handleUpOptionChange}
+                      onChange={this.state.handleUpOptionChange}
                       className="form-check-input"
                     />Active
                     <input
@@ -338,7 +338,7 @@ var EmployeeUpdateform = React.createClass({
                       id="upempstatusinactive"
                       value="Inactive"
                       checked={this.state.upselectedOption === "Inactive"}
-                      onChange={this.handleUpOptionChange}
+                      onChange={this.state.handleUpOptionChange}
                       className="form-check-input"
                     />Inactive
                   </td>
@@ -354,7 +354,7 @@ var EmployeeUpdateform = React.createClass({
               </tbody>
             </table><br />
             <div className="button-container">
-              <input type="hidden" name="upempkey" id="upempkey" onChange={this.handleUpChange} />
+              <input type="hidden" name="upempkey" id="upempkey" onChange={this.state.handleUpChange} />
               <input type="submit" value="Update User" />
             </div>
           </form>
