@@ -510,7 +510,6 @@ app.get('/getsingleemp/', function (req, res) {
 
 app.post('/updatesingleemp', function (req, res,) {
 
-  var eid = req.body.upemployeeid;
   var elname = req.body.upemployeelastname;
   var efname = req.body.upemployeefirstname;
   var eemail = req.body.upemployeeemail;
@@ -518,10 +517,10 @@ app.post('/updatesingleemp', function (req, res,) {
   var etype = req.body.upemployeetype;
   var ekey = req.body.upemployeekey;
 
-  var sqlins = "UPDATE employee SET employeeID = ?, employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, " +
+  var sqlins = "UPDATE employee SET employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, " +
     " employeeStatus = ?, employeeTypeID =? " +
     " WHERE employeeID = ? ";
-  var inserts = [eid, elname, efname, eemail, estatus, etype, ekey];
+  var inserts = [elname, efname, eemail, estatus, etype, ekey];
 
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
@@ -664,7 +663,6 @@ app.post('/playerCreateAccount', function (req, res) {
 });
 app.post('/employee', function (req, res,) {
 
-  var eid = req.body.employeeid;
   var elname = req.body.employeelastname;
   var efname = req.body.employeefirstname;
   var eemail = req.body.employeeemail;
@@ -687,11 +685,11 @@ app.post('/employee', function (req, res,) {
       theHashedPW = hashedPassword;
       console.log("Password Enc: " + theHashedPW);
 
-      var sqlins = "INSERT INTO employee (employeeID, employeeLastName, employeeFirstName, employeeEmail, " +
+      var sqlins = "INSERT INTO employee ( employeeLastName, employeeFirstName, employeeEmail, " +
         " employeeStatus, employeeTypeID, employeePassword) " +
-        " VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+        " VALUES ( ?, ?, ?, ?, ?, ?)";
 
-      var inserts = [eid, elname, efname, eemail, estatus, etype, theHashedPW];
+      var inserts = [elname, efname, eemail, estatus, etype, theHashedPW];
 
       var sql = mysql.format(sqlins, inserts);
 
@@ -713,7 +711,7 @@ app.post('/updatesingleres', function (req, res) {
   var rplay = req.body.upreservationplayer;
   var rid = req.body.upreservationid;
   var rplaycount = req.body.upreservationplayercount;
-  var sqlins = "UPDATE reservations SET reservationDateTime = ?, reservationStatus = ?, playerID = ?, reservationPlayerCount = ?, WHERE reservationID = ?";
+  var sqlins = "UPDATE reservations SET reservationDateTime = ?, reservationStatus = ?, playerID = ?, reservationPlayerCount = ? WHERE reservationID = ?";
   var inserts = [rdatetime, rstatus, rplay, rplaycount, rid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
@@ -832,12 +830,11 @@ app.post('/updatesingleord', function (req, res) {
   con.execute(sqlOrder, function (err) {
     if (err) throw err;
     console.log("Order updated");
-    process.exit(1);
-  });
-  con.execute(sqlDetail, function (err) {
-    if (err) throw err;
-    console.log("Order Detail updated");
-    res.end();
+    con.execute(sqlDetail, function (err) {
+      if (err) throw err;
+      console.log("Order Detail updated");
+      res.end();
+    });
   });
 });
 
@@ -919,7 +916,7 @@ app.post('/order', function (req, res) {
   var oeid = req.body.employeeid;
   console.log(odate + "-" + ototal + "-" + odid);
   var sqlInsOrder = "INSERT INTO orders (employeeID, orderTotal, orderDate) VALUES (?, ?, now())";
-  var insertOrder = [oeid, 0];
+  var insertOrder = [oeid, ototal, odate];
   var sqlOrder = mysql.format(sqlInsOrder, insertOrder);
 
   con.query(sqlOrder, function (err, result) {
@@ -939,7 +936,7 @@ app.post('/order', function (req, res) {
         process.exit(1);
       }
       console.log("1 orderDetail record inserted");
-      res.redirect('insertorder.html');
+      // res.redirect('insertorder.html');
     });
   });
 });

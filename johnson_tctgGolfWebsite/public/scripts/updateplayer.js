@@ -57,7 +57,7 @@ var PlayerBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-    window.location.reload(true);
+    // window.location.reload(true);
     alert("Information updated.");
   },
   componentDidMount: function () {
@@ -96,7 +96,7 @@ var PlayerBox = React.createClass({
               </table>
             </div>
             <div >
-              <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
+              <PlayerUpdateform viewthepage={this.state.viewthepage} onUpdateSubmit={this.updateSinglePlyrFromServer} />
             </div>
           </div>
         </div>
@@ -198,7 +198,7 @@ var PlayerBox = React.createClass({
 var PlayerUpdateform = React.createClass({
   getInitialState: function () {
     return {
-      upplayerid: "",
+      upplayerid: this.props.viewthepage,
       upplayerlastname: "",
       upplayerfirstname: "",
       // upplayerrewardspoints: "",
@@ -217,7 +217,7 @@ var PlayerUpdateform = React.createClass({
   handleUpSubmit: function (e) {
     e.preventDefault();
 
-    // var upplayerid = upplyrid.value;
+    var upplayerid = this.props.viewthepage;
     var upplayerlastname = upplyrlname.value;
     var upplayerfirstname = upplyrfname.value;
     // var upplayerrewardspoints = upplyrrewards.value;
@@ -324,13 +324,13 @@ var Player = React.createClass({
   },
   getInitialState: function () {
     return {
-      upplyrid: "",
+      upplyrid: this.props.viewthepage,
       singledata: []
     };
   },
   updateRecord: function (e) {
     e.preventDefault();
-    var theupplyrid = this.props.plyrid;
+    var theupplyrid = this.props.viewthepage;
 
     this.loadSinglePlyr(theupplyrid);
   },

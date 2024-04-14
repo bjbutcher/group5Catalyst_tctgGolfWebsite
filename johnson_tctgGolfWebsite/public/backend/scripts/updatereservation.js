@@ -210,7 +210,6 @@ var Reservationform2 = React.createClass({
 
   handleSubmit: function (e) {
     e.preventDefault();
-
     var reservationdatetime = "";
     if (this.state.reservationdate && this.state.reservationtime) {
       reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
@@ -398,7 +397,8 @@ var ReservationUpdateform = React.createClass({
     e.preventDefault();
 
     var upreservationid = upresid.value;
-    var upreservationdatetime = this.state.upresdate + 'T' + this.state.uprestime;
+    var upreservationdatetime = "";
+    var upreservationdatetime = this.createDateTime(upresdate.value, uprestime.value);
     var upreservationstatus = upresstatus.value;
     var upreservationplayer = upresplayer.value;
     var upreservationplayercount = uppresplaycount.value;

@@ -293,7 +293,7 @@ var EmployeeUpdateform = React.createClass({
     e.preventDefault();
 
     var upemployeekey = upempkey.value;
-    var upemployeeid = upempid.value;
+    // var upemployeeid = empid.value;
     var upemployeeemail = upempemail.value;
     var upemployeelastname = upemplname.value;
     var upemployeefirstname = upempfname.value;
@@ -302,7 +302,7 @@ var EmployeeUpdateform = React.createClass({
 
     this.props.onUpdateSubmit({
       upemployeekey: upemployeekey,
-      upemployeeid: upemployeeid,
+      // upemployeeid: upemployeeid,
       upemployeelastname: upemployeelastname,
       upemployeefirstname: upemployeefirstname,
       upemployeeemail: upemployeeemail,
@@ -450,7 +450,7 @@ var Employee = React.createClass({
         var populateEmp = this.state.singledata.map(function (employee) {
           upempkey.value = theupempkey;
           upempemail.value = employee.employeeEmail;
-          upempid.value = employee.employeeID;
+          // upempkey.value = employee.employeeID;
           upemplname.value = employee.employeeLastName;
           upempfname.value = employee.employeeFirstName;
           if (employee.employeeStatus == "Active") {
