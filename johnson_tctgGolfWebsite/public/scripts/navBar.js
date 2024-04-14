@@ -52,6 +52,7 @@ var NavBar = React.createClass({
           <a href="Restaurant.html">Restaurant</a>
           <a href="searchinventory.html">Browse Products</a>
           <a href="insertreservation.html">Book A Tee Time</a>
+          <a href="insertplayer.html">Create Account</a>
           {/* <a href="updateplayer.html">Edit Profile</a> */}
           <a href="login.html">Login</a>
         </nav >
