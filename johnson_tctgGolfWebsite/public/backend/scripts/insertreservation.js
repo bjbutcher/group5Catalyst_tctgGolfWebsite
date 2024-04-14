@@ -31,6 +31,7 @@ var ReservationBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Reservation Added");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

@@ -34,6 +34,7 @@ var InventoryBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Inventory Item Added");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

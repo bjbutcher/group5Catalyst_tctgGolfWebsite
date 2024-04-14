@@ -31,6 +31,7 @@ var PlayerBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Player Added");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

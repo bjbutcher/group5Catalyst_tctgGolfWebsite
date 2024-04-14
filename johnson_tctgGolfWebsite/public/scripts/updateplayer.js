@@ -58,6 +58,7 @@ var PlayerBox = React.createClass({
       }.bind(this)
     });
     window.location.reload(true);
+    alert("Information updated.");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

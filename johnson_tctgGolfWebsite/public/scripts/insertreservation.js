@@ -36,12 +36,17 @@ var ReservationBox = React.createClass({
       type: 'POST',
       data: reservation,
       success: function (data) {
-        this.setState({ datat: data });
+        if (data.success) {
+          window.location.href = data.redirectUrl;
+        } else {
+          this.setState({ data: data });
+        }
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Reservation submitted successfully.");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

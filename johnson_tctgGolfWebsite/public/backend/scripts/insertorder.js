@@ -31,6 +31,7 @@ var OrderBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Order Added");
   },
   componentDidMount: function () {
     this.loadAllowLogin();

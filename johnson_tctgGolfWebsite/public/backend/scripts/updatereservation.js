@@ -79,6 +79,7 @@ var ReservationBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Reservation Updated");
     window.location.reload(true);
   },
 

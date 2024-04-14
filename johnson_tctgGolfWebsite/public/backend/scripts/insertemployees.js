@@ -35,7 +35,7 @@ var EmployeeBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-
+    alert("User Added");
   },
 
   componentDidMount: function () {

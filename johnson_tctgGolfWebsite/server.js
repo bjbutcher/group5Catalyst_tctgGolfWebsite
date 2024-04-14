@@ -635,6 +635,7 @@ app.post('/playerCreateAccount', function (req, res) {
 
     if (err) {
       console.log("Bad on encrypt");
+      res.status(500).json({ error: 'Bad on encrypt' });
       return;
     } else {
 
@@ -649,9 +650,13 @@ app.post('/playerCreateAccount', function (req, res) {
       var sql = mysql.format(sqlins, inserts);
 
       con.execute(sql, function (err, result) {
-        if (err) throw err;
+        if (err) {
+          console.log(err);
+          res.status(500).json({ error: 'Database error' });
+          return;
+        }
         console.log("1 record inserted");
-        res.redirect('Home.html');
+        res.json({ success: true, redirectUrl: 'login.html' });
         res.end();
       });
     }
@@ -788,7 +793,7 @@ app.post('/reservation', function (req, res) {
     if (err) throw err;
     console.log(sql);
     console.log("1 record inserted");
-    res.redirect('Home.html');
+    res.json({ success: true, redirectUrl: 'Home.html' });
     res.end();
   });
 });

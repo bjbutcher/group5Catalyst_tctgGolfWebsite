@@ -65,6 +65,7 @@ var EmployeeBox = React.createClass({
       }.bind(this)
     });
     window.location.reload(true);
+    alert("User Updated");
   },
 
   componentDidMount: function () {

@@ -69,6 +69,7 @@ var PlayerBox = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
+    alert("Player Updated");
     window.location.reload(true);
   },
   componentDidMount: function () {
