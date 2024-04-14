@@ -1,4 +1,33 @@
 var ReservationBox = React.createClass({
+  getInitialState: function () {
+    return {
+      data: [],
+      viewthepage: 0,
+      playerName: "",
+      loading: true
+    };
+  },
+  loadAllowLogin: function () {
+    $.ajax({
+      url: '/customerlogin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({
+          data: datalog,
+          viewthepage: datalog[0].playerID,
+          playerName: datalog[0].playerFirstName + " " + datalog[0].playerLastName,
+          loading: false
+        });
+        localStorage.setItem('viewthepage', datalog[0].playerID);
+        localStorage.setItem('playerName', datalog[0].playerFirstName + " " + datalog[0].playerLastName);
+        console.log("Logged in:" + this.state.viewthepage + "," + this.state.playerName);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   handleReservationSubmit: function (reservation) {
 
     $.ajax({
@@ -14,13 +43,27 @@ var ReservationBox = React.createClass({
       }.bind(this)
     });
   },
+  componentDidMount: function () {
+    this.loadAllowLogin();
+  },
+
   render: function () {
-    return (
-      <div className="ReservationBox">
-        <h1>Reserve A Tee Time</h1>
-        <Reservationform2 onReservationSubmit={this.handleReservationSubmit} />
-      </div>
-    );
+    if (this.state.viewthepage === 0) {
+      return (
+        <div>Please log in to make a reservation.</div>
+      );
+    }
+    else if (this.state.loading) {
+      return (<div>Loading...</div>);
+    }
+    else {
+      return (
+        <div className="ReservationBox">
+          <h1>Reserve A Tee Time</h1>
+          <Reservationform2 onReservationSubmit={this.handleReservationSubmit} playerName={this.state.playerName} viewthepage={this.state.viewthepage} />
+        </div>
+      );
+    }
   }
 });
 
@@ -56,17 +99,17 @@ var Reservationform2 = React.createClass({
     return `${hours}:${minutes}:00`;
   },
   loadResPlayer: function () {
-    $.ajax({
-      url: '/getplayers',
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+    // $.ajax({
+    //   url: '/getplayers',
+    //   dataType: 'json',
+    //   cache: false,
+    //   success: function (data) {
+    //     this.setState({ data: data });
+    //   }.bind(this),
+    //   error: function (xhr, status, err) {
+    //     console.error(this.props.url, status, err.toString());
+    //   }.bind(this)
+    // });
     $.ajax({
       url: '/getReservedDateTime',
       dataType: 'json',
@@ -130,7 +173,7 @@ var Reservationform2 = React.createClass({
 
     var reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
     var reservationstatus = this.state.reservationstatus;
-    var reservationplayer = this.state.reservationplayer;
+    var reservationplayer = this.props.viewthepage;
     var reservationplayercount = this.state.reservationplayercount;
 
     this.props.onReservationSubmit({
@@ -220,7 +263,7 @@ var Reservationform2 = React.createClass({
                 <tr>
                   <th>Player Scheduling Reservation</th>
                   <td>
-                    {this.state.reservationplayer}
+                    {this.props.playerName}
                   </td>
                 </tr>
               </tbody>

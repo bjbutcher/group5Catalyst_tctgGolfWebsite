@@ -38,9 +38,12 @@ app.get('/', function (req, res) {
 
 app.get('/getloggedout/', function (req, res) {
   res.cookie('token', 2, { maxAge: 0 })
-  res.send({ redirect: '/backend/index.html' });
+  res.send({ redirect: '/Home.html' });
 });
-
+app.get('/playerlogout/', function (req, res) {
+  res.cookie('token', 2, { maxAge: 0 })
+  res.send({ redirect: '/home.html' });
+});
 app.get('/getloggedin/', function (req, res) {
 
   var viewpage = 0;
@@ -59,6 +62,51 @@ app.get('/getloggedin/', function (req, res) {
       viewpage = payload.empkey;
 
       var sqlsel = 'select * from employee where employeeID = ?';
+      var inserts = [viewpage];
+
+      var sql = mysql.format(sqlsel, inserts);
+
+      con.query(sql, function (err, data) {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        }
+        console.log("Show 1" + data);
+
+        datahold = data;
+
+        res.send(JSON.stringify(data));
+      });
+
+    } catch (e) {
+      if (e instanceof jwt.JsonWebTokenError) {
+        viewpage = 0;
+        console.log("NVT2");
+      }
+      viewpage = 0;
+      console.log("NVT3");
+    }
+  }
+
+});
+app.get('/customerlogin/', function (req, res) {
+
+  var viewpage = 0;
+  var datahold = [];
+  const validtoken = req.cookies.token
+  console.log('token new:', validtoken);
+  var payload;
+
+  if (!validtoken) {
+    viewpage = 0;
+    console.log("NVT");
+  } else {
+    try {
+      payload = jwt.verify(validtoken, jwtKey);
+      console.log('payload new:', payload.playkey);
+      viewpage = payload.playkey;
+
+      var sqlsel = 'select * from players where playerID = ?';
       var inserts = [viewpage];
 
       var sql = mysql.format(sqlsel, inserts);
@@ -156,7 +204,7 @@ app.post('/loginplyr/', function (req, res) {
           });
 
           res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
-          res.send({ redirect: '//Home.html' });
+          res.send({ redirect: '/Home.html' });
         }
       });
     } else {

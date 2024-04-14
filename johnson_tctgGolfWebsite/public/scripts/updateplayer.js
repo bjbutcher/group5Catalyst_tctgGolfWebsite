@@ -1,10 +1,36 @@
 var PlayerBox = React.createClass({
   getInitialState: function () {
-    return { data: [] };
+    return {
+      data: [],
+      viewthepage: 0,
+      playerName: "",
+      loading: true
+    };
   },
-  loadPlayersFromServer: function () {
+  loadAllowLogin: function () {
     $.ajax({
-      url: '/getplyrinfo',
+      url: '/customerlogin',
+      dataType: 'json',
+      cache: false,
+      success: function (datalog) {
+        this.setState({
+          data: datalog,
+          viewthepage: datalog[0].playerID,
+          playerName: datalog[0].playerFirstName + " " + datalog[0].playerLastName,
+          loading: false
+        });
+        localStorage.setItem('viewthepage', datalog[0].playerID);
+        localStorage.setItem('playerName', datalog[0].playerFirstName + " " + datalog[0].playerLastName);
+        console.log("Logged in:" + this.state.viewthepage + "," + this.state.playerName);
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  loadPlayerFromServer: function () {
+    $.ajax({
+      url: '/getsingleplyr',
       dataType: 'json',
       cache: false,
       success: function (data) {
@@ -34,35 +60,47 @@ var PlayerBox = React.createClass({
     window.location.reload(true);
   },
   componentDidMount: function () {
-    this.loadPlayersFromServer();
+    this.loadAllowLogin();
+    if (this.state.viewthepage != 0) {
+      (this.loadPlayerFromServer());
+    }
+
   },
+
   render: function () {
-    return (
-      <div>
-        <h1>Your Account</h1>
-        {/* <Playerform2/> */}
-        <br />
+    if (this.state.viewthepage === 0) {
+      return (
+        <div>Please log in to see this page.</div>
+      );
+    }
+    else {
+      return (
         <div id="playerInfo">
-          <div id="theleft">
-            <table>
-              <thead>
-                <tr>
-                  <th>Last Name</th>
-                  <th>First Name</th>
-                  <th>Email</th>
-                  <th>Rewards Points</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <PlayerList data={this.state.data} />
-            </table>
-          </div>
-          <div id="theright">
-            <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
+          <h1>Your Account</h1>
+          {/* <Playerform2/> */}
+          <br />
+          <div>
+            <div >
+              <table>
+                <thead>
+                  <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Email</th>
+                    <th>Rewards Points</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <PlayerList data={this.state.data} />
+              </table>
+            </div>
+            <div >
+              <PlayerUpdateform onUpdateSubmit={this.updateSinglePlyrFromServer} />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 });
 
