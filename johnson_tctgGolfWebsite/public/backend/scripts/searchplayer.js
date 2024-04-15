@@ -2,14 +2,14 @@ var PlayerBox = React.createClass({
   getInitialState: function () {
     return { data: [], viewthepage: 0 };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -18,48 +18,52 @@ var PlayerBox = React.createClass({
     });
   },
   loadPlayersFromServer: function () {
-    var playermembertypevalue = 2;
-    if (basic.checked) {
-      playermembertypevalue = 0;
-    }
-    if (premium.checked) {
-      playermembertypevalue = 1;
-    }
-    var playerstatusvalue = "Active";
-    if (plyrstatusactive.checked) {
-      playerstatusvalue = "Active";
-    }
-    if (plyrstatusinactive.checked) {
-      playerstatusvalue = "Inactive";
-    }
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 3) {
+        console.log('Insufficient permission level');
+        return;
+      }
+      var playermembertypevalue = 2;
+      if (basic.checked) {
+        playermembertypevalue = 0;
+      }
+      if (premium.checked) {
+        playermembertypevalue = 1;
+      }
+      var playerstatusvalue = "Active";
+      if (plyrstatusactive.checked) {
+        playerstatusvalue = "Active";
+      }
+      if (plyrstatusinactive.checked) {
+        playerstatusvalue = "Inactive";
+      }
 
-    $.ajax({
-      url: '/getplyr',
-      data: {
-        'playerlastname': playerlastname.value,
-        'playerfirstname': playerfirstname.value,
-        'playermembertype': playermembertypevalue,
-        'playerrewardspoints': playerrewardspoints.value,
-        'playeremail': playeremail.value,
-        'playerstatus': playerstatusvalue
-      },
+      $.ajax({
+        url: '/getplyr',
+        data: {
+          'playerlastname': playerlastname.value,
+          'playerfirstname': playerfirstname.value,
+          'playermembertype': playermembertypevalue,
+          'playerrewardspoints': playerrewardspoints.value,
+          'playeremail': playeremail.value,
+          'playerstatus': playerstatusvalue
+        },
 
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    }
+    )
   },
   componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage > 2) {
-      this.loadPlayersFromServer();
-      // setInterval(this.loadPlayersFromServer, this.props.pollInterval);
-    }
+    this.loadPlayersFromServer();
+    // setInterval(this.loadPlayersFromServer, this.props.pollInterval);
   },
 
   render: function () {

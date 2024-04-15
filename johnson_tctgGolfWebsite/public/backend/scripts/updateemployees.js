@@ -2,14 +2,14 @@ var EmployeeBox = React.createClass({
   getInitialState: function () {
     return { data: [], viewthepage: 0 };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -18,36 +18,44 @@ var EmployeeBox = React.createClass({
     });
   },
   loadEmployeesFromServer: function () {
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 5) {
+        console.log('Insufficient permission level');
+        return;
+      }
+      var estatusvalue = "Active";
+      if (empstatusactive.checked) {
+        estatusvalue = "Active";
+      }
+      if (empstatusinactive.checked) {
+        estatusvalue = "Inactive";
+      }
+      console.log(estatusvalue);
+      $.ajax({
+        url: '/getemp',
+        data: {
+          'employeeid': employeeid.value,
+          'employeelastname': employeelastname.value,
+          'employeefirstname': employeefirstname.value,
+          'employeeemail': employeeemail.value,
+          'employeestatus': estatusvalue,
+          'employeetype': emptype.value
+        },
 
-    var estatusvalue = "Active";
-    if (empstatusactive.checked) {
-      estatusvalue = "Active";
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
     }
-    if (empstatusinactive.checked) {
-      estatusvalue = "Inactive";
-    }
-    console.log(estatusvalue);
-    $.ajax({
-      url: '/getemp',
-      data: {
-        'employeeid': employeeid.value,
-        'employeelastname': employeelastname.value,
-        'employeefirstname': employeefirstname.value,
-        'employeeemail': employeeemail.value,
-        'employeestatus': estatusvalue,
-        'employeetype': emptype.value
-      },
-
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-
+    )
+  },
+  componentDidMount: function () {
+    this.loadEmployeesFromServer();
   },
   updateSingleEmpFromServer: function (employee) {
 
@@ -68,20 +76,8 @@ var EmployeeBox = React.createClass({
     alert("User Updated");
   },
 
-  componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage > 4) {
-      this.loadEmployeesFromServer();
-    }
-    // setInterval(this.loadEmployeesFromServer, this.props.pollInterval);
-  },
-
   render: function () {
     if (this.state.viewthepage < 5) {
-      //if it's less than 5 (manager) then I'd like to let the user update/see their own info only
-      //gotta figure out how to pass empuser id to the rest of the code without repeating it
-      //maybe make certain divs conditional instead of the whole page?
-      //look into later if time
       return (
         <div id="noPerms">You are not authorized to view this page.</div>
       );

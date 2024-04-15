@@ -2,14 +2,14 @@ var InventoryBox = React.createClass({
   getInitialState: function () {
     return { data: [], viewthepage: 0 };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -18,24 +18,30 @@ var InventoryBox = React.createClass({
     });
   },
   loadInventoryFromServer: function () {
-    $.ajax({
-      url: '/getinv',
-      data: {
-        'inventoryname': inventoryname.value,
-        'inventoryquantity': inventoryquantity.value,
-        'inventoryprice': inventoryprice.value,
-      },
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 4) {
+        console.log('Insufficient permission level');
+        return;
+      }
+      $.ajax({
+        url: '/getinv',
+        data: {
+          'inventoryname': inventoryname.value,
+          'inventoryquantity': inventoryquantity.value,
+          'inventoryprice': inventoryprice.value,
+        },
 
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    }
+    )
   },
   updateSingleInvFromServer: function (inventory) {
     console.log("Starting update");
@@ -56,10 +62,8 @@ var InventoryBox = React.createClass({
     window.location.reload(true);
   },
   componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage > 1) {
-      this.loadInventoryFromServer();
-    }
+
+    this.loadInventoryFromServer();
     // setInterval(this.loadInventoryFromServer, this.props.pollInterval);
   },
 

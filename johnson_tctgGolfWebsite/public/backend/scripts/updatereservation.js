@@ -10,14 +10,14 @@ var ReservationBox = React.createClass({
       viewthepage: 0
     };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -26,31 +26,35 @@ var ReservationBox = React.createClass({
     });
   },
   loadReservationsFromServer: function (formState) {
-    var reservationDateTime = formState.reservationDate && formState.reservationTime ? formState.reservationDate + 'T' + formState.reservationTime : '';
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 2) {
+        console.log('Insufficient permission level');
+        return;
+      }
+      var reservationDateTime = formState.reservationDate && formState.reservationTime ? formState.reservationDate + 'T' + formState.reservationTime : '';
 
-    $.ajax({
-      url: '/getres',
-      data: {
-        'reservationdatetime': reservationDateTime,
-        'reservationstatus': formState.reservationstatus,
-        'reservationplayer': resplayer.value,
-        'reservationplayercount': formState.reservationplayercount
-      },
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+      $.ajax({
+        url: '/getres',
+        data: {
+          'reservationdatetime': reservationDateTime,
+          'reservationstatus': formState.reservationstatus,
+          'reservationplayer': resplayer.value,
+          'reservationplayercount': formState.reservationplayercount
+        },
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    }
+    )
   },
   componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage > 1) {
-      this.loadReservationsFromServer(this.state);
-    }
+    this.loadReservationsFromServer(this.state);
   },
   updateFormState: function (date, time, status, playerCount, playerId) {
     this.refs.reservationUpdateForm.setState({

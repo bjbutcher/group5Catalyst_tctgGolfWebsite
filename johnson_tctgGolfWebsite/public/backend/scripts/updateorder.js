@@ -2,14 +2,14 @@ var OrderBox = React.createClass({
   getInitialState: function () {
     return { data: [], viewthepage: 0 };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -18,31 +18,36 @@ var OrderBox = React.createClass({
     });
   },
   loadOrdersFromServer: function () {
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 2) {
+        console.log('Insufficient permission level');
+        return;
+      }
 
+      $.ajax({
+        url: '/getord',
+        data: {
+          'orderid': orderid.value,
+          'orderdate': orderdate.value,
+          'ordertotal': ordertotal.value,
+          'reservationid': orderres.value,
+          'orderdetailid': orderdetailid.value,
+          'inventoryid': orderinv.value,
+          'orderdetailquantity': orderdetailquantity.value,
+          'employeeid': orderemp.value
+        },
 
-    $.ajax({
-      url: '/getord',
-      data: {
-        'orderid': orderid.value,
-        'orderdate': orderdate.value,
-        'ordertotal': ordertotal.value,
-        'reservationid': orderres.value,
-        'orderdetailid': orderdetailid.value,
-        'inventoryid': orderinv.value,
-        'orderdetailquantity': orderdetailquantity.value,
-        'employeeid': orderemp.value
-      },
-
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    }
+    )
   },
   updateSingleOrdFromServer: function (order) {
     console.log("Starting update");
@@ -63,10 +68,7 @@ var OrderBox = React.createClass({
     window.location.reload(true);
   },
   componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage > 1) {
-      this.loadOrdersFromServer();
-    }
+    this.loadOrdersFromServer();
     // setInterval(this.loadOrdersFromServer, this.props.pollInterval);
   },
 

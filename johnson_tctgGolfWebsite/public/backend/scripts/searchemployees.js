@@ -2,14 +2,14 @@ var EmployeeBox = React.createClass({
   getInitialState: function () {
     return { data: [], viewthepage: 0 };
   },
-  loadAllowLogin: function () {
+  loadAllowLogin: function (callback) {
     $.ajax({
       url: '/getloggedin',
       dataType: 'json',
       cache: false,
       success: function (datalog) {
         this.setState({ data: datalog });
-        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel });
+        this.setState({ viewthepage: this.state.data[0].employeePermissionLevel }, callback);
         console.log("Logged in:" + this.state.viewthepage);
       }.bind(this),
       error: function (xhr, status, err) {
@@ -18,43 +18,44 @@ var EmployeeBox = React.createClass({
     });
   },
   loadEmployeesFromServer: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage < 5) {
-      console.log('Insufficient permission level');
-      return;
-    }
-    var estatusvalue = "Active";
-    if (empstatusactive.checked) {
-      estatusvalue = "Active";
-    }
-    if (empstatusinactive.checked) {
-      estatusvalue = "Inactive";
-    }
-    console.log(estatusvalue);
-    $.ajax({
-      url: '/getemp',
-      data: {
-        'employeeid': employeeid.value,
-        'employeelastname': employeelastname.value,
-        'employeefirstname': employeefirstname.value,
-        'employeeemail': employeeemail.value,
-        'employeestatus': estatusvalue,
-        'employeetype': emptype.value
-      },
+    this.loadAllowLogin(() => {
+      if (this.state.viewthepage < 5) {
+        console.log('Insufficient permission level');
+        return;
+      }
+      var estatusvalue = "Active";
+      if (empstatusactive.checked) {
+        estatusvalue = "Active";
+      }
+      if (empstatusinactive.checked) {
+        estatusvalue = "Inactive";
+      }
+      console.log(estatusvalue);
+      $.ajax({
+        url: '/getemp',
+        data: {
+          'employeeid': employeeid.value,
+          'employeelastname': employeelastname.value,
+          'employeefirstname': employeefirstname.value,
+          'employeeemail': employeeemail.value,
+          'employeestatus': estatusvalue,
+          'employeetype': emptype.value
+        },
 
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ data: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+          this.setState({ data: data });
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this)
+      });
+    }
+    )
   },
   componentDidMount: function () {
-    this.loadEmployeesFromServer(); // Modify this line
+    this.loadEmployeesFromServer();
   },
   render: function () {
     if (this.state.viewthepage != 5) {
