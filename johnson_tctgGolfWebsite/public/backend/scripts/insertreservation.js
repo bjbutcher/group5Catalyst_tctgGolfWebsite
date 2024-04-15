@@ -39,7 +39,7 @@ var ReservationBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 2) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -61,26 +61,20 @@ var Reservationform2 = React.createClass({
       reservationtime: "",
       reservationdatetime: "",
       reservationstatus: "",
-      reservationplayercount: "",
+      reservationplayercount: 1,
+      reservedDateTimes: [],
       data: [],
-      reservedDateTimes: []
+      loadingReservedTimes: false
     };
   },
-  handleOptionChange: function (e) {
-    this.setState({
-      selectedOption: e.target.value
+  handleChange: function (event) {
+    var partialState = {};
+    partialState[event.target.id] = event.target.value;
+    this.setState(partialState, () => {
+      if (event.target.id === "reservationdate") {
+        this.setState({ reservationtime: '', loadingReservedTimes: true }, this.getReservedDateTimes);
+      }
     });
-  },
-  convertTo24Hour: function (time12h) {
-    const [time, modifier] = time12h.split(' ');
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
-    }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    return `${hours}:${minutes}:00`;
   },
   loadResPlayer: function () {
     $.ajax({
@@ -93,64 +87,72 @@ var Reservationform2 = React.createClass({
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
-    });
+    })
+  },
+  componentDidMount: function () {
+    this.loadResPlayer();
+  },
+  getReservedDateTimes: function () {
+    if (!this.state.reservationdate) return;
     $.ajax({
       url: '/getReservedDateTime',
       dataType: 'json',
       cache: false,
       success: function (data) {
-        this.setState({ reservedDateTime: data });
+        let filteredDateTimes = data.filter(dt => {
+          let reservedDate = new Date(dt.reservationDateTime).toISOString().split('T')[0];
+          return reservedDate === this.state.reservationdate;
+        }).map(dt => new Date(dt.reservationDateTime).toISOString());
+        this.setState({ reservedDateTimes: filteredDateTimes, loadingReservedTimes: false });
+
       }.bind(this),
       error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
+        this.setState({ loadingReservedTimes: false });
       }.bind(this)
     });
   },
-  componentDidMount: function () {
-    this.loadResPlayer();
-  },
-  handleChange: function (event) {
-    var partialState = {};
-    partialState[event.target.id] = event.target.value;
-    this.setState(partialState);
-
-    if (event.target.id === "reservationdate") {
-      this.setState({ reservationtime: '' });
-    }
-  },
-
-  handleDateTimeChange: function () {
-    var reservationdatetime = this.state.reservationdate + 'T' + this.state.reservationtime;
-    this.setState({ reservationdatetime: reservationdatetime });
-  },
-
   renderTimeOptions: function () {
+    if (!this.state.reservationdate || this.state.loadingReservedTimes) {
+      return [];
+    }
     var timeOptions = [];
-    var reservedTimes = this.state.reservedDateTime ?
-      this.state.reservedDateTime.map(rt => rt.reservationDateTime) : [];
-
-    var hours, minutes, ampm;
-
-    for (var i = 480; i <= 960; i += 8) {
-      hours = Math.floor(i / 60);
-      minutes = i % 60;
-      ampm = hours >= 12 ? 'PM' : 'AM';
+    var startTime = 480;
+    var endTime = 960;
+    var timeIncrement = 8;
+    var reservedTimes = this.state.reservedDateTimes;
+    console.log('Reserved Times:', reservedTimes);
+    for (var i = startTime; i <= endTime; i += timeIncrement) {
+      var hours = Math.floor(i / 60);
+      var minutes = i % 60;
+      var ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12;
       minutes = minutes < 10 ? '0' + minutes : minutes;
 
       var timeValue = `${hours}:${minutes} ${ampm}`;
-      var optionDateTime = this.createDateTime(this.state.reservationdate, timeValue);
-
+      var dateParts = this.state.reservationdate.split('-');
+      var optionDateTime = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], hours, minutes)).toISOString();
+      console.log('Generated Time Slot:', optionDateTime);
       if (!reservedTimes.includes(optionDateTime)) {
         timeOptions.push(<option key={timeValue} value={timeValue}>{timeValue}</option>);
       }
     }
-
     return timeOptions;
   },
-
-
+  commonValidate: function () {
+    return true;
+  },
+  setValue: function (field, event) {
+    var object = {};
+    object[field] = event.target.value;
+    this.setState(object);
+  },
+  handleOptionChange: function (e) {
+    this.setState({
+      selectedOption: e.target.value
+    });
+  },
 
   handleSubmit: function (e) {
     e.preventDefault();
@@ -178,14 +180,7 @@ var Reservationform2 = React.createClass({
     }
     return date + 'T' + hours + ':' + minutes + ':00';
   },
-  commonValidate: function () {
-    return true;
-  },
-  setValue: function (field, event) {
-    var object = {};
-    object[field] = event.target.value;
-    this.setState(object);
-  },
+
   render: function () {
 
     return (
@@ -201,7 +196,8 @@ var Reservationform2 = React.createClass({
                     uniqueName="reservationdate"
                     id="reservationdate"
                     value={this.state.reservationdate}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                    required />
                 </td>
               </tr>
               <tr>
@@ -246,7 +242,7 @@ var Reservationform2 = React.createClass({
               <tr>
                 <th>Player Scheduling Reservation</th>
                 <td>
-                  <SelectList data={this.state.data} />
+                  <SelectList data={this.state.data} required />
                 </td>
               </tr>
             </tbody>

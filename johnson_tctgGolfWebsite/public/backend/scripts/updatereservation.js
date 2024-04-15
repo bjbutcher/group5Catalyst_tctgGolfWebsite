@@ -87,7 +87,7 @@ var ReservationBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 2) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -433,7 +433,7 @@ var ReservationUpdateform = React.createClass({
                       uniqueName="upresdate"
                       id="upresdate"
                       value={this.state.upresdate}
-                      onChange={this.state.handleUpChange} />
+                      onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -478,7 +478,7 @@ var ReservationUpdateform = React.createClass({
                 <tr>
                   <th>Player Scheduling Reservation</th>
                   <td>
-                    <SelectUpdateList data={this.state.updata} />
+                    <SelectUpdateList data={this.state.updata} required />
                   </td>
                 </tr>
               </tbody>
@@ -549,7 +549,7 @@ var Reservation = React.createClass({
       cache: false,
       success: function (data) {
         this.setState({ singledata: data });
-        console.log("Get single reservation " + this.state.singledata);
+        console.log("Get single reservation ", this.state.singledata);
         var populateRes = this.state.singledata.map(function (reservation) {
           var dateTimeSplit = reservation.reservationDateTime.split('T');
           var datePart = dateTimeSplit[0];

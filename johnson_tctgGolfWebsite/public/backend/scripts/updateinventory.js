@@ -66,7 +66,7 @@ var InventoryBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 4) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -226,19 +226,19 @@ var InventoryUpdateform = React.createClass({
                 <tr>
                   <th>Item Name</th>
                   <td>
-                    <input type="text" name="upinvname" id="upinvname" value={this.state.upinvname} onChange={this.state.handleUpChange} />
+                    <input type="text" name="upinvname" id="upinvname" value={this.state.upinvname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Quantity On Hand</th>
                   <td>
-                    <input name="upinvqty" id="upinvqty" value={this.state.upinvqty} onChange={this.state.handleUpChange} />
+                    <input name="upinvqty" id="upinvqty" value={this.state.upinvqty} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Price Per Item</th>
                   <td>
-                    <input name="upinvprice" id="upinvprice" value={this.state.upinvprice} onChange={this.state.handleUpChange} />
+                    <input name="upinvprice" id="upinvprice" value={this.state.upinvprice} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
               </tbody>

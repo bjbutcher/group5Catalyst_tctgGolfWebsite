@@ -71,10 +71,6 @@ var ReservationBox = React.createClass({
     }
   }
 });
-
-
-
-
 var Reservationform2 = React.createClass({
   getInitialState: function () {
     return {
@@ -83,99 +79,83 @@ var Reservationform2 = React.createClass({
       reservationdatetime: "",
       reservationstatus: "",
       reservationplayercount: 1,
-      data: [],
-      reservedDateTimes: []
+      reservedDateTimes: [],
+      loadingReservedTimes: false
     };
+  },
+
+  handleChange: function (event) {
+    var partialState = {};
+    partialState[event.target.id] = event.target.value;
+    this.setState(partialState, () => {
+      if (event.target.id === "reservationdate") {
+        this.setState({ reservationtime: '', loadingReservedTimes: true }, this.getReservedDateTimes);
+      }
+    });
+  },
+  getReservedDateTimes: function () {
+    if (!this.state.reservationdate) return;
+    $.ajax({
+      url: '/getReservedDateTime',
+      dataType: 'json',
+      cache: false,
+      success: function (data) {
+        let filteredDateTimes = data.filter(dt => {
+          let reservedDate = new Date(dt.reservationDateTime).toISOString().split('T')[0];
+          return reservedDate === this.state.reservationdate;
+        }).map(dt => new Date(dt.reservationDateTime).toISOString());
+        this.setState({ reservedDateTimes: filteredDateTimes, loadingReservedTimes: false });
+
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+        this.setState({ loadingReservedTimes: false });
+      }.bind(this)
+    });
+  },
+  renderTimeOptions: function () {
+    if (!this.state.reservationdate || this.state.loadingReservedTimes) {
+      return [];
+    }
+    var timeOptions = [];
+    var startTime = 480;
+    var endTime = 960;
+    var timeIncrement = 8;
+    var reservedTimes = this.state.reservedDateTimes;
+    console.log('Reserved Times:', reservedTimes);
+    for (var i = startTime; i <= endTime; i += timeIncrement) {
+      var hours = Math.floor(i / 60);
+      var minutes = i % 60;
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+
+      var timeValue = `${hours}:${minutes} ${ampm}`;
+      var dateParts = this.state.reservationdate.split('-');
+      var optionDateTime = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], hours, minutes)).toISOString();
+      console.log('Generated Time Slot:', optionDateTime);
+      if (!reservedTimes.includes(optionDateTime)) {
+        timeOptions.push(<option key={timeValue} value={timeValue}>{timeValue}</option>);
+      }
+    }
+    return timeOptions;
+  },
+  commonValidate: function () {
+    return true;
+  },
+  setValue: function (field, event) {
+    var object = {};
+    object[field] = event.target.value;
+    this.setState(object);
   },
   handleOptionChange: function (e) {
     this.setState({
       selectedOption: e.target.value
     });
   },
-  convertTo24Hour: function (time12h) {
-    const [time, modifier] = time12h.split(' ');
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') {
-      hours = '00';
-    }
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-    return `${hours}:${minutes}:00`;
-  },
-  loadResPlayer: function () {
-    // $.ajax({
-    //   url: '/getplayers',
-    //   dataType: 'json',
-    //   cache: false,
-    //   success: function (data) {
-    //     this.setState({ data: data });
-    //   }.bind(this),
-    //   error: function (xhr, status, err) {
-    //     console.error(this.props.url, status, err.toString());
-    //   }.bind(this)
-    // });
-    $.ajax({
-      url: '/getReservedDateTime',
-      dataType: 'json',
-      cache: false,
-      success: function (data) {
-        this.setState({ reservedDateTime: data });
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
-  },
-  componentDidMount: function () {
-    this.loadResPlayer();
-  },
-  handleChange: function (event) {
-    var partialState = {};
-    partialState[event.target.id] = event.target.value;
-    this.setState(partialState);
-
-    if (event.target.id === "reservationdate") {
-      this.setState({ reservationtime: '' });
-    }
-  },
-
-  handleDateTimeChange: function () {
-    var reservationdatetime = this.state.reservationdate + 'T' + this.state.reservationtime;
-    this.setState({ reservationdatetime: reservationdatetime });
-  },
-
-  renderTimeOptions: function () {
-    var timeOptions = [];
-    var reservedTimes = this.state.reservedDateTime ?
-      this.state.reservedDateTime.map(rt => rt.reservationDateTime) : [];
-
-    var hours, minutes, ampm;
-
-    for (var i = 480; i <= 960; i += 8) {
-      hours = Math.floor(i / 60);
-      minutes = i % 60;
-      ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-
-      var timeValue = `${hours}:${minutes} ${ampm}`;
-      var optionDateTime = this.createDateTime(this.state.reservationdate, timeValue);
-
-      if (!reservedTimes.includes(optionDateTime)) {
-        timeOptions.push(<option key={timeValue} value={timeValue}>{timeValue}</option>);
-      }
-    }
-
-    return timeOptions;
-  },
-
-
-
   handleSubmit: function (e) {
     e.preventDefault();
-
     var reservationdatetime = this.createDateTime(this.state.reservationdate, this.state.reservationtime);
     var reservationstatus = this.state.reservationstatus;
     var reservationplayer = this.props.viewthepage;
@@ -199,16 +179,7 @@ var Reservationform2 = React.createClass({
     }
     return date + 'T' + hours + ':' + minutes + ':00';
   },
-  commonValidate: function () {
-    return true;
-  },
-  setValue: function (field, event) {
-    var object = {};
-    object[field] = event.target.value;
-    this.setState(object);
-  },
   render: function () {
-
     return (
       <div>
         <div id="inputForm">
@@ -221,7 +192,6 @@ var Reservationform2 = React.createClass({
                     <input
                       type="date"
                       title="Select reservation date"
-                      uniqueName="reservationdate"
                       id="reservationdate"
                       value={this.state.reservationdate}
                       onChange={this.handleChange} />
@@ -235,7 +205,8 @@ var Reservationform2 = React.createClass({
                       title="Select reservation time"
                       value={this.state.reservationtime}
                       onChange={this.handleChange}
-                      required>
+                      required
+                      disabled={!this.state.reservationdate}>
                       <option value="">Select Time</option>
                       {this.renderTimeOptions()}
                     </select>
@@ -282,25 +253,7 @@ var Reservationform2 = React.createClass({
     );
   }
 });
-// var SelectList = React.createClass({
-//   render: function () {
-//     var optionNodes = this.props.data.map(function (resPlayer) {
-//       return (
-//         <option
-//           key={resPlayer.playerID}
-//           value={resPlayer.playerID}
-//         >
-//           {resPlayer.playerFirstName + " " + resPlayer.playerLastName}
-//         </option>
-//       );
-//     });
-//     return (
-//       <select name="resplayer" id="resplayer">
-//         {optionNodes}
-//       </select>
-//     );
-//   }
-// });
+
 var InputError = React.createClass({
   getInitialState: function () {
     return {

@@ -47,7 +47,7 @@ var InventoryBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 1) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {

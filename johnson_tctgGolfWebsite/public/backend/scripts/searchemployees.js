@@ -18,7 +18,11 @@ var EmployeeBox = React.createClass({
     });
   },
   loadEmployeesFromServer: function () {
-
+    this.loadAllowLogin();
+    if (this.state.viewthepage < 5) {
+      console.log('Insufficient permission level');
+      return;
+    }
     var estatusvalue = "Active";
     if (empstatusactive.checked) {
       estatusvalue = "Active";
@@ -50,17 +54,12 @@ var EmployeeBox = React.createClass({
 
   },
   componentDidMount: function () {
-    this.loadAllowLogin();
-    if (this.state.viewthepage == 5) {
-      this.loadEmployeesFromServer();
-    }
-
+    this.loadEmployeesFromServer(); // Modify this line
   },
-
   render: function () {
     if (this.state.viewthepage != 5) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {

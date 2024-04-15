@@ -83,7 +83,7 @@ var EmployeeBox = React.createClass({
       //maybe make certain divs conditional instead of the whole page?
       //look into later if time
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -334,19 +334,19 @@ var EmployeeUpdateform = React.createClass({
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input name="upemplname" id="upemplname" value={this.state.upemplname} onChange={this.state.handleUpChange} />
+                    <input name="upemplname" id="upemplname" value={this.state.upemplname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input name="upempfname" id="upempfname" value={this.state.upempfname} onChange={this.state.handleUpChange} />
+                    <input name="upempfname" id="upempfname" value={this.state.upempfname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Employee Email</th>
                   <td>
-                    <input name="upempemail" id="upempemail" value={this.state.upempemail} onChange={this.state.handleUpChange} />
+                    <input name="upempemail" id="upempemail" value={this.state.upempemail} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -362,6 +362,7 @@ var EmployeeUpdateform = React.createClass({
                       checked={this.state.upselectedOption === "Active"}
                       onChange={this.state.handleUpOptionChange}
                       className="form-check-input"
+                      required
                     />Active
                     <input
                       type="radio"
@@ -371,6 +372,7 @@ var EmployeeUpdateform = React.createClass({
                       checked={this.state.upselectedOption === "Inactive"}
                       onChange={this.state.handleUpOptionChange}
                       className="form-check-input"
+                      required
                     />Inactive
                   </td>
                 </tr>
@@ -379,7 +381,7 @@ var EmployeeUpdateform = React.createClass({
                     Employee Type
                   </th>
                   <td>
-                    <SelectUpdateList data={this.state.updata} />
+                    <SelectUpdateList data={this.state.updata} required />
                   </td>
                 </tr>
               </tbody>

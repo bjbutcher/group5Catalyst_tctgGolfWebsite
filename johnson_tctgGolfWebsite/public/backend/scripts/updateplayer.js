@@ -83,7 +83,7 @@ var PlayerBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 3) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -341,13 +341,13 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} />
+                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} />
+                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -363,6 +363,7 @@ var PlayerUpdateform = React.createClass({
                       checked={this.state.upselectedType === "0"}
                       onChange={this.state.handleUpTypeChange}
                       className="form-check-input"
+                      required
                     />Basic
                     <input
                       type="radio"
@@ -372,19 +373,20 @@ var PlayerUpdateform = React.createClass({
                       checked={this.state.upselectedType === "1"}
                       onChange={this.state.handleUpTypeChange}
                       className="form-check-input"
+                      required
                     />Premium
                   </td>
                 </tr>
                 <tr>
                   <th>Rewards Points</th>
                   <td>
-                    <input type="number" name="upplyrrewards" id="upplyrrewards" value={this.state.upplyrrewards} onChange={this.state.handleUpChange} />
+                    <input type="number" name="upplyrrewards" id="upplyrrewards" value={this.state.upplyrrewards} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Email</th>
                   <td>
-                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} />
+                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -400,6 +402,7 @@ var PlayerUpdateform = React.createClass({
                       checked={this.state.upselectedStatus === "Active"}
                       onChange={this.state.handleUpStatusChange}
                       className="form-check-input"
+                      required
                     />Active
                     <input
                       type="radio"
@@ -409,6 +412,7 @@ var PlayerUpdateform = React.createClass({
                       checked={this.state.upselectedStatus === "Inactive"}
                       onChange={this.state.handleUpStatusChange}
                       className="form-check-input"
+                      required
                     />Inactive
                   </td>
                 </tr>

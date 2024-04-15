@@ -71,7 +71,7 @@ app.get('/getloggedin/', function (req, res) {
           console.error(err);
           process.exit(1);
         }
-        console.log("Show 1" + data);
+        console.log("Logged In: ", data);
 
         datahold = data;
 
@@ -116,7 +116,7 @@ app.get('/customerlogin/', function (req, res) {
           console.error(err);
           process.exit(1);
         }
-        console.log("Show 1" + data);
+        console.log("Logged In: ", data);
 
         datahold = data;
 
@@ -319,11 +319,28 @@ app.post('/updatesingleplyr', function (req, res) {
   var plname = req.body.upplayerlastname;
   var pfname = req.body.upplayerfirstname;
   var prewards = req.body.upplayerrewardspoints;
+  var prtype = req.body.upplayermembertype;
   var pemail = req.body.upplayeremail;
   var pstat = req.body.upplayerstatus;
   var pid = req.body.upplayerid;
-  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ? WHERE playerID = ?";
-  var inserts = [plname, pfname, pstat, prewards, pemail, pid];
+  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerMemberRewardsType = ?, playerEmail = ? WHERE playerID = ?";
+  var inserts = [plname, pfname, pstat, prewards, prtype, pemail, pid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record updated");
+    res.redirect('updateplayer.html');
+    res.end();
+  });
+});
+app.post('/editprofile', function (req, res) {
+  var plname = req.body.upplayerlastname;
+  var pfname = req.body.upplayerfirstname;
+  var pemail = req.body.upplayeremail;
+  var pid = req.body.upplayerid;
+  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerEmail = ? WHERE playerID = ?";
+  var inserts = [plname, pfname, pemail, pid];
   var sql = mysql.format(sqlins, inserts);
   console.log(sql);
   con.execute(sql, function (err, result) {
@@ -332,7 +349,6 @@ app.post('/updatesingleplyr', function (req, res) {
     res.end();
   });
 });
-
 app.get('/getsingleplyr/', function (req, res) {
   var pid = req.query.upplyrid;
 
@@ -350,7 +366,22 @@ app.get('/getsingleplyr/', function (req, res) {
   });
 });
 
+app.get('/getloggedinplayer/', function (req, res) {
+  var pid = req.query.plyrid;
 
+  var sqlsel = 'select * from players where playerID = ?'
+  var inserts = [pid];
+  var sql = mysql.format(sqlsel, inserts);
+  console.log("Player retrieved.");
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+
+    res.send(JSON.stringify(data));
+  });
+});
 app.get('/getplyr/', function (req, res) {
   var plname = req.query.playerlastname;
   var pfname = req.query.playerfirstname;
@@ -623,6 +654,7 @@ app.post('/playerCreateAccount', function (req, res) {
   var pfname = req.body.playerfirstname;
   var pstatus = "Active";
   var prewards = 0;
+  var prtype = 0;
   var pmail = req.body.playeremail;
   var ppw = req.body.playerpw;
   console.log("PW: " + ppw);
@@ -642,9 +674,9 @@ app.post('/playerCreateAccount', function (req, res) {
       console.log("Password Enc: " + theHashedPW);
 
       var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
-        + " playerRewardsPoints, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ? )";
+        + " playerRewardsPoints, playerRewardsType, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ? )";
 
-      var inserts = [plname, pfname, pstatus, prewards, pmail, theHashedPW];
+      var inserts = [plname, pfname, pstatus, prewards, prtype, pmail, theHashedPW];
 
       var sql = mysql.format(sqlins, inserts);
 
@@ -797,7 +829,7 @@ app.post('/reservation', function (req, res) {
 });
 
 app.get('/getReservedDateTime', (req, res) => {
-  var sqlsel = "SELECT reservationDateTime FROM reservations WHERE reservationStatus != 'Cancelled'";
+  var sqlsel = "SELECT reservationDateTime FROM reservations WHERE reservationStatus = 'Scheduled' OR reservationStatus = 'Rescheduled'";
   var sql = mysql.format(sqlsel)
   console.log(sql);
 

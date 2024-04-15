@@ -311,3 +311,15 @@ input[type="date"]
 {
   font-size: 1.5em;
 }
+
+#noPerms
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5vw;
+  color: red;
+  font-family: Balgon Serif;
+  height: 100vh;
+  text-align: center;
+}

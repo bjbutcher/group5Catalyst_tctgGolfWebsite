@@ -73,7 +73,7 @@ var OrderBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 2) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -386,13 +386,13 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Order Date</th>
                   <td>
-                    <input name="upordate" id="upordate" value={this.state.upordate} onChange={this.state.handleUpChange} />
+                    <input name="upordate" id="upordate" value={this.state.upordate} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Order Total</th>
                   <td>
-                    <input type="number" name="upordtotal" id="upordtotal" value={this.state.upordtotal} onChange={this.state.handleUpChange} />
+                    <input type="number" name="upordtotal" id="upordtotal" value={this.state.upordtotal} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -404,7 +404,7 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Order Detail ID</th>
                   <td>
-                    <input name="uporddetid" id="uporddetid" value={this.state.uporddetid} onChange={this.state.handleUpChange} />
+                    <input name="uporddetid" id="uporddetid" value={this.state.uporddetid} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
@@ -422,7 +422,7 @@ var OrderUpdateform = React.createClass({
                 <tr>
                   <th>Order Subtotal</th>
                   <td>
-                    <input type="number" name="uporddetprice" id="uporddetprice" value={this.state.uporddetprice} onChange={this.state.handleUpChange} />
+                    <input type="number" name="uporddetprice" id="uporddetprice" value={this.state.uporddetprice} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>

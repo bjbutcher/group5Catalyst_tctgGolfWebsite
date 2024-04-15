@@ -44,7 +44,7 @@ var EmployeeBox = React.createClass({
   render: function () {
     if (this.state.viewthepage < 5) {
       return (
-        <div>You are not authorized to view this page.</div>
+        <div id="noPerms">You are not authorized to view this page.</div>
       );
     }
     else {
@@ -256,6 +256,7 @@ var Employeeform2 = React.createClass({
                       checked={this.state.selectedOption === "Active"}
                       onChange={this.handleOptionChange}
                       className="form-check-input"
+                      required
                     />Active
                     <input
                       type="radio"
@@ -265,6 +266,7 @@ var Employeeform2 = React.createClass({
                       checked={this.state.selectedOption === "Inactive"}
                       onChange={this.handleOptionChange}
                       className="form-check-input"
+                      required
                     />Inactive
                   </td>
                 </tr>
@@ -273,7 +275,7 @@ var Employeeform2 = React.createClass({
                     Employee Type
                   </th>
                   <td>
-                    <SelectList data={this.state.data} />
+                    <SelectList data={this.state.data} required />
                   </td>
                 </tr>
               </tbody>
