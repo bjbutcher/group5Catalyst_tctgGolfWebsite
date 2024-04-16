@@ -941,10 +941,10 @@ app.post('/order', function (req, res) {
   var odate = req.body.orderdate;
   var ototal = req.body.ordertotal;
   var odid = req.body.orderdetailid;
-  var odrid = req.body.reservationid;
-  var odiid = req.body.inventoryid;
-  var odprice = req.body.orderdetailprice;
-  var odqty = req.body.orderdetailquantity;
+  var odrid = req.body.reservationid || null;
+  var odiid = req.body.inventoryid || null;
+  var odprice = req.body.orderdetailprice || null;
+  var odqty = req.body.orderdetailquantity || null;
   var oeid = req.body.employeeid;
   console.log(odate + "-" + ototal + "-" + odid);
   var sqlInsOrder = "INSERT INTO orders (employeeID, orderTotal, orderDate) VALUES (?, ?, now())";

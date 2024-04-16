@@ -356,9 +356,8 @@ var EmployeeUpdateform = React.createClass({
                       id="upempstatusactive"
                       value="Active"
                       checked={this.state.upselectedOption === "Active"}
-                      onChange={this.state.handleUpOptionChange}
+                      onChange={this.handleUpOptionChange}
                       className="form-check-input"
-                      required
                     />Active
                     <input
                       type="radio"
@@ -366,9 +365,8 @@ var EmployeeUpdateform = React.createClass({
                       id="upempstatusinactive"
                       value="Inactive"
                       checked={this.state.upselectedOption === "Inactive"}
-                      onChange={this.state.handleUpOptionChange}
+                      onChange={this.handleUpOptionChange}
                       className="form-check-input"
-                      required
                     />Inactive
                   </td>
                 </tr>

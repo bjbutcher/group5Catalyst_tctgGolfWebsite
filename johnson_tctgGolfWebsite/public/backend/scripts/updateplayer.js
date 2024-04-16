@@ -318,18 +318,31 @@ var PlayerUpdateform = React.createClass({
 
   handleUpTypeChange: function (e) {
     console.log("Type Change:", e.target.value);
+    var upselectedStatus = "";
+    if (upplyrstatusactive.checked = true) {
+      upselectedStatus = "Active";
+    }
+    else { upselectedStatus = "Inactive"; }
     this.setState({
-      upselectedType: e.target.value
+      upselectedType: e.target.value,
+      upselectedStatus: upselectedStatus,
     });
   },
 
   handleUpStatusChange: function (e) {
     console.log("Status Change:", e.target.value);
+    var upselectedType = "";
+    if (upbasic.checked = true) {
+      upselectedType = "0";
+    }
+    else {
+      upselectedType = "1";
+    }
     this.setState({
-      upselectedStatus: e.target.value
+      upselectedStatus: e.target.value,
+      upselectedType: upselectedType,
     });
   },
-
   render: function () {
     console.log("Render State:", this.state.upselectedType, this.state.upselectedStatus);
 
@@ -344,13 +357,13 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>Last Name</th>
                   <td>
-                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} required />
+                    <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>First Name</th>
                   <td>
-                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} required />
+                    <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -364,9 +377,8 @@ var PlayerUpdateform = React.createClass({
                       id="upbasic"
                       value="0"
                       checked={this.state.upselectedType === "0"}
-                      onChange={this.state.handleUpTypeChange}
+                      onChange={this.handleUpTypeChange}
                       className="form-check-input"
-                      required
                     />Basic
                     <input
                       type="radio"
@@ -374,9 +386,8 @@ var PlayerUpdateform = React.createClass({
                       id="uppremium"
                       value="1"
                       checked={this.state.upselectedType === "1"}
-                      onChange={this.state.handleUpTypeChange}
+                      onChange={this.handleUpTypeChange}
                       className="form-check-input"
-                      required
                     />Premium
                   </td>
                 </tr>
@@ -389,7 +400,7 @@ var PlayerUpdateform = React.createClass({
                 <tr>
                   <th>Email</th>
                   <td>
-                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} required />
+                    <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} />
                   </td>
                 </tr>
                 <tr>
@@ -403,9 +414,8 @@ var PlayerUpdateform = React.createClass({
                       id="upplyrstatusactive"
                       value="Active"
                       checked={this.state.upselectedStatus === "Active"}
-                      onChange={this.state.handleUpStatusChange}
+                      onChange={this.handleUpStatusChange}
                       className="form-check-input"
-                      required
                     />Active
                     <input
                       type="radio"
@@ -413,9 +423,8 @@ var PlayerUpdateform = React.createClass({
                       id="upplyrstatusinactive"
                       value="Inactive"
                       checked={this.state.upselectedStatus === "Inactive"}
-                      onChange={this.state.handleUpStatusChange}
+                      onChange={this.handleUpStatusChange}
                       className="form-check-input"
-                      required
                     />Inactive
                   </td>
                 </tr>
@@ -490,6 +499,8 @@ var Player = React.createClass({
           upplyrfname.value = player.playerFirstName;
           upplyrrewards.value = player.playerRewardsPoints;
           upplyremail.value = player.playerEmail;
+          upselectedType: player.playerMemberRewardsType.toString();
+          upselectedStatus: player.playerStatus;
           if (player.playerMemberRewardsType == 0) {
             upbasic.checked = true;
           } else {

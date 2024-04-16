@@ -259,7 +259,7 @@ var InvSelectList = React.createClass({
     });
     return (
       <select name="orderinv" id="orderinv">
-        <option value="0"></option>
+        <option></option>
         {optionNodes}
       </select>
     );
@@ -279,7 +279,7 @@ var ResSelectList = React.createClass({
     });
     return (
       <select name="orderres" id="orderres">
-        <option value="0"></option>
+        <option></option>
         {optionNodes}
       </select>
     );
@@ -299,7 +299,7 @@ var SelectList = React.createClass({
     });
     return (
       <select name="orderemp" id="orderemp">
-        <option value="0"></option>
+        <option></option>
         {optionNodes}
       </select>
     );
