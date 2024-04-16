@@ -309,9 +309,9 @@ var Reservationform2 = React.createClass({
             <form onSubmit={this.getInitialState}>
               <input type="submit" value="Clear Form" />
             </form>
-            <form onSubmit={this.viewDeletes}>
+            {/* <form onSubmit={this.viewDeletes}>
               <input type="submit" value="View Deleted Reservations" />
-            </form>
+            </form> */}
           </div>
         </div>
       </div>

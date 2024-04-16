@@ -632,16 +632,38 @@ radio
 
 @media (max-width: 768px)
 {
+  .header{
+    height:20vh;
+  }
+  .header::after{
+    background: rgba(255,255,255,0.5);
+  }
   .header-logo
   {
-    width: 50%;
+    width: 35%;
+    position:relative;
+    top: 0;
+    left:0;
+    margin:auto;
+    margin-bottom: 10;
   }
-
-  .phone-number
+.top-right-image
+{
+  background-image: none;
+  display: none;
+}
+.phone-number
+{
+  display:none;
+  background-image: none;
+}
+ 
+.footer-left,
+  .footer-right,
+  .footer-logo
   {
-    font-size: 5vw;
+    margin: 10px 0;
   }
-
   nav a
   {
     font-size: 5vw;
@@ -651,15 +673,29 @@ radio
   {
     flex-direction: column;
     text-align: center;
+    font-size: 1em;
   }
-
-  .footer-left,
-  .footer-right,
-  .footer-logo
-  {
-    margin: 10px 0;
-  }
-
+.footer-left{
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.footer-left img {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex:1;
+}
+.footerRow img{
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex:1;
+}
+  
+.footer-logo img{
+  height: 5vh;
+}
   .course-section
   {
     flex-direction: column;
