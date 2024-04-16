@@ -67,6 +67,24 @@ var OrderBox = React.createClass({
     alert("Order Updated");
     window.location.reload(true);
   },
+  deleteOrder: function (order) {
+    console.log("Starting update");
+    $.ajax({
+      url: '/deleteOrd',
+      dataType: 'json',
+      data: order,
+      type: 'POST',
+      cache: false,
+      success: function (upsingledata) {
+        this.setState({ upsingledata: upsingledata });
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+    alert("Order deleted");
+    window.location.reload(true);
+  },
   componentDidMount: function () {
     this.loadOrdersFromServer();
     // setInterval(this.loadOrdersFromServer, this.props.pollInterval);
@@ -83,9 +101,9 @@ var OrderBox = React.createClass({
         <div>
           <Orderform2 onOrderSubmit={this.loadOrdersFromServer} />
           <br />
-          <div id="theresults">
-            <div id="theleft">
-              <table>
+          <div id="theresults" style={{ marginRight: '-5%' }}>
+            <div id="theleft" >
+              <table style={{ marginRight: '-5%' }}>
                 <thead>
                   <tr>
                     <th>Order ID</th>
@@ -100,7 +118,7 @@ var OrderBox = React.createClass({
                     <th></th>
                   </tr>
                 </thead>
-                <OrderList data={this.state.data} />
+                <OrderList data={this.state.data} onDeleteSubmit={this.deleteOrder} />
               </table>
             </div>
             <br />
@@ -217,10 +235,10 @@ var Orderform2 = React.createClass({
       <div id="inputForm">
         <form onSubmit={this.handleSubmit}>
           <table>
-            <tbody>
+            <tbody >
 
               <tr>
-                <th>Order ID</th>
+                <th >Order ID</th>
                 <td>
                   <input name="orderid" id="orderid" value={this.state.orderid} onChange={this.handleChange} />
                 </td>
@@ -276,7 +294,7 @@ var Orderform2 = React.createClass({
             <input type="submit" value="Clear Form" />
           </form>
         </div>
-      </div>
+      </div >
     );
   }
 });
@@ -461,12 +479,13 @@ var OrderList = React.createClass({
           orddetqty={order.orderDetailQuantity}
           orddetprice={order.orderDetailPrice}
           orderemp={order.employeeLastName + ", " + order.employeeFirstName}
+          deletedOrder={order.orderStatus}
+          deletedOrderDetail={order.orderDetailStatus}
+          onDeleteSubmit={this.props.onDeleteSubmit}
         >
         </Order>
       );
-
-    });
-
+    }.bind(this));
     //print all the nodes in the list
     return (
       <tbody>
@@ -517,7 +536,17 @@ var Order = React.createClass({
       }.bind(this)
     });
   },
-
+  deleteRecord: function (e) {
+    e.preventDefault();
+    var uporderid = this.props.ordid;
+    var uporderdetailid = this.props.orddetid;
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      this.props.onDeleteSubmit({
+        uporderid: uporderid,
+        uporderdetailid: uporderdetailid
+      });
+    }
+  },
   render: function () {
 
 
@@ -552,10 +581,13 @@ var Order = React.createClass({
         <td>
           {this.props.orderemp}
         </td>
-        <td>
+        <td style={{ display: 'flex', marginRight: '-200%', borderBottom: 'none' }}>
           <div className="updateButton">
             <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
+            </form>
+            <form onSubmit={this.deleteRecord}>
+              <input type="submit" value="Delete Record" />
             </form>
           </div>
         </td>

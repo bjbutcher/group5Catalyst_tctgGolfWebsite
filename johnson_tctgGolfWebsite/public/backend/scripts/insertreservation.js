@@ -233,7 +233,7 @@ var Reservationform2 = React.createClass({
                   <option value="">Please Select a Status</option>
                   <option value="Scheduled">Scheduled</option>
                   <option value="Rescheduled">Rescheduled</option>
-                  <option value="Cancelled">Cancelled</option>
+                  {/* <option value="Cancelled">Cancelled</option> */}
                   <option value="Checked In">Checked In</option>
                   <option value="Completed">Completed</option>
                 </select>

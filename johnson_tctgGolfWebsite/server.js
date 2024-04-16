@@ -254,7 +254,7 @@ app.get('/getinv/', function (req, res) {
 
 
 
-  var sqlsel = 'Select * FROM inventory where inventoryName Like ? and inventoryPrice Like ? and inventoryQuantity Like ?'
+  var sqlsel = 'Select * FROM inventory where inventoryName Like ? and inventoryPrice Like ? and inventoryQuantity Like ? and inventoryStatus = "Active"'
 
   var inserts = [`%` + iname + `%`, `%` + iprice + `%`, `%` + iqty + `%`];
 
@@ -674,7 +674,7 @@ app.post('/playerCreateAccount', function (req, res) {
       console.log("Password Enc: " + theHashedPW);
 
       var sqlins = "INSERT INTO players (playerLastName, playerFirstName, playerStatus,"
-        + " playerRewardsPoints, playerRewardsType, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ? )";
+        + " playerRewardsPoints, playerMemberRewardsType, playerEmail, playerPassword) VALUES (?, ?, ?, ?, ?, ?,? )";
 
       var inserts = [plname, pfname, pstatus, prewards, prtype, pmail, theHashedPW];
 
@@ -753,7 +753,30 @@ app.post('/updatesingleres', function (req, res) {
     res.end();
   });
 });
-
+app.post('/deleteRes', function (req, res) {
+  var rid = req.body.upreservationid;
+  var sqlins = "UPDATE reservations SET reservationEntryStatus = 'Inactive' WHERE reservationID = ?";
+  var inserts = [rid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted.");
+    res.end();
+  });
+});
+app.post('/deleteInv', function (req, res) {
+  var iid = req.body.upinventoryid;
+  var sqlins = "UPDATE inventory SET inventoryStatus = 'Inactive' WHERE inventoryID = ?";
+  var inserts = [iid];
+  var sql = mysql.format(sqlins, inserts);
+  console.log(sql);
+  con.execute(sql, function (err, result) {
+    if (err) throw err;
+    console.log("1 record deleted.");
+    res.end();
+  });
+});
 app.get('/getsingleres/', function (req, res) {
   var rid = req.query.upresid;
 
@@ -791,8 +814,8 @@ app.get('/getres/', function (req, res) {
     var playaddonvar = '%%';
   }
 
-  var sqlsel = ' SELECT reservations.*, players.playerFirstName, players.playerLastName' +
-    ' FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationDateTime LIKE ? AND reservationStatus LIKE ? and reservationPlayerCount LIKE ?' + playaddon;
+  var sqlsel = " SELECT reservations.*, players.playerFirstName, players.playerLastName" +
+    " FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationDateTime LIKE ? AND reservationStatus LIKE ? and reservationPlayerCount LIKE ? and reservationEntryStatus = 'Active'" + playaddon;
 
   var inserts = [`%` + rdatetime + `%`, `%` + rstatus + `%`, `%` + rplaycount + `%`, playaddonvar];
 
@@ -808,7 +831,22 @@ app.get('/getres/', function (req, res) {
     res.send(JSON.stringify(data));
   });
 });
+app.get('/getdelres/', function (req, res) {
+  console.log("Tier: " + rplay);
+  var sqlsel = " SELECT reservations.*, players.playerFirstName, players.playerLastName" +
+    " FROM reservations INNER JOIN players ON players.playerID = reservations.playerID WHERE reservationEntryStatus = 'Inactive'";
+  var sql = mysql.format(sqlsel);
 
+  console.log(sql);
+
+  con.query(sql, function (err, data) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+    res.send(JSON.stringify(data));
+  });
+});
 app.post('/reservation', function (req, res) {
   var rdatetime = req.body.reservationdatetime;
   var rstatus = req.body.reservationstatus;
@@ -869,7 +907,26 @@ app.post('/updatesingleord', function (req, res) {
     });
   });
 });
-
+app.post('/deleteOrd', function (req, res) {
+  var oid = req.body.uporderid;
+  var odid = req.body.uporderdetailid;
+  var sqlInsOrder = "UPDATE orders SET orderStatus = 'Inactive' WHERE orderID = ?";
+  var insOrder = [oid];
+  var sqlOrder = mysql.format(sqlInsOrder, insOrder);
+  var sqlInsDetail = "UPDATE orderDetail SET orderDetailStatus = 'Inactive' WHERE orderDetailID = ?";
+  var insDetail = [odid];
+  var sqlDetail = mysql.format(sqlInsDetail, insDetail);
+  console.log(sqlOrder, sqlDetail);
+  con.execute(sqlOrder, function (err) {
+    if (err) throw err;
+    console.log("Order deleted");
+    con.execute(sqlDetail, function (err) {
+      if (err) throw err;
+      console.log("Order Detail deleted");
+      res.end();
+    });
+  });
+});
 app.get('/getsingleord/', function (req, res) {
   var oid = req.query.upordid;
   var odid = req.query.upordid;
@@ -905,7 +962,8 @@ INNER JOIN employee e ON e.employeeID = o.employeeID
 LEFT JOIN orderDetail od ON od.orderID = o.orderID
 LEFT JOIN inventory i ON i.inventoryID = od.inventoryID
 LEFT JOIN reservations r ON r.reservationID = od.reservationID
-WHERE (COALESCE(?, '') = '' OR o.orderDate LIKE CONCAT('%', ?, '%')) AND
+WHERE o.orderStatus = 'Active' AND od.orderDetailStatus = 'Active' AND
+(COALESCE(?, '') = '' OR o.orderDate LIKE CONCAT('%', ?, '%')) AND
       (COALESCE(?, '') = '' OR CAST(o.orderTotal AS CHAR) LIKE CONCAT('%', ?, '%')) AND
       (COALESCE(?, '') = '' OR CAST(od.orderDetailID AS CHAR) LIKE CONCAT('%', ?, '%')) AND
       (COALESCE(?, '') = '' OR CAST(r.reservationID AS CHAR) LIKE CONCAT('%', ?, '%')) AND

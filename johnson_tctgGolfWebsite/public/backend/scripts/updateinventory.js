@@ -61,6 +61,25 @@ var InventoryBox = React.createClass({
     alert("Inventory Item Updated");
     window.location.reload(true);
   },
+  deleteInventory: function (inventory) {
+    console.log("Starting update");
+    $.ajax({
+      url: '/deleteInv',
+      dataType: 'json',
+      data: inventory,
+      type: 'POST',
+      cache: false,
+      success: function (upsingledata) {
+        this.setState({ upsingledata: upsingledata });
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+    alert("Inventory item deleted");
+    window.location.reload(true);
+  },
+
   componentDidMount: function () {
 
     this.loadInventoryFromServer();
@@ -78,9 +97,9 @@ var InventoryBox = React.createClass({
         <div>
           <Inventoryform2 onInventorySubmit={this.loadInventoryFromServer} />
           <br />
-          <div id="theresults">
-            <div id="theleft">
-              <table>
+          <div id="theresults" style={{ marginRight: '-5%' }}>
+            <div id="theleft" >
+              <table style={{ marginRight: '-5%' }}>
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -90,7 +109,7 @@ var InventoryBox = React.createClass({
                     <th></th>
                   </tr>
                 </thead>
-                <InventoryList data={this.state.data} />
+                <InventoryList data={this.state.data} onDeleteSubmit={this.deleteInventory} />
               </table>
             </div>
             <br />
@@ -145,7 +164,7 @@ var Inventoryform2 = React.createClass({
 
     return (
       <div>
-        <div id="theform">
+        <div id="inputForm">
           <form onSubmit={this.handleSubmit}>
             <table>
               <tbody>
@@ -268,14 +287,14 @@ var InventoryList = React.createClass({
           invname={inventory.inventoryName}
           invqty={inventory.inventoryQuantity}
           invprice={inventory.inventoryPrice}
-
+          deleted={inventory.inventoryStatus}
+          onDeleteSubmit={this.props.onDeleteSubmit}
 
 
         >
         </Inventory>
       );
-
-    });
+    }.bind(this));
 
     //print all the nodes in the list
     return (
@@ -323,7 +342,15 @@ var Inventory = React.createClass({
     });
 
   },
-
+  deleteRecord: function (e) {
+    e.preventDefault();
+    var upinventoryid = this.props.invid;
+    if (window.confirm("Are you sure you want to delete this item?")) {
+      this.props.onDeleteSubmit({
+        upinventoryid: upinventoryid
+      });
+    }
+  },
   render: function () {
 
 
@@ -343,10 +370,13 @@ var Inventory = React.createClass({
         <td>
           {this.props.invprice}
         </td>
-        <td>
+        <td style={{ display: 'flex', marginRight: '-200%', borderBottom: 'none' }}>
           <div className="updateButton">
             <form onSubmit={this.updateRecord}>
               <input type="submit" value="Update Record" />
+            </form>
+            <form onSubmit={this.deleteRecord}>
+              <input type="submit" value="Delete Record" />
             </form>
           </div>
         </td>

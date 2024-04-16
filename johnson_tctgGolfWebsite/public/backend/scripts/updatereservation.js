@@ -87,7 +87,24 @@ var ReservationBox = React.createClass({
     window.location.reload(true);
   },
 
-
+  deleteReservation: function (reservation) {
+    console.log("Starting update");
+    $.ajax({
+      url: '/deleteRes',
+      dataType: 'json',
+      data: reservation,
+      type: 'POST',
+      cache: false,
+      success: function (upsingledata) {
+        this.setState({ upsingledata: upsingledata });
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+    alert("Reservation deleted");
+    window.location.reload(true);
+  },
   render: function () {
     if (this.state.viewthepage < 2) {
       return (
@@ -99,9 +116,9 @@ var ReservationBox = React.createClass({
         <div>
           <Reservationform2 onReservationSubmit={this.loadReservationsFromServer} onFormChange={this.handleFormChange} />
           <br />
-          <div id="theresults">
-            <div id="theleft">
-              <table>
+          <div id="theresults" style={{ marginRight: '-5%' }}>
+            <div id="theleft" >
+              <table style={{ marginRight: '-5%' }}>
                 <thead>
                   <tr>
                     <th>Key</th>
@@ -111,7 +128,7 @@ var ReservationBox = React.createClass({
                     <th>Status</th>
                   </tr>
                 </thead>
-                <ReservationList data={this.state.data} updateFormState={this.updateFormState} />
+                <ReservationList data={this.state.data} updateFormState={this.updateFormState} onDeleteSubmit={this.deleteReservation} />
               </table>
             </div>
             <br />
@@ -256,7 +273,7 @@ var Reservationform2 = React.createClass({
       <div>
         <div id="inputForm">
           <form className="reservationForm" onSubmit={this.handleSubmit}>
-            <table>
+            <table style={{ marginLeft: '-5%' }}>
               <tbody>
                 <tr>
                   <th>Reservation Date</th>
@@ -427,7 +444,7 @@ var ReservationUpdateform = React.createClass({
       <div>
         <div id="updateForm">
           <form onSubmit={this.handleUpSubmit}>
-            <table>
+            <table style={{ marginLeft: '-5%' }}>
               <tbody>
                 <tr>
                   <th>Reservation Date</th>
@@ -509,11 +526,12 @@ var ReservationList = React.createClass({
           resstatus={reservation.reservationStatus}
           resplayer={reservation.playerFirstName + " " + reservation.playerLastName}
           rescount={reservation.reservationPlayerCount}
+          deleted={reservation.reservationEntryStatus}
+          onDeleteSubmit={this.props.onDeleteSubmit}
         >
         </Reservation>
       );
-
-    });
+    }.bind(this));
 
     //print all the nodes in the list
     return (
@@ -582,7 +600,15 @@ var Reservation = React.createClass({
     minutes = parseInt(minutes, 10);
     return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
   },
-
+  deleteRecord: function (e) {
+    e.preventDefault();
+    var upreservationid = this.props.resid;
+    if (window.confirm("Are you sure you want to delete this reservation?")) {
+      this.props.onDeleteSubmit({
+        upreservationid: upreservationid
+      });
+    }
+  },
   render: function () {
 
 
@@ -603,14 +629,19 @@ var Reservation = React.createClass({
         <td>
           {this.props.resstatus}
         </td>
-        <td>
-          <div className="updateButton">
-            <form onSubmit={this.updateRecord}>
+        <td style={{ display: 'flex', marginRight: '-200%', borderBottom: 'none' }}>
+          <div className="updateButton" >
+            <form onSubmit={this.updateRecord} >
               <input type="submit" value="Update Record" />
             </form>
           </div>
+          <div className="updateButton">
+            <form onSubmit={this.deleteRecord} >
+              <input type="submit" value="Delete Record" />
+            </form>
+          </div>
         </td>
-      </tr>
+      </tr >
     );
   }
 });
