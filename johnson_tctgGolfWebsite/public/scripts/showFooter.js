@@ -2,11 +2,15 @@ var Footer = React.createClass({
   render: function () {
     return (
       <footer>
-        <div class="footer-left">
-          <img src="../images/instagram-white-icon_vc.png"
-            alt="Instagram Icon" />
-          <img src="../images/facebook-logo-png-white-facebo_ql.png"
-            alt="Facebook Icon" />
+        <div id="footer-left">
+          <div>
+            <img src="../images/instagram-white-icon_vc.png"
+              alt="Instagram Icon" />
+          </div>
+          <div>
+            <img src="../images/facebook-logo-png-white-facebo_ql.png"
+              alt="Facebook Icon" />
+          </div>
         </div>
         <div class="footer-logo">
           <a title="Employee Login" href="backend/index.html">

@@ -6,6 +6,32 @@
   border: none;
 }
 
+.hamburger
+{
+  margin-top: 14vh;
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 8vw;
+  width: 8vw;
+}
+
+.hamburger span
+{
+  display: block;
+  height: 1vh;
+  width: 8vw;
+  background-color: rgba(96, 96, 96, 1);
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+#bun
+{
+  display: flex;
+}
+
 .header
 {
   background-image: url('../images/sunset-in-the-golf-course-9ouh_sz.png');
@@ -64,14 +90,25 @@
   background-repeat: no-repeat;
 }
 
+body
+{
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
 h1
 {
+
+  background-color: #f5f5f5;
   font-family: Balgon Serif;
   font-size: 3vw;
   justify-content: center;
   align-items: center;
   text-align: center;
   color: rgba(96, 96, 96, 1);
+  border-radius: 8px;
+  padding: 5px;
 }
 
 h2
@@ -99,6 +136,10 @@ nav
   z-index: 5;
 }
 
+body
+{
+  background-color: white;
+}
 
 .phone-number
 {
@@ -201,6 +242,15 @@ footer a:hover
   color: rgba(96, 96, 96, 1);
 }
 
+form
+{
+  margin: auto;
+  margin-top: 2%;
+  background-color: #f5f5f5;
+  width: 80%;
+  border-radius: 10px;
+}
+
 .course-item
 {
   width: 20vw;
@@ -265,159 +315,48 @@ footer a:hover
 #content
 {
   font-size: 2em;
-  font-family: Avenir Next,
+  font-family: Avenir Next;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
-#content h1
-{
-  font-family: Balgon Serif;
-  font-size: 3vw;
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
+
 
 #theresults tr:nth-child(even)
 {
   background-color: #f9f9f9;
 }
 
-
-
+#PlayerBox,
+#playerInfo,
+#loginForm,
+#productDisplay,
+#updateForm,
+#theresults,
 #inputForm
 {
   font-family: Avenir Next, sans-serif;
   background-color: #f5f5f5;
   padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-}
-
-#theresults
-{
-  font-family: Avenir Next, sans-serif;
-  background-color: #f5f5f5;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#updateForm
-{
-  font-family: Avenir Next, sans-serif;
-  background-color: #f5f5f5;
-  padding: 10px;
   margin: auto;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#updateForm h2
-{
-  font-family: Balgon Serif;
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
 
 }
 
-#productDisplay
-{
-  font-family: Avenir Next, sans-serif;
-  background-color: #f5f5f5;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#loginForm
-{
-  font-family: Avenir Next, sans-serif;
-  border-radius: 8px;
-  padding: 8px;
-}
-
-#playerInfo
-{
-  font-family: Avenir Next, sans-serif;
-  background-color: #f5f5f5;
-  padding: 10px;
-  margin: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#productDisplay h1
-{
-  font-family: Balgon Serif;
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#playerInfo h1
-{
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#inputForm h1
-{
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#theresults h1
-{
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
-  margin-bottom: 20px;
-}
-
+#theresults h1,
+#inputForm h1,
+#playerInfo h1,
+#productDisplay h1,
+#updateForm h2,
 #updateForm h1
 {
-  color: rgba(96, 96, 96, 1);
-  text-align: center;
   margin-bottom: 20px;
+
 }
 
-#inputForm table
-{
-  border-collapse: collapse;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-#theresults table
-{
-  border-collapse: collapse;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-#updateForm table
-{
-  border-collapse: collapse;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-
-
-#productDisplay table
-{
-  border-collapse: collapse;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-#loginForm table
+table
 {
   border-collapse: collapse;
   margin: 0 auto;
@@ -426,128 +365,39 @@ footer a:hover
 }
 
 
-#playerInfo table
-{
-  border-collapse: collapse;
-  margin: 0 auto;
-  margin-bottom: 20px;
-}
-
-#inputForm th
+th
 {
   background-color: rgba(196, 79, 77, 1);
   color: white;
   padding: 10px 15px;
 }
 
-#theresults th
+td
 {
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
   padding: 10px 15px;
-}
-
-#updateForm th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
-}
-
-#productDisplay th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
-}
-
-#loginForm th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
-}
-
-#playerInfo th
-{
-  background-color: rgba(196, 79, 77, 1);
-  color: white;
-  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
 }
 
 #inputForm td,
 #updateForm td
 {
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
+
   font-size: 0.8em;
 }
 
-#theresults td
-{
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
 
-#productDisplay td
-{
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-
-#loginForm td
-{
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-
-}
-
-#playerInfo td
-{
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-
-#inputForm input,
+input,
 select,
 radio,
 date,
-number,
-#productDisplay input,
-select,
-radio,
-#updateForm input,
-select,
-radio
+number
 {
   border-radius: 4px;
   border: 1px solid rgba(96, 96, 96, 0.3);
   box-sizing: border-box;
   font-size: 1em;
   width: 40vw;
-}
-
-#loginForm input
-{
-  border-radius: 4px;
-  border: 1px solid rgba(96, 96, 96, 0.3);
-  box-sizing: border-box;
-  font-size: 1em;
-  width: 40vw;
-}
-
-#playerInfo input,
-select,
-radio
-{
-  border-radius: 4px;
-  border: 1px solid rgba(96, 96, 96, 0.3);
-  box-sizing: border-box;
-  font-size: 1em;
 }
 
 #productID
@@ -595,12 +445,9 @@ radio
 
 #directions h3
 {
-  font-family: Avenir, sans-serif;
-  font-size: 1vw;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: rgba(96, 96, 96, 1);
 }
 
 #directions img
@@ -632,96 +479,236 @@ radio
 
 @media (max-width: 768px)
 {
-  .header{
-    height:20vh;
+
+
+
+
+  form
+  {
+    width: 100%;
   }
-  .header::after{
-    background: rgba(255,255,255,0.5);
+
+  h1
+  {
+    font-size: 8vw;
   }
+
+  h2,
+  h3
+  {
+    font-size: 5vw;
+  }
+
+  input
+  {
+    width: 100%;
+    font-size: 5vw;
+  }
+
+  .header
+  {
+    height: 20vh;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+
+  .header::after
+  {
+    background: rgba(255, 255, 255, 0.5);
+    overflow: visible;
+  }
+
   .header-logo
   {
-    width: 35%;
-    position:relative;
+    width: 48%;
+    position: relative;
     top: 0;
-    left:0;
-    margin:auto;
-    margin-bottom: 10;
+    left: 0;
+    margin: auto;
+    margin-left: 26vw;
+
   }
-.top-right-image
-{
-  background-image: none;
-  display: none;
-}
-.phone-number
-{
-  display:none;
-  background-image: none;
-}
- 
-.footer-left,
+
+  .top-right-image,
+  .phone-number
+  {
+    display: none;
+    background-image: none;
+  }
+
+  .footer-left,
   .footer-right,
   .footer-logo
   {
     margin: 10px 0;
   }
-  nav a
-  {
-    font-size: 5vw;
-  }
 
   footer
   {
+    display: flex;
     flex-direction: column;
     text-align: center;
     font-size: 1em;
   }
-.footer-left{
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.footer-left img {
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex:1;
-}
-.footerRow img{
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  flex:1;
-}
-  
-.footer-logo img{
-  height: 5vh;
-}
+
+  .hamburger
+  {
+    display: block;
+    z-index: 5;
+
+  }
+
+  nav
+  {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: all 0.5s ease;
+  }
+
+
+
+  nav.active
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 6;
+
+  }
+
+  nav a
+  {
+    font-size: 5vw;
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+    text-align: center;
+  }
+
+  #footer-left
+  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .footer-left img
+  {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+
+
+  .footer-logo img
+  {
+    height: 5vh;
+  }
+
+
+
+  #directions h3
+  {
+    font-size: 5vw;
+
+  }
+
+
+
+
   .course-section
   {
     flex-direction: column;
     align-items: center;
   }
 
-  #content h1,
-  #theresults th,
-  #theresults td,
-  #theForm th,
-  #theForm td,
-  #updateForm th,
-  #updateForm td
+
+  .scorecard button
   {
     font-size: 5vw;
+    width: 100%;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+    background-color: rgba(96, 96, 96, 1);
+    color: white;
+    text-decoration: none;
+    font-family: Balgon Serif;
+    border: none;
+    cursor: pointer;
   }
 
-  #theform h1,
-  #theform th,
-  #theform td
+  .stars img
+  {
+    height: 5vw;
+    width: 5vw;
+  }
+
+  .course-item
+  {
+    width: 90%;
+    text-align: center;
+    font-size: 3vw;
+  }
+
+  #About_Us
   {
     font-size: 5vw;
+    width: 90%;
   }
 
-  #theform input
+  #About_Us h1
+  {
+    font-size: 8vw;
+  }
+
+  #productDisplay th
   {
     font-size: 4vw;
+    white-space: nowrap;
+    padding: 0;
+    text-align: center;
+    width: 30%;
+    border-color: #f5f5f5;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 10px;
   }
+
+  #productDisplay td
+  {
+    width: 60%;
+  }
+
+
+
+  #productDisplay input,
+  #button-container input
+  {
+    font-size: 5vw;
+    padding: 1%;
+    width: 100%;
+  }
+
+  #button-container
+  {
+    width: 100%;
+  }
+
+
 }

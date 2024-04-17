@@ -29,33 +29,52 @@ var NavBar = React.createClass({
   componentDidMount: function () {
     this.loadAllowLogin();
   },
+  toggleNav: function () {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('active');
+    console.log('Toggle active class');
+  },
   render: function () {
     if (this.state.viewthepage != 0) {
       return (
-        <nav>
-          <a href="Home.html">Home</a>
-          <a href="About_Us.html">About Us</a>
-          <a href="Restaurant.html">Restaurant</a>
-          <a href="searchinventory.html">Browse Products</a>
-          <a href="insertreservation.html">Book A Tee Time</a>
-          {/* <a href="insertplayer.html">Create Account</a> */}
-          <a href="updateplayer.html">Edit Profile</a>
-          {/* <a href="login.html">Login</a> */}
-          <a href="logout.html">Logout</a>
-        </nav>
+        <div id="bun">
+          <div className="hamburger" onClick={this.toggleNav}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <nav>
+            <a href="Home.html">Home</a>
+            <a href="About_Us.html">About Us</a>
+            <a href="Restaurant.html">Restaurant</a>
+            <a href="searchinventory.html">Browse Products</a>
+            <a href="insertreservation.html">Book A Tee Time</a>
+            {/* <a href="insertplayer.html">Create Account</a> */}
+            <a href="updateplayer.html">Edit Profile</a>
+            {/* <a href="login.html">Login</a> */}
+            <a href="logout.html">Logout</a>
+          </nav>
+        </div>
       );
     } else {
       return (
-        <nav>
-          <a href="Home.html">Home</a>
-          <a href="About_Us.html">About Us</a>
-          <a href="Restaurant.html">Restaurant</a>
-          <a href="searchinventory.html">Browse Products</a>
-          <a href="insertreservation.html">Book A Tee Time</a>
-          <a href="insertplayer.html">Create Account</a>
-          {/* <a href="updateplayer.html">Edit Profile</a> */}
-          <a href="login.html">Login</a>
-        </nav >
+        <div id="bun">
+          <div className="hamburger" onClick={this.toggleNav}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <nav>
+            <a href="Home.html">Home</a>
+            <a href="About_Us.html">About Us</a>
+            <a href="Restaurant.html">Restaurant</a>
+            <a href="searchinventory.html">Browse Products</a>
+            <a href="insertreservation.html">Book A Tee Time</a>
+            <a href="insertplayer.html">Create Account</a>
+            {/* <a href="updateplayer.html">Edit Profile</a> */}
+            <a href="login.html">Login</a>
+          </nav >
+        </div>
       );
     }
   }
