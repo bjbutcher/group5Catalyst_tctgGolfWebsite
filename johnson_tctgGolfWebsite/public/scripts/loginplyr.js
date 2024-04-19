@@ -76,13 +76,13 @@ var LoginForm = React.createClass({
               <tbody>
                 <tr>
                   <th>Email</th>
-                  <td>
+                  <td data-label="Email">
                     <input type="email" name="playeremail" id="playeremail" value={this.state.playeremail} onChange={this.handleChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Password</th>
-                  <td>
+                  <td data-label="Password">
                     <input type="password" name="playerpw" id="playerpw" value={this.state.playerpw} onChange={this.handleChange} />
                   </td>
                 </tr>

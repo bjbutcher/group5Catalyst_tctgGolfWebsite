@@ -93,13 +93,13 @@ var Inventoryform2 = React.createClass({
               <tbody>
                 <tr>
                   <th>Product Name</th>
-                  <td>
+                  <td data-label="Product Name">
                     <input type="text" name="inventoryname" id="inventoryname" value={this.state.inventoryname} onChange={this.handleChange} />
                   </td>
                 </tr>
                 <tr>
                   <th>Price</th>
-                  <td>
+                  <td data-label="Price">
                     <input name="inventoryprice" id="inventoryprice" value={this.state.inventoryprice} onChange={this.handleChange} />
                   </td>
                 </tr>

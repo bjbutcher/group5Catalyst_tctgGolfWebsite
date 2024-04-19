@@ -4,7 +4,7 @@ var PlayerBox = React.createClass({
       data: [],
       viewthepage: 0,
       playerName: "",
-      loading: true
+      loading: true,
     };
   },
   loadAllowLogin: function () {
@@ -75,7 +75,6 @@ var PlayerBox = React.createClass({
       (this.loadPlayerFromServer());
     }
   },
-
   render: function () {
     if (this.state.viewthepage === 0) {
       return (
@@ -88,7 +87,7 @@ var PlayerBox = React.createClass({
           <h1>Your Account</h1>
           <br />
           <div>
-            <div >
+            <div class="table-wrapper">
               <table>
                 <thead>
                   <tr>
@@ -112,7 +111,65 @@ var PlayerBox = React.createClass({
   }
 });
 
+var PlayerList = React.createClass({
+  render: function () {
+    var playerNodes = this.props.data.map(function (player) {
+      return (
+        <Player
+          key={player.playerID}
+          plyrlname={player.playerLastName}
+          plyrfname={player.playerFirstName}
+          plyrrewards={player.playerRewardsPoints}
+          playermembertype={player.playerMemberRewardsType}
+          plyremail={player.playerEmail}
+        >
+        </Player>
+      );
+    });
+    return (
+      <tbody>
+        {playerNodes}
+      </tbody>
+    );
+  }
+});
 
+var Player = React.createClass({
+  render: function () {
+    if (this.props.playermembertype == 0) {
+      var thetype = "Basic";
+    } else {
+      var thetype = "Premium";
+    }
+    return (
+      <tr>
+        <td>
+          {this.props.plyrfname}
+        </td>
+        <td>
+          {this.props.plyrlname}
+        </td>
+        <td>
+          {this.props.plyremail}
+        </td>
+        <td>
+          {this.props.plyrrewards}
+        </td>
+        <td>
+          {thetype}
+        </td>
+      </tr>
+    )
+  },
+
+
+  getInitialState: function () {
+    return {
+      upplyrid: this.props.viewthepage,
+      data: []
+    };
+  },
+});
 
 var PlayerUpdateform = React.createClass({
   getInitialState: function () {
@@ -162,19 +219,19 @@ var PlayerUpdateform = React.createClass({
               <tbody>
                 <tr>
                   <th>First Name</th>
-                  <td>
+                  <td data-label="First Name">
                     <input type="text" name="upplyrfname" id="upplyrfname" value={this.state.upplyrfname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Last Name</th>
-                  <td>
+                  <td data-label="Last Name">
                     <input type="text" name="upplyrlname" id="upplyrlname" value={this.state.upplyrlname} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
                 <tr>
                   <th>Email</th>
-                  <td>
+                  <td data-label="Email">
                     <input type="email" name="upplyremail" id="upplyremail" value={this.state.upplyremail} onChange={this.state.handleUpChange} required />
                   </td>
                 </tr>
@@ -191,62 +248,7 @@ var PlayerUpdateform = React.createClass({
   }
 });
 
-var PlayerList = React.createClass({
-  render: function () {
-    var playerNodes = this.props.data.map(function (player) {
-      return (
-        <Player
-          key={player.playerID}
-          plyrlname={player.playerLastName}
-          plyrfname={player.playerFirstName}
-          plyrrewards={player.playerRewardsPoints}
-          playermembertype={player.playerMemberRewardsType}
-          plyremail={player.playerEmail}
-        >
-        </Player>
-      );
-    });
-    return (
-      <tbody>
-        {playerNodes}
-      </tbody>
-    );
-  }
-});
 
-var Player = React.createClass({
-  render: function () {
-    if (this.props.playermembertype == 0) {
-      var thetype = "Basic";
-    } else {
-      var thetype = "Premium";
-    }
-    return (
-
-      <tr>
-        <td>
-          {this.props.plyrfname}
-        </td>
-        <td>
-          {this.props.plyrlname}
-        </td>
-        <td>
-          {this.props.plyremail}
-        </td>
-        <td>
-          {this.props.plyrrewards}
-        </td>
-        <td>{thetype}</td>
-      </tr>
-    );
-  },
-  getInitialState: function () {
-    return {
-      upplyrid: this.props.viewthepage,
-      data: []
-    };
-  },
-});
 
 
 ReactDOM.render(

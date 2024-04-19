@@ -323,13 +323,36 @@ app.post('/updatesingleplyr', function (req, res) {
   var pemail = req.body.upplayeremail;
   var pstat = req.body.upplayerstatus;
   var pid = req.body.upplayerid;
-  var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerMemberRewardsType = ?, playerEmail = ? WHERE playerID = ?";
-  var inserts = [plname, pfname, pstat, prewards, prtype, pemail, pid];
-  var sql = mysql.format(sqlins, inserts);
-  console.log(sql);
+  if (prtype === 0 || prtype === 1) {
+    if (pstat === 'Active' || pstat === 'Inactive') {
+      var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerMemberRewardsType = ?, playerEmail = ? WHERE playerID = ?";
+      var inserts = [plname, pfname, pstat, prewards, prtype, pemail, pid];
+      var sql = mysql.format(sqlins, inserts);
+    }
+    else {
+      console.log("else", prtype);
+      var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerRewardsPoints = ?,  playerMemberRewardsType = ?, playerEmail = ? WHERE playerID = ?";
+      var inserts = [plname, pfname, prewards, prtype, pemail, pid];
+      var sql = mysql.format(sqlins, inserts);
+    }
+  }
+  else {
+    if (pstat === 'Active' || pstat === 'Inactive') {
+      var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerStatus = ?, playerRewardsPoints = ?, playerEmail = ? WHERE playerID = ?";
+      var inserts = [plname, pfname, pstat, prewards, pemail, pid];
+      var sql = mysql.format(sqlins, inserts);
+    }
+    else {
+      var sqlins = "UPDATE players SET playerLastName = ?, playerFirstName = ?, playerRewardsPoints = ?, playerEmail = ? WHERE playerID = ?";
+      var inserts = [plname, pfname, prewards, pemail, pid];
+      var sql = mysql.format(sqlins, inserts);
+    }
+  }
+
   con.execute(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record updated");
+    console.log(sql);
     res.redirect('updateplayer.html');
     res.end();
   });
@@ -547,18 +570,21 @@ app.post('/updatesingleemp', function (req, res,) {
   var estatus = req.body.upemployeestatus;
   var etype = req.body.upemployeetype;
   var ekey = req.body.upemployeekey;
+  if (estatus === 'Active' || estatus === 'Inactive') {
+    var sqlins = "UPDATE employee SET employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, employeeStatus = ?, employeeTypeID =? WHERE employeeID = ? ";
+    var inserts = [elname, efname, eemail, estatus, etype, ekey];
+  } else {
+    var sqlins = "UPDATE employee SET employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, employeeTypeID =? WHERE employeeID = ? ";
+    var inserts = [elname, efname, eemail, etype, ekey];
+  }
 
-  var sqlins = "UPDATE employee SET employeeLastName = ?, employeeFirstName = ?, employeeEmail = ?, " +
-    " employeeStatus = ?, employeeTypeID =? " +
-    " WHERE employeeID = ? ";
-  var inserts = [elname, efname, eemail, estatus, etype, ekey];
 
   var sql = mysql.format(sqlins, inserts);
-  console.log(sql);
+
   con.execute(sql, function (err, result) {
     if (err) throw err;
     console.log("1 record updated");
-
+    console.log(sql);
     res.end();
   });
 });

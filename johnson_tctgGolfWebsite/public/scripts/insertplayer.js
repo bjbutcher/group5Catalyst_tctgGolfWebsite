@@ -112,7 +112,7 @@ var Playerform2 = React.createClass({
             <tbody>
               <tr>
                 <th>First Name</th>
-                <td>
+                <td data-label="First Name">
                   <TextInput
                     inputType="text"
                     value={this.state.playerfirstname}
@@ -127,7 +127,7 @@ var Playerform2 = React.createClass({
               </tr>
               <tr>
                 <th>Last Name</th>
-                <td>
+                <td data-label="Last Name">
                   <TextInput
                     inputType="text"
                     value={this.state.playerlastname}
@@ -142,7 +142,7 @@ var Playerform2 = React.createClass({
               </tr>
               <tr>
                 <th>Email</th>
-                <td>
+                <td data-label="Email">
                   <TextInput
                     inputType="email"
                     value={this.state.playeremail}
@@ -157,7 +157,7 @@ var Playerform2 = React.createClass({
               </tr>
               <tr>
                 <th>Password</th>
-                <td>
+                <td data-label="Password">
                   <TextInput
                     inputType="password"
                     value={this.state.playerpw}
@@ -171,8 +171,8 @@ var Playerform2 = React.createClass({
                 </td>
               </tr>
               <tr>
-                <th>Password Confirm</th>
-                <td>
+                <th>Confirm Password</th>
+                <td data-label="Confirm Password">
                   <TextInput
                     inputType="password"
                     value={this.state.playerpw2}
@@ -185,46 +185,6 @@ var Playerform2 = React.createClass({
                     emptyMessage="Password is Required" />
                 </td>
               </tr>
-              {/* <tr>
-                <th>Rewards Points</th>
-                <td>
-                  <TextInput
-                    inputType="number"
-                    value={this.state.playerrewardspoints}
-                    uniqueName="playerrewardspoints"
-                    textArea={false}
-                    required={false}
-                    validate={this.validateCommon}
-                    onChange={this.setValue.bind(this, 'playerrewardspoints')}
-                    errorMessage="Invalid point value"
-                    emptyMessage="" />
-                </td>
-              </tr> */}
-              {/* <tr>
-                <th>
-                  Player Status
-                </th>
-                <td>
-                  <input
-                    type="radio"
-                    name="plyrstatus"
-                    id="plyrstatusactive"
-                    value="Active"
-                    checked={this.state.upselectedOption === "Active"}
-                    onChange={this.handleOptionChange}
-                    className="form-check-input"
-                  />Active
-                  <input
-                    type="radio"
-                    name="plyrstatus"
-                    id="plyrstatusinactive"
-                    value="Inactive"
-                    checked={this.state.selectedOption === "Inactive"}
-                    onChange={this.handleOptionChange}
-                    className="form-check-input"
-                  />Inactive
-                </td>
-              </tr> */}
             </tbody>
           </table>
           <div className="button-container">

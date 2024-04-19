@@ -188,7 +188,7 @@ var Reservationform2 = React.createClass({
               <tbody>
                 <tr>
                   <th>Reservation Date</th>
-                  <td>
+                  <td data-label="Reservation Date">
                     <input
                       type="date"
                       title="Select reservation date"
@@ -199,7 +199,7 @@ var Reservationform2 = React.createClass({
                 </tr>
                 <tr>
                   <th>Reservation Time</th>
-                  <td>
+                  <td data-label="Reservation Time">
                     <select
                       id="reservationtime"
                       title="Select reservation time"
@@ -214,7 +214,7 @@ var Reservationform2 = React.createClass({
                 </tr>
                 <tr>
                   <th>Number of Players for Reservation</th>
-                  <td>
+                  <td data-label="Number of Players for Reservation">
                     <input
                       type="number"
                       title="Select number of players who want to play during this reservation"
@@ -227,7 +227,7 @@ var Reservationform2 = React.createClass({
                 </tr>
                 <tr>
                   <th>Reservation Status</th>
-                  <td>
+                  <td data-label="Reservation Status">
                     <select
                       value={this.state.reservationstatus} onChange={this.setValue.bind(this, 'reservationstatus')} required>
                       <option value="">Please Select a Status</option>
@@ -238,7 +238,7 @@ var Reservationform2 = React.createClass({
                 </tr>
                 <tr>
                   <th>Player Scheduling Reservation</th>
-                  <td>
+                  <td data-label="Player Scheduling Reservation">
                     {this.props.playerName}
                   </td>
                 </tr>
